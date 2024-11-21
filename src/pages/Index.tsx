@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Github, Linkedin, Mail, ExternalLink } from "lucide-react";
+import { Github, Linkedin, Mail, ExternalLink, FileText } from "lucide-react";
 
 const Index = () => {
   const projects = [
@@ -41,8 +41,12 @@ const Index = () => {
             Full Stack Developer | Problem Solver | Tech Enthusiast
           </p>
           <div className="flex gap-4 justify-center">
-            <Button variant="outline" className="glass">
-              <Mail className="mr-2 h-4 w-4" /> Resume
+            <Button 
+              variant="outline" 
+              className="glass"
+              onClick={() => window.open('https://drive.google.com/uc?export=download&id=1i6d_Tmi5mSNWLJsGsaX4_IiE0p9Mg44o', '_blank')}
+            >
+              <FileText className="mr-2 h-4 w-4" /> Resume
             </Button>
             <Button variant="outline" className="glass">
               <Github className="mr-2 h-4 w-4" /> GitHub

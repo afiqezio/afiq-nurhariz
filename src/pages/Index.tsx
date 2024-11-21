@@ -55,10 +55,11 @@ const Index = () => {
       <section className="section-padding" id="about">
         <div className="max-w-3xl mx-auto glass p-8 rounded-lg animate-slideUp">
           <h2 className="text-3xl font-bold mb-6">About Me</h2>
+          <p className="text-lg text-muted-foreground mb-4">
+            I am a creative professional with experience working with tech startups and universities. As a graduate student in Artificial Intelligence at Universiti Teknologi Mara, Shah Alam, I enjoy working on new ideas and exciting projects.
+          </p>
           <p className="text-lg text-muted-foreground">
-            I'm a passionate developer with X years of experience building web applications.
-            I love turning complex problems into simple, beautiful, and intuitive solutions.
-            When I'm not coding, you can find me exploring new technologies or contributing to open-source projects.
+            I am strongly interested in data and AI, creating smart algorithms, building data pipelines, and working with large datasets to find insights. I also have experience in web and mobile development, creating user-friendly applications. My studies in Web Development and AI have given me solid skills, and I am always ready to learn and improve.
           </p>
         </div>
       </section>

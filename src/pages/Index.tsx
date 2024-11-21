@@ -35,7 +35,7 @@ const Index = () => {
       <section className="section-padding min-h-screen flex items-center justify-center">
         <div className="text-center animate-fadeIn">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Hi, I'm <span className="text-primary">Your Name</span>
+            Hi, I'm <span className="text-primary">Afiq Nurhariz</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8">
             Full Stack Developer | Problem Solver | Tech Enthusiast

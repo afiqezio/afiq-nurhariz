@@ -120,10 +120,18 @@ const Index = () => {
         <div className="max-w-3xl mx-auto glass p-8 rounded-lg">
           <h2 className="text-3xl font-bold mb-6 text-center">Get In Touch</h2>
           <div className="flex justify-center gap-6">
-            <Button variant="outline" className="glass">
+            <Button 
+              variant="outline" 
+              className="glass"
+              onClick={() => window.open('mailto:afiqnurhariz@gmail.com', '_blank')}
+            >
               <Mail className="mr-2 h-4 w-4" /> Email
             </Button>
-            <Button variant="outline" className="glass">
+            <Button 
+              variant="outline" 
+              className="glass"
+              onClick={() => window.open('https://www.linkedin.com/in/afiqnurhariz/', '_blank')}
+            >
               <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
             </Button>
             <Button 

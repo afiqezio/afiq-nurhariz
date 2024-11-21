@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, ExternalLink, FileText } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Index = () => {
   const projects = [
@@ -31,6 +32,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      <ThemeToggle />
       {/* Hero Section */}
       <section className="section-padding min-h-screen flex items-center justify-center">
         <div className="text-center animate-fadeIn">

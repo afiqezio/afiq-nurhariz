@@ -38,7 +38,7 @@ const Index = () => {
             Hi, I'm <span className="text-primary">Afiq Nurhariz</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground mb-8">
-            Full Stack Developer | Problem Solver | Tech Enthusiast
+            Software Developer | Mobile Developer | AI Engineer
           </p>
           <div className="flex gap-4 justify-center">
             <Button 

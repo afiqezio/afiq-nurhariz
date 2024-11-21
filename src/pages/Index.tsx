@@ -48,7 +48,11 @@ const Index = () => {
             >
               <FileText className="mr-2 h-4 w-4" /> Resume
             </Button>
-            <Button variant="outline" className="glass">
+            <Button 
+              variant="outline" 
+              className="glass"
+              onClick={() => window.open('https://github.com/afiqezio', '_blank')}
+            >
               <Github className="mr-2 h-4 w-4" /> GitHub
             </Button>
           </div>
@@ -122,7 +126,11 @@ const Index = () => {
             <Button variant="outline" className="glass">
               <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
             </Button>
-            <Button variant="outline" className="glass">
+            <Button 
+              variant="outline" 
+              className="glass"
+              onClick={() => window.open('https://github.com/afiqezio', '_blank')}
+            >
               <Github className="mr-2 h-4 w-4" /> GitHub
             </Button>
           </div>

@@ -42,7 +42,7 @@ const Index = () => {
           </p>
           <div className="flex gap-4 justify-center">
             <Button variant="outline" className="glass">
-              <Mail className="mr-2 h-4 w-4" /> Contact Me
+              <Mail className="mr-2 h-4 w-4" /> Resume
             </Button>
             <Button variant="outline" className="glass">
               <Github className="mr-2 h-4 w-4" /> GitHub

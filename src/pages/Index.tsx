@@ -26,7 +26,7 @@ const Index = () => {
 
   const skills = [
     "Python", "JavaScript", "C#", "PHP", "Dart",
-    "React", "Flutter", ".Net", "Laravel", "MySQL", "MSSQL"
+    "React", "Flutter", ".NET", "Laravel", "MySQL", "MSSQL", "SQL"
   ];
 
   return (

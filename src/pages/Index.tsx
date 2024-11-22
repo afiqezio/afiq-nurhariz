@@ -5,21 +5,21 @@ import { Github, Linkedin, Mail, ExternalLink, FileText } from "lucide-react";
 const Index = () => {
   const projects = [
     {
-      title: "Project 1",
-      description: "A brief description of project 1 and its key features.",
-      tech: ["React", "TypeScript", "Tailwind"],
+      title: "Mamak Breakfast Food Calories Estimation Based on Image Classification",
+      description: "Using modern smartphone technology, one photo can simplify the time-consuming task of manually calculating food calories.",
+      tech: ["Python", "YoloV8", "CNN"],
       link: "#",
     },
     {
-      title: "Project 2",
-      description: "A brief description of project 2 and its key features.",
-      tech: ["Next.js", "Node.js", "MongoDB"],
+      title: "Mobile Time Attendance With Locations",
+      description: "Mobile app project integrated with TAMS for remote employee attendance tracking",
+      tech: ["Flutter", ".NET", "MSSQL"],
       link: "#",
     },
     {
-      title: "Project 3",
-      description: "A brief description of project 3 and its key features.",
-      tech: ["React Native", "Firebase", "Redux"],
+      title: "Hair Saloon Booking Mobile Application",
+      description: "Simple mobile app project for hair saloon booking",
+      tech: ["Flutter", "PHP", "MySQL"],
       link: "#",
     },
   ];
@@ -43,14 +43,14 @@ const Index = () => {
           <div className="flex gap-4 justify-center">
             <Button 
               variant="outline" 
-              className="glass"
+              className="glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
               onClick={() => window.open('https://drive.google.com/uc?export=download&id=1i6d_Tmi5mSNWLJsGsaX4_IiE0p9Mg44o', '_blank')}
             >
               <FileText className="mr-2 h-4 w-4" /> Resume
             </Button>
             <Button 
               variant="outline" 
-              className="glass"
+              className="glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
               onClick={() => window.open('https://github.com/afiqezio', '_blank')}
             >
               <Github className="mr-2 h-4 w-4" /> GitHub
@@ -77,25 +77,36 @@ const Index = () => {
         <h2 className="text-3xl font-bold mb-12 text-center">Featured Projects</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, index) => (
-            <Card key={index} className="glass p-6 animate-slideUp" style={{
-              animationDelay: `${index * 200}ms`
-            }}>
+            <Card
+              key={index}
+              className="glass p-6 animate-slideUp"
+              style={{
+                animationDelay: `${index * 200}ms`,
+              }}
+            >
               <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
               <p className="text-muted-foreground mb-4">{project.description}</p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.tech.map((tech, i) => (
-                  <span key={i} className="text-xs px-2 py-1 rounded-full glass">
+                  <span
+                    key={i}
+                    className="text-xs px-2 py-1 rounded-full glass"
+                  >
                     {tech}
                   </span>
                 ))}
               </div>
-              <Button variant="outline" className="w-full glass">
+              <Button
+                variant="outline"
+                className="w-full glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
+              >
                 <ExternalLink className="mr-2 h-4 w-4" /> View Project
               </Button>
             </Card>
           ))}
         </div>
       </section>
+
 
       {/* Skills Section */}
       <section className="section-padding" id="skills">
@@ -122,21 +133,21 @@ const Index = () => {
           <div className="flex justify-center gap-6">
             <Button 
               variant="outline" 
-              className="glass"
+              className="glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
               onClick={() => window.open('mailto:afiqnurhariz@gmail.com', '_blank')}
             >
               <Mail className="mr-2 h-4 w-4" /> Email
             </Button>
             <Button 
               variant="outline" 
-              className="glass"
+              className="glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
               onClick={() => window.open('https://www.linkedin.com/in/afiqnurhariz/', '_blank')}
             >
               <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
             </Button>
             <Button 
               variant="outline" 
-              className="glass"
+              className="glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
               onClick={() => window.open('https://github.com/afiqezio', '_blank')}
             >
               <Github className="mr-2 h-4 w-4" /> GitHub

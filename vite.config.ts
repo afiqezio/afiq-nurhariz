@@ -5,15 +5,19 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // server: {
-  //   host: "::",
-  //   port: 8080,
-  // },
-  plugins: [react()],
-  base: '/afiq-nurhariz/',
+  plugins: [
+    react(),
+    mode === 'development' && componentTagger(),
+  ].filter(Boolean),
+  server: {
+    host: "::",
+    port: 8080,
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  base: mode === 'production' ? '/afiq-nurhariz/' : '/', // Apply base only in production
 }));
+

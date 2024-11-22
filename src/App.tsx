@@ -8,11 +8,12 @@ import Index from "./pages/Index";
 const queryClient = new QueryClient();
 
 const App = () => (
+  //for Loveable
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename={'/afiq-nurhariz/'}>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
         </Routes>
@@ -20,5 +21,20 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
+
+
+// const App = () => (
+//   <QueryClientProvider client={queryClient}>
+//     <TooltipProvider>
+//       <Toaster />
+//       <Sonner />
+//       <BrowserRouter basename={'/afiq-nurhariz/'}>
+//         <Routes>
+//           <Route path="/" element={<Index />} />
+//         </Routes>
+//       </BrowserRouter>
+//     </TooltipProvider>
+//   </QueryClientProvider>
+// );
 
 export default App;

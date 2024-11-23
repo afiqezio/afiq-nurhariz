@@ -14,6 +14,24 @@ const View = () => {
   const location = useLocation();
   const project = location.state as ProjectData;
 
+  const projectImages = [
+    {
+      url: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+      alt: "Project Overview",
+      caption: "Main dashboard interface"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
+      alt: "Technical Implementation",
+      caption: "Backend system architecture"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+      alt: "Development Process",
+      caption: "Development environment setup"
+    }
+  ];
+
   if (!project) {
     return (
       <div className="min-h-screen section-padding">
@@ -46,6 +64,29 @@ const View = () => {
             <p className="text-lg text-muted-foreground mb-8">
               {project.description}
             </p>
+
+            {/* Project Showcase Images */}
+            <div className="mb-8">
+              <h2 className="text-2xl font-semibold mb-6">Project Showcase</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {projectImages.map((image, index) => (
+                  <div 
+                    key={index} 
+                    className="glass p-2 rounded-lg animate-slideUp"
+                    style={{ animationDelay: `${index * 200}ms` }}
+                  >
+                    <img
+                      src={image.url}
+                      alt={image.alt}
+                      className="w-full h-48 object-cover rounded-md mb-2"
+                    />
+                    <p className="text-sm text-muted-foreground text-center">
+                      {image.caption}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <div className="flex flex-wrap gap-2 mb-8">
               {project.tech.map((tech, index) => (

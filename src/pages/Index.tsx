@@ -7,8 +7,8 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 const Index = () => {
   const projects = [
     {
-      title: "Mamak Breakfast Food Calories Estimation Based on Image Classification",
-      description: "Using modern smartphone technology, one photo can simplify the time-consuming task of manually calculating food calories.",
+      title: "Mamak Food Calories Estimation Based on Image Classification",
+      description: "One photo can simplify the time-consuming task of manually calculating food calories.",
       tech: ["Python", "YoloV5", "CNN"],
       link: "#",
     },
@@ -38,12 +38,12 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
       {/* Hero Section */}
-      <section className="section-padding min-h-screen flex items-center justify-center">
-        <div className="text-center animate-fadeIn">
-          <div className="mb-8 flex justify-center">
-            <Avatar className="h-32 w-32 border-4 border-primary">
+      <section className="min-h-screen flex items-center justify-center px-4">
+        <div className="text-center space-y-8 animate-fadeIn">
+          <div className="relative inline-block">
+            <Avatar className="h-32 w-32 border-2 border-primary/20 transition-transform duration-300 hover:scale-105">
               <AvatarImage
                 src="assets/afiqnhz.jpg"
                 alt="Profile"
@@ -52,23 +52,25 @@ const Index = () => {
               <AvatarFallback>ANHZ</AvatarFallback>
             </Avatar>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Hi, I'm <span className="text-primary">Afiq Nurhariz</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8">
-            Software Developer | Mobile Developer | AI Engineer
-          </p>
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-6xl font-bold">
+              Hi, I'm <span className="text-primary">Afiq Nurhariz</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-muted-foreground">
+              Software Developer | Mobile Developer | AI Engineer
+            </p>
+          </div>
           <div className="flex gap-4 justify-center">
             <Button 
               variant="outline" 
-              className="glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
+              className="glass transition-all duration-300 hover:scale-105 hover:shadow-lg"
               onClick={() => window.open('https://drive.google.com/uc?export=download&id=1i6d_Tmi5mSNWLJsGsaX4_IiE0p9Mg44o', '_blank')}
             >
               <FileText className="mr-2 h-4 w-4" /> Resume
             </Button>
             <Button 
               variant="outline" 
-              className="glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
+              className="glass transition-all duration-300 hover:scale-105 hover:shadow-lg"
               onClick={() => window.open('https://github.com/afiqezio', '_blank')}
             >
               <Github className="mr-2 h-4 w-4" /> GitHub
@@ -78,29 +80,29 @@ const Index = () => {
       </section>
 
       {/* About Section */}
-      <section className="section-padding" id="about">
-        <div className="max-w-3xl mx-auto glass p-8 rounded-lg animate-slideUp">
-          <h2 className="text-3xl font-bold mb-6">About Me</h2>
-          <p className="text-lg text-muted-foreground mb-4">
-            I am a creative professional with experience working with tech startups and universities. As a graduate student in Artificial Intelligence at Universiti Teknologi Mara, Shah Alam, I enjoy working on new ideas and exciting projects.
-          </p>
-          <p className="text-lg text-muted-foreground">
-            I am strongly interested in data and AI, creating smart algorithms, building data pipelines, and working with large datasets to find insights. I also have experience in web and mobile development, creating user-friendly applications. My studies in Web Development and AI have given me solid skills, and I am always ready to learn and improve.
-          </p>
+      <section className="py-20 px-4 md:px-8 lg:px-16" id="about">
+        <div className="max-w-3xl mx-auto glass rounded-xl p-8 transform transition-all duration-500 hover:shadow-xl">
+          <h2 className="text-3xl font-bold mb-6 text-primary/80">About Me</h2>
+          <div className="space-y-4 text-muted-foreground">
+            <p className="text-lg leading-relaxed">
+              I am a creative professional with experience working with tech startups and universities. As a graduate student in Artificial Intelligence at Universiti Teknologi Mara, Shah Alam, I enjoy working on new ideas and exciting projects.
+            </p>
+            <p className="text-lg leading-relaxed">
+              I am strongly interested in data and AI, creating smart algorithms, building data pipelines, and working with large datasets to find insights. I also have experience in web and mobile development, creating user-friendly applications. My studies in Web Development and AI have given me solid skills, and I am always ready to learn and improve.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Projects Section */}
-      <section className="section-padding" id="projects">
-        <h2 className="text-3xl font-bold mb-12 text-center">Featured Projects</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <section className="py-20 px-4 md:px-8 lg:px-16" id="projects">
+        <h2 className="text-3xl font-bold mb-12 text-center text-primary/80">Featured Projects</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {projects.map((project, index) => (
             <Card
               key={index}
-              className="glass p-6 animate-slideUp"
-              style={{
-                animationDelay: `${index * 200}ms`,
-              }}
+              className="glass p-6 transform transition-all duration-500 hover:shadow-xl hover:-translate-y-1"
+              style={{ animationDelay: `${index * 200}ms` }}
             >
               <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
               <p className="text-muted-foreground mb-4">{project.description}</p>
@@ -108,7 +110,7 @@ const Index = () => {
                 {project.tech.map((tech, i) => (
                   <span
                     key={i}
-                    className="text-xs px-2 py-1 rounded-full glass"
+                    className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary"
                   >
                     {tech}
                   </span>
@@ -116,7 +118,7 @@ const Index = () => {
               </div>
               <Button
                 variant="outline"
-                className="w-full glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
+                className="w-full glass transition-all duration-300 hover:scale-105"
                 onClick={() => handleViewProject(project)}
               >
                 <ExternalLink className="mr-2 h-4 w-4" /> View Project
@@ -127,14 +129,14 @@ const Index = () => {
       </section>
 
       {/* Skills Section */}
-      <section className="section-padding" id="skills">
-        <h2 className="text-3xl font-bold mb-12 text-center">Skills</h2>
+      <section className="py-20 px-4 md:px-8 lg:px-16" id="skills">
+        <h2 className="text-3xl font-bold mb-12 text-center text-primary/80">Skills</h2>
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {skills.map((skill, index) => (
               <div
                 key={index}
-                className="glass p-4 rounded-lg text-center animate-slideUp"
+                className="glass p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-primary/5"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {skill}
@@ -145,27 +147,27 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="section-padding" id="contact">
-        <div className="max-w-3xl mx-auto glass p-8 rounded-lg">
-          <h2 className="text-3xl font-bold mb-6 text-center">Get In Touch</h2>
+      <section className="py-20 px-4 md:px-8 lg:px-16" id="contact">
+        <div className="max-w-3xl mx-auto glass rounded-xl p-8 transform transition-all duration-500 hover:shadow-xl">
+          <h2 className="text-3xl font-bold mb-6 text-center text-primary/80">Get In Touch</h2>
           <div className="flex justify-center gap-6">
             <Button 
               variant="outline" 
-              className="glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
+              className="glass transition-all duration-300 hover:scale-105 hover:shadow-lg"
               onClick={() => window.open('mailto:afiqnurhariz@gmail.com', '_blank')}
             >
               <Mail className="mr-2 h-4 w-4" /> Email
             </Button>
             <Button 
               variant="outline" 
-              className="glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
+              className="glass transition-all duration-300 hover:scale-105 hover:shadow-lg"
               onClick={() => window.open('https://www.linkedin.com/in/afiqnurhariz/', '_blank')}
             >
               <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
             </Button>
             <Button 
               variant="outline" 
-              className="glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
+              className="glass transition-all duration-300 hover:scale-105 hover:shadow-lg"
               onClick={() => window.open('https://github.com/afiqezio', '_blank')}
             >
               <Github className="mr-2 h-4 w-4" /> GitHub

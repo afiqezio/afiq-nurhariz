@@ -1,17 +1,9 @@
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Github, ExternalLink } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import ImageModal from "@/components/ImageModal";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import ProjectHeader from "@/components/ProjectHeader";
+import ProjectShowcase from "@/components/ProjectShowcase";
+import ProjectDetails from "@/components/ProjectDetails";
 
 interface ProjectData {
   title: string;
@@ -20,7 +12,6 @@ interface ProjectData {
 }
 
 const View = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const project = location.state as ProjectData;
   const [selectedImage, setSelectedImage] = useState<{ url: string; caption: string } | null>(null);
@@ -31,7 +22,7 @@ const View = () => {
 
 // Project-specific data mapping
 const projectData = {
-  "Mamak Breakfast Food Calories Estimation Based on Image Classification": {
+  "Mamak Food Calories Estimation Based on Image Classification": {
     images: [
       {
         url: "assets/projects/Mamak/lemak.png",
@@ -54,7 +45,7 @@ const projectData = {
         caption: "Prototype architecture"
       }
     ],
-    overview: "An innovative AI-powered system that uses computer vision and deep learning to estimate calories in Malaysian breakfast dishes through image recognition.",
+    overview: "Calculating and estimating calories manually is time-consuming and challenging. The traditional method involves weighing and measuring food, and then comparing the values to calorie charts, which is difficult and not suitable for everyone. It's even harder for those with active lifestyles, as their daily caloric intake varies with their activities. Beginners may also struggle with this method, finding it inefficient and lacking the necessary tools. However, modern generations can easily calculate calories using their smartphones.",
     features: [
       "Food recognition using YOLOv5",
       "Almost accurate calorie estimation based on food set",
@@ -95,7 +86,7 @@ const projectData = {
         caption: "Check In/Check Out log history"
       }
     ],
-    overview: "A comprehensive mobile application for tracking employee attendance with location verification, integrated with existing TAMS systems.",
+    overview: "This project addresses the challenge faced by employees who work remotely or off-site, unable to use the organization's face terminal reader for attendance. To solve this issue, we are developing a mobile application integrated with the Time Attendance Management System (TAMS). Employees can log in using their TAMS credentials and check in via the app, transmitting their location data to ensure accurate attendance tracking. By centralizing data collection and digitizing the process, the organization aims to reduce operational costs, enhance decision-making capabilities, and streamline administrative tasks securely accessible only to authorized administrators.",
     features: [
       "Real-time location tracking",
       "Check in/Check out verification",
@@ -144,7 +135,7 @@ const projectData = {
         caption: "Detail of the booking with QR"
       }
     ],
-    overview: "A user-friendly mobile application for booking hair salon appointments, managing services, and handling customer relationships.",
+    overview: "Managing salon appointments through inconsistent and outdated methods causes frustration for both customers and salon owners. Our project aims to develop a mobile application using Flutter that provides a seamless and efficient salon booking experience with real-time availability, and personalized customer profiles. By leveraging the advantages of a mobile application such as push notifications, offline access, and enhanced user engagement, our solution offers greater convenience and reliability compared to traditional websites. ",
     features: [
       "Real-time appointment booking",
       "Service catalog management",
@@ -167,17 +158,9 @@ const projectData = {
     ]
   }
 };
-
 if (!project) {
   return (
     <div className="min-h-screen section-padding">
-      <Button
-        variant="outline"
-        className="glass mb-4"
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" /> Back
-      </Button>
       <p className="text-muted-foreground">Project not found.</p>
     </div>
   );
@@ -188,141 +171,43 @@ const currentProjectData = projectData[project.title as keyof typeof projectData
 if (!currentProjectData) {
   return (
     <div className="min-h-screen section-padding">
-      <Button
-        variant="outline"
-        className="glass mb-4"
-        onClick={() => navigate(-1)}
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" /> Back
-      </Button>
       <p className="text-muted-foreground">Project details not found.</p>
     </div>
   );
 }
 
 return (
-  <div className="min-h-screen">
+  <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
     <section className="section-padding">
-      <div className="max-w-4xl mx-auto">
-        <Button
-          variant="outline"
-          className="glass mb-8 animate-fadeIn"
-          onClick={() => navigate(-1)}
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back
-        </Button>
+      <div className="max-w-4xl mx-auto space-y-8">
+        <ProjectHeader
+          title={project.title}
+          description={project.description}
+          tech={project.tech}
+        />
 
-        <Card className="glass p-8 animate-slideUp">
-          <h1 className="text-4xl font-bold mb-6">{project.title}</h1>
-          <p className="text-lg text-muted-foreground mb-8">
-            {project.description}
-          </p>
+        <ProjectShowcase
+          images={currentProjectData.images}
+          onImageClick={setSelectedImage}
+        />
 
-          {/* Project Showcase Images */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-6">Project Showcase</h2>
-            <Carousel className="w-full">
-              <CarouselContent className="-ml-2 md:-ml-4">
-                {currentProjectData.images.map((image, index) => (
-                  <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2">
-                    <div 
-                      className="glass p-2 rounded-lg animate-slideUp cursor-pointer hover:scale-105 transition-transform"
-                      style={{ animationDelay: `${index * 200}ms` }}
-                      onClick={() => setSelectedImage(image)}
-                    >
-                      <AspectRatio ratio={16 / 9} className="bg-muted">
-                        <img
-                          src={image.url}
-                          alt={image.alt}
-                          className="w-full h-full object-cover rounded-md"
-                        />
-                      </AspectRatio>
-                      <p className="text-sm text-muted-foreground text-center mt-2">
-                        {image.caption}
-                      </p>
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="hidden md:flex" />
-              <CarouselNext className="hidden md:flex" />
-            </Carousel>
-          </div>
+        <ProjectDetails
+          overview={currentProjectData.overview}
+          features={currentProjectData.features}
+          challenges={currentProjectData.challenges}
+          improvements={currentProjectData.improvements}
+        />
+      </div>
+    </section>
 
-            <div className="flex flex-wrap gap-2 mb-8">
-              {project.tech.map((tech, index) => (
-                <span
-                  key={index}
-                  className="text-sm px-3 py-1 rounded-full glass"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
-
-            <div className="space-y-6">
-              {/* Overview Section */}
-              <Card className="glass p-6">
-                <h2 className="text-2xl font-semibold mb-4">Project Overview</h2>
-                <p className="text-muted-foreground mb-4">
-                  {currentProjectData.overview}
-                </p>
-                <div className="flex gap-4 mt-6">
-                  <Button variant="outline" className="glass">
-                    <Github className="mr-2 h-4 w-4" /> View Source
-                  </Button>
-                  <Button variant="outline" className="glass">
-                    <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
-                  </Button>
-                </div>
-              </Card>
-
-              {/* Key Features */}
-              <Card className="glass p-6">
-                <h2 className="text-2xl font-semibold mb-4">Key Features</h2>
-                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                  {currentProjectData.features.map((feature, index) => (
-                    <li key={index}>{feature}</li>
-                  ))}
-                </ul>
-              </Card>
-
-              {/* Challenges and Solutions */}
-              <Card className="glass p-6">
-                <h2 className="text-2xl font-semibold mb-4">Challenges & Solutions</h2>
-                <div className="space-y-4">
-                  {currentProjectData.challenges.map((challenge, index) => (
-                    <div key={index}>
-                      <h3 className="text-lg font-medium mb-2">{challenge.title}</h3>
-                      <p className="text-muted-foreground">
-                        {challenge.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-
-              {/* Future Improvements */}
-              <Card className="glass p-6">
-                <h2 className="text-2xl font-semibold mb-4">Future Improvements</h2>
-                <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                  {currentProjectData.improvements.map((improvement, index) => (
-                    <li key={index}>{improvement}</li>
-                  ))}
-                </ul>
-              </Card>
-            </div>
-          </Card>
-        </div>
-      </section>
-      <ImageModal
-        isOpen={!!selectedImage}
-        onClose={() => setSelectedImage(null)}
-        imageUrl={selectedImage?.url || ''}
-        caption={selectedImage?.caption || ''}
-      />
-    </div>
-  );
+    <ImageModal
+      isOpen={!!selectedImage}
+      onClose={() => setSelectedImage(null)}
+      imageUrl={selectedImage?.url || ''}
+      caption={selectedImage?.caption || ''}
+    />
+  </div>
+);
 };
 
 export default View;

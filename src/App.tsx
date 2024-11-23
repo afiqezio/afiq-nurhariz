@@ -31,6 +31,7 @@ const App = () => (
 //       <BrowserRouter basename={'/afiq-nurhariz/'}>
 //         <Routes>
 //           <Route path="/" element={<Index />} />
+//           <Route path="/view" element={<View />} />
 //         </Routes>
 //       </BrowserRouter>
 //     </TooltipProvider>

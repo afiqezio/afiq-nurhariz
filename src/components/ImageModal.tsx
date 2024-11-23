@@ -1,4 +1,5 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -10,13 +11,15 @@ interface ImageModalProps {
 const ImageModal = ({ isOpen, onClose, imageUrl, caption }: ImageModalProps) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[90vw] max-h-[90vh] p-0">
-        <div className="relative">
-          <img
-            src={imageUrl}
-            alt={caption}
-            className="w-full h-full object-contain"
-          />
+      <DialogContent className="max-w-[80vw] p-0">
+        <div className="relative max-h-[80vh] overflow-hidden">
+          <AspectRatio ratio={16 / 9} className="bg-muted">
+            <img
+              src={imageUrl}
+              alt={caption}
+              className="w-full h-full object-contain"
+            />
+          </AspectRatio>
           <p className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2 text-center">
             {caption}
           </p>

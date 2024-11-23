@@ -4,6 +4,14 @@ import { ArrowLeft, Github, ExternalLink } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ImageModal from "@/components/ImageModal";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 interface ProjectData {
   title: string;
@@ -213,25 +221,32 @@ return (
           {/* Project Showcase Images */}
           <div className="mb-8">
             <h2 className="text-2xl font-semibold mb-6">Project Showcase</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {currentProjectData.images.map((image, index) => (
-                <div 
-                  key={index} 
-                  className="glass p-2 rounded-lg animate-slideUp cursor-pointer hover:scale-105 transition-transform"
-                  style={{ animationDelay: `${index * 200}ms` }}
-                  onClick={() => setSelectedImage(image)}
-                >
-                  <img
-                    src={image.url}
-                    alt={image.alt}
-                    className="w-full h-48 object-cover rounded-md mb-2"
-                  />
-                  <p className="text-sm text-muted-foreground text-center">
-                    {image.caption}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <Carousel className="w-full">
+              <CarouselContent className="-ml-2 md:-ml-4">
+                {currentProjectData.images.map((image, index) => (
+                  <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2">
+                    <div 
+                      className="glass p-2 rounded-lg animate-slideUp cursor-pointer hover:scale-105 transition-transform"
+                      style={{ animationDelay: `${index * 200}ms` }}
+                      onClick={() => setSelectedImage(image)}
+                    >
+                      <AspectRatio ratio={16 / 9} className="bg-muted">
+                        <img
+                          src={image.url}
+                          alt={image.alt}
+                          className="w-full h-full object-cover rounded-md"
+                        />
+                      </AspectRatio>
+                      <p className="text-sm text-muted-foreground text-center mt-2">
+                        {image.caption}
+                      </p>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
           </div>
 
             <div className="flex flex-wrap gap-2 mb-8">

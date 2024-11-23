@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, ExternalLink, FileText } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const projects = [
@@ -28,6 +29,12 @@ const Index = () => {
     "Python", "JavaScript", "C#", "PHP", "Dart",
     "React", "Flutter", ".NET", "Laravel", "MySQL", "MSSQL", "SQL"
   ];
+
+  const navigate = useNavigate();
+
+  const handleViewProject = (project: any) => {
+    navigate('/view', { state: project });
+  };
 
   return (
     <div className="min-h-screen">
@@ -99,6 +106,7 @@ const Index = () => {
               <Button
                 variant="outline"
                 className="w-full glass transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:bg-opacity-90"
+                onClick={() => handleViewProject(project)}
               >
                 <ExternalLink className="mr-2 h-4 w-4" /> View Project
               </Button>
@@ -106,7 +114,6 @@ const Index = () => {
           ))}
         </div>
       </section>
-
 
       {/* Skills Section */}
       <section className="section-padding" id="skills">

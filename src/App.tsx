@@ -22,7 +22,6 @@ const App = () => (
   </QueryClientProvider>
 );
 
-
 // const App = () => (
 //   <QueryClientProvider client={queryClient}>
 //     <TooltipProvider>

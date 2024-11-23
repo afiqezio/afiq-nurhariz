@@ -9,7 +9,7 @@ const Index = () => {
     {
       title: "Mamak Breakfast Food Calories Estimation Based on Image Classification",
       description: "Using modern smartphone technology, one photo can simplify the time-consuming task of manually calculating food calories.",
-      tech: ["Python", "YoloV8", "CNN"],
+      tech: ["Python", "YoloV5", "CNN"],
       link: "#",
     },
     {
@@ -45,11 +45,11 @@ const Index = () => {
           <div className="mb-8 flex justify-center">
             <Avatar className="h-32 w-32 border-4 border-primary">
               <AvatarImage
-                src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+                src="assets/afiqnhz.jpg"
                 alt="Profile"
                 className="object-cover"
               />
-              <AvatarFallback>AN</AvatarFallback>
+              <AvatarFallback>ANHZ</AvatarFallback>
             </Avatar>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6">

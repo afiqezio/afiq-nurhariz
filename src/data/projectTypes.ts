@@ -11,7 +11,7 @@ export interface ProjectDetails {
     alt: string;
     caption: string;
   }>;
-  documentUrl?: string;
+  documentUrl?: string;  // Added this line with optional property
 }
 
 export interface ProjectData {

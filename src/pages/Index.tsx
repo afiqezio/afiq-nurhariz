@@ -38,12 +38,14 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-secondary/20">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center space-y-8 animate-fadeIn">
-          <div className="relative inline-block">
-            <Avatar className="h-32 w-32 border-2 border-primary/20 transition-transform duration-300 hover:scale-105">
+      <section className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
+        <div className="text-center space-y-8 animate-fadeIn relative z-10">
+          <div className="relative inline-block floating-element">
+            <div className="absolute inset-0 bg-primary/10 rounded-full blur-2xl transform -translate-x-1/2 -translate-y-1/2 w-48 h-48" />
+            <Avatar className="h-32 w-32 border-2 border-primary/20 transition-transform duration-300 hover:scale-105 relative">
               <AvatarImage
                 src="assets/afiqnhz.jpg"
                 alt="Profile"
@@ -54,7 +56,7 @@ const Index = () => {
           </div>
           <div className="space-y-4">
             <h1 className="text-4xl md:text-6xl font-bold">
-              Hi, I'm <span className="text-primary">Afiq Nurhariz</span>
+              Hi, I'm <span className="gradient-text">Afiq Nurhariz</span>
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground">
               Software Developer | Mobile Developer | AI Engineer
@@ -63,14 +65,14 @@ const Index = () => {
           <div className="flex gap-4 justify-center">
             <Button 
               variant="outline" 
-              className="glass transition-all duration-300 hover:scale-105 hover:shadow-lg"
+              className="glass-card transition-all duration-300 hover:scale-105 hover:shadow-lg"
               onClick={() => window.open('https://drive.google.com/uc?export=download&id=1i6d_Tmi5mSNWLJsGsaX4_IiE0p9Mg44o', '_blank')}
             >
               <FileText className="mr-2 h-4 w-4" /> Resume
             </Button>
             <Button 
               variant="outline" 
-              className="glass transition-all duration-300 hover:scale-105 hover:shadow-lg"
+              className="glass-card transition-all duration-300 hover:scale-105 hover:shadow-lg"
               onClick={() => window.open('https://github.com/afiqezio', '_blank')}
             >
               <Github className="mr-2 h-4 w-4" /> GitHub
@@ -81,8 +83,8 @@ const Index = () => {
 
       {/* About Section */}
       <section className="py-20 px-4 md:px-8 lg:px-16" id="about">
-        <div className="max-w-3xl mx-auto glass rounded-xl p-8 transform transition-all duration-500 hover:shadow-xl">
-          <h2 className="text-3xl font-bold mb-6 text-primary/80">About Me</h2>
+        <div className="max-w-3xl mx-auto glass-card p-8 transform hover:scale-[1.01] transition-all duration-500">
+          <h2 className="text-3xl font-bold mb-6 gradient-text">About Me</h2>
           <div className="space-y-4 text-muted-foreground">
             <p className="text-lg leading-relaxed">
               I am a creative professional with experience working with tech startups and universities. As a graduate student in Artificial Intelligence at Universiti Teknologi Mara, Shah Alam, I enjoy working on new ideas and exciting projects.
@@ -96,12 +98,12 @@ const Index = () => {
 
       {/* Projects Section */}
       <section className="py-20 px-4 md:px-8 lg:px-16" id="projects">
-        <h2 className="text-3xl font-bold mb-12 text-center text-primary/80">Featured Projects</h2>
+        <h2 className="text-3xl font-bold mb-12 text-center gradient-text">Featured Projects</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
           {projects.map((project, index) => (
             <Card
               key={index}
-              className="glass p-6 transform transition-all duration-500 hover:shadow-xl hover:-translate-y-1"
+              className="glass-card p-6"
               style={{ animationDelay: `${index * 200}ms` }}
             >
               <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
@@ -130,13 +132,13 @@ const Index = () => {
 
       {/* Skills Section */}
       <section className="py-20 px-4 md:px-8 lg:px-16" id="skills">
-        <h2 className="text-3xl font-bold mb-12 text-center text-primary/80">Skills</h2>
+        <h2 className="text-3xl font-bold mb-12 text-center gradient-text">Skills</h2>
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {skills.map((skill, index) => (
               <div
                 key={index}
-                className="glass p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-primary/5"
+                className="glass-card p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-primary/5"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {skill}
@@ -148,26 +150,26 @@ const Index = () => {
 
       {/* Contact Section */}
       <section className="py-20 px-4 md:px-8 lg:px-16" id="contact">
-        <div className="max-w-3xl mx-auto glass rounded-xl p-8 transform transition-all duration-500 hover:shadow-xl">
-          <h2 className="text-3xl font-bold mb-6 text-center text-primary/80">Get In Touch</h2>
+        <div className="max-w-3xl mx-auto glass-card p-8">
+          <h2 className="text-3xl font-bold mb-6 text-center gradient-text">Get In Touch</h2>
           <div className="flex justify-center gap-6">
             <Button 
               variant="outline" 
-              className="glass transition-all duration-300 hover:scale-105 hover:shadow-lg"
+              className="glass-card transition-all duration-300 hover:scale-105 hover:shadow-lg"
               onClick={() => window.open('mailto:afiqnurhariz@gmail.com', '_blank')}
             >
               <Mail className="mr-2 h-4 w-4" /> Email
             </Button>
             <Button 
               variant="outline" 
-              className="glass transition-all duration-300 hover:scale-105 hover:shadow-lg"
+              className="glass-card transition-all duration-300 hover:scale-105 hover:shadow-lg"
               onClick={() => window.open('https://www.linkedin.com/in/afiqnurhariz/', '_blank')}
             >
               <Linkedin className="mr-2 h-4 w-4" /> LinkedIn
             </Button>
             <Button 
               variant="outline" 
-              className="glass transition-all duration-300 hover:scale-105 hover:shadow-lg"
+              className="glass-card transition-all duration-300 hover:scale-105 hover:shadow-lg"
               onClick={() => window.open('https://github.com/afiqezio', '_blank')}
             >
               <Github className="mr-2 h-4 w-4" /> GitHub

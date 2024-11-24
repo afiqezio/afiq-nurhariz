@@ -84,6 +84,11 @@ const projectData = {
         url: "assets/projects/TAMS/log.png",
         alt: "Transaction Log",
         caption: "Check In/Check Out log history"
+      },
+      {
+        url: "assets/projects/TAMS/map.png",
+        alt: "User Current Location on Map",
+        caption: "User current location"
       }
     ],
     overview: "This project addresses the challenge faced by employees who work remotely or off-site, unable to use the organization's face terminal reader for attendance. To solve this issue, we are developing a mobile application integrated with the Time Attendance Management System (TAMS). Employees can log in using their TAMS credentials and check in via the app, transmitting their location data to ensure accurate attendance tracking. By centralizing data collection and digitizing the process, the organization aims to reduce operational costs, enhance decision-making capabilities, and streamline administrative tasks securely accessible only to authorized administrators.",
@@ -133,6 +138,16 @@ const projectData = {
         url: "assets/projects/Saloon/qr.png",
         alt: "Booking Details",
         caption: "Detail of the booking with QR"
+      },
+      {
+        url: "assets/projects/Saloon/adminqr.png",
+        alt: "Admin QR Scanner",
+        caption: "Admin QR scanner"
+      },
+      {
+        url: "assets/projects/Saloon/adminconfirm.png",
+        alt: "Admin Confirmation",
+        caption: "Admin confirmation"
       }
     ],
     overview: "Managing salon appointments through inconsistent and outdated methods causes frustration for both customers and salon owners. Our project aims to develop a mobile application using Flutter that provides a seamless and efficient salon booking experience with real-time availability, and personalized customer profiles. By leveraging the advantages of a mobile application such as push notifications, offline access, and enhanced user engagement, our solution offers greater convenience and reliability compared to traditional websites. ",

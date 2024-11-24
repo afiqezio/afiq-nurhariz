@@ -41,6 +41,7 @@ const View = () => {
             title={project.title}
             description={project.description}
             tech={project.tech}
+            duration={currentProjectData.duration}
           />
 
           <ProjectShowcase

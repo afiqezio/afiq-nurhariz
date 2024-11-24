@@ -29,6 +29,12 @@ const Index = () => {
       description: "Analyzing customer behavior to identify reasons for churn and predicting potential attrition using machine learning models",
       tech: ["Python", "Pandas", "XGBoost", "Logistic Regressions", "Decision Tree"],
       link: "#",
+    },
+    {
+      title: "Database Management and Optimization Projects",
+      description: "Development and optimization of database scripts and SQL queries for large-scale data systems",
+      tech: ["MySQL", "SQL", "Database Migration", "Performance Tuning"],
+      link: "#",
     }
   ];
 

@@ -59,5 +59,5 @@ export const saloonProject: ProjectDetails = {
     "Implement push notifications",
     "Add review and rating system"
   ],
-  duration: "4 months"
+  duration: "3 months"
 };

@@ -51,5 +51,5 @@ export const mamakProject: ProjectDetails = {
     "Add nutritional breakdown features"
   ],
   documentUrl: "https://drive.google.com/uc?export=download&id=104hjdPEQC6MvjGkwr1nKRfrXIzSdOxeE",
-  duration: "3 months"
+  duration: "6 months"
 };

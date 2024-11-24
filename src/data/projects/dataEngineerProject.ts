@@ -1,7 +1,23 @@
 import { ProjectDetails } from "../projectTypes";
 
 export const dataEngineerProject: ProjectDetails = {
-  images: [],
+  images: [
+    {
+      url: "assets/projects/SQL/migrate.png",
+      alt: "Migration",
+      caption: "Create migration and backup SQL"
+    },
+    {
+      url: "assets/projects/SQL/clickup.png",
+      alt: "Debug SQL and Clickup Usage",
+      caption: "Debugging existing SQL query"
+    },
+    {
+      url: "assets/projects/SQL/deploy.png",
+      alt: "Deployment Process",
+      caption: "Passing deployment queries"
+    }
+  ],
   overview: "As a Data Engineer, I focused on database management and optimization, working with large-scale data systems to ensure efficient data processing and reliable reporting capabilities. The role involved creating and maintaining database scripts, performing migrations, and collaborating closely with development teams to meet various data requirements.",
   features: [
     "Database migration scripts development",
@@ -21,8 +37,7 @@ export const dataEngineerProject: ProjectDetails = {
   ],
   improvements: [
     "Implement automated testing for database migrations",
-    "Develop real-time monitoring dashboard for database performance",
     "Create comprehensive documentation for all database procedures"
   ],
-  duration: "1 year"
+  duration: "6 months"
 };

@@ -5,17 +5,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import View from "./pages/View";
-import CursorEffect from "./components/CursorEffect";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <CursorEffect />
       <Toaster />
       <Sonner />
-      <BrowserRouter basename='/afiq-nurhariz/'>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/view" element={<View />} />
@@ -24,5 +22,20 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
+
+// const App = () => (
+//   <QueryClientProvider client={queryClient}>
+//     <TooltipProvider>
+//       <Toaster />
+//       <Sonner />
+//       <BrowserRouter basename={'/afiq-nurhariz/'}>
+//         <Routes>
+//           <Route path="/" element={<Index />} />
+//           <Route path="/view" element={<View />} />
+//         </Routes>
+//       </BrowserRouter>
+//     </TooltipProvider>
+//   </QueryClientProvider>
+// );
 
 export default App;

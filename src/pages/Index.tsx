@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, ExternalLink, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import SkillItem from "@/components/SkillItem";
 
 const Index = () => {
   const projects = [
@@ -134,13 +135,7 @@ const Index = () => {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {skills.map((skill, index) => (
-              <div
-                key={index}
-                className="glass p-4 rounded-lg text-center transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:bg-primary/5"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                {skill}
-              </div>
+              <SkillItem key={index} skill={skill} />
             ))}
           </div>
         </div>

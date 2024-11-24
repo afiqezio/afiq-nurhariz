@@ -14,7 +14,7 @@ interface ProjectShowcaseProps {
     alt: string;
     caption: string;
   }>;
-  onImageClick: (image: { url: string; caption: string }) => void;
+  onImageClick: (imageIndex: number) => void;
 }
 
 const ProjectShowcase = ({ images, onImageClick }: ProjectShowcaseProps) => {
@@ -30,7 +30,7 @@ const ProjectShowcase = ({ images, onImageClick }: ProjectShowcaseProps) => {
               <CarouselItem key={index} className="pl-2 md:pl-4 basis-full md:basis-1/2">
                 <div 
                   className="glass p-2 rounded-lg cursor-pointer transition-all duration-300 hover:scale-105"
-                  onClick={() => onImageClick(image)}
+                  onClick={() => onImageClick(index)}
                 >
                   <AspectRatio ratio={16 / 9} className="bg-muted">
                     <img

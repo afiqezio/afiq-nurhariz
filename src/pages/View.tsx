@@ -9,7 +9,7 @@ import { projectData, ProjectData } from "@/data/projectData";
 const View = () => {
   const location = useLocation();
   const project = location.state as ProjectData;
-  const [selectedImage, setSelectedImage] = useState<{ url: string; caption: string } | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -46,7 +46,7 @@ const View = () => {
 
           <ProjectShowcase
             images={currentProjectData.images}
-            onImageClick={setSelectedImage}
+            onImageClick={setSelectedImageIndex}
           />
 
           <ProjectDetails
@@ -60,10 +60,10 @@ const View = () => {
       </section>
 
       <ImageModal
-        isOpen={!!selectedImage}
-        onClose={() => setSelectedImage(null)}
-        imageUrl={selectedImage?.url || ''}
-        caption={selectedImage?.caption || ''}
+        isOpen={selectedImageIndex !== null}
+        onClose={() => setSelectedImageIndex(null)}
+        images={currentProjectData.images}
+        currentIndex={selectedImageIndex ?? 0}
       />
     </div>
   );

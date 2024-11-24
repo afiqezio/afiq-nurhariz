@@ -22,14 +22,14 @@ const ProjectHeader = ({ title, description, tech }: ProjectHeaderProps) => {
         <ArrowLeft className="mr-2 h-4 w-4" /> Back
       </Button>
 
-      <Card className="glass p-8">
-        <h1 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+      <Card className="glass-card p-8">
+        <h1 className="text-4xl font-bold mb-6 gradient-text">
           {title}
         </h1>
         <p className="text-lg text-muted-foreground mb-8">
           {description}
         </p>
-        <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex flex-wrap gap-2">
           {tech.map((tech, index) => (
             <span
               key={index}

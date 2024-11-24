@@ -1,6 +1,4 @@
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Github, ExternalLink } from "lucide-react";
 
 interface ProjectDetailsProps {
   overview: string;
@@ -15,20 +13,15 @@ interface ProjectDetailsProps {
 const ProjectDetails = ({ overview, features, challenges, improvements }: ProjectDetailsProps) => {
   return (
     <div className="space-y-6 animate-slideUp" style={{ animationDelay: "200ms" }}>
-      <Card className="glass p-6">
-        <h2 className="text-2xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+      <Card className="glass-card p-6">
+        <h2 className="text-2xl font-semibold mb-4 gradient-text">
           Project Overview
         </h2>
-        <p className="text-muted-foreground mb-4">{overview}</p>
-        {/* <div className="flex gap-4 mt-6">
-          <Button variant="outline" className="glass transition-all duration-300 hover:scale-105">
-            <Github className="mr-2 h-4 w-4" /> View Source
-          </Button>
-        </div> */}
+        <p className="text-muted-foreground">{overview}</p>
       </Card>
 
-      <Card className="glass p-6">
-        <h2 className="text-2xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+      <Card className="glass-card p-6">
+        <h2 className="text-2xl font-semibold mb-4 gradient-text">
           Key Features
         </h2>
         <ul className="list-disc list-inside space-y-2 text-muted-foreground">
@@ -40,8 +33,8 @@ const ProjectDetails = ({ overview, features, challenges, improvements }: Projec
         </ul>
       </Card>
 
-      <Card className="glass p-6">
-        <h2 className="text-2xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+      <Card className="glass-card p-6">
+        <h2 className="text-2xl font-semibold mb-4 gradient-text">
           Challenges & Solutions
         </h2>
         <div className="space-y-4">
@@ -54,8 +47,8 @@ const ProjectDetails = ({ overview, features, challenges, improvements }: Projec
         </div>
       </Card>
 
-      <Card className="glass p-6">
-        <h2 className="text-2xl font-semibold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+      <Card className="glass-card p-6">
+        <h2 className="text-2xl font-semibold mb-4 gradient-text">
           Future Improvements
         </h2>
         <ul className="list-disc list-inside space-y-2 text-muted-foreground">

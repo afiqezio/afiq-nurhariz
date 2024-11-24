@@ -19,8 +19,8 @@ interface ProjectShowcaseProps {
 
 const ProjectShowcase = ({ images, onImageClick }: ProjectShowcaseProps) => {
   return (
-    <Card className="glass p-8 animate-slideUp">
-      <h2 className="text-2xl font-semibold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/60">
+    <Card className="glass-card p-8 animate-slideUp">
+      <h2 className="text-2xl font-semibold mb-6 gradient-text">
         Project Showcase
       </h2>
       <div className="relative px-4">
@@ -46,8 +46,8 @@ const ProjectShowcase = ({ images, onImageClick }: ProjectShowcaseProps) => {
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="left-2" />
-          <CarouselNext className="right-2" />
+          <CarouselPrevious className="glass" />
+          <CarouselNext className="glass" />
         </Carousel>
       </div>
     </Card>

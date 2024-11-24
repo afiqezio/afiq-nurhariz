@@ -53,6 +53,7 @@ const View = () => {
             features={currentProjectData.features}
             challenges={currentProjectData.challenges}
             improvements={currentProjectData.improvements}
+            documentUrl={currentProjectData.documentUrl}
           />
         </div>
       </section>

@@ -15,6 +15,7 @@ interface ProjectDetails {
   features: string[];
   challenges: Challenge[];
   improvements: string[];
+  documentUrl?: string;
 }
 
 export interface ProjectData {

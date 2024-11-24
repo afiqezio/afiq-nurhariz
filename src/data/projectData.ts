@@ -211,6 +211,7 @@ export const projectData: Record<string, ProjectDetails> = {
     improvements: [
       "Explore advanced machine learning models for improved predictions",
       "Implement real-time dashboards to monitor churn trends"
-    ]
-  },
+    ],
+    documentUrl: "https://drive.google.com/uc?export=download&id=1tNrWm2t8m2NQWEgZDsBbrbZ2OFScr7mR"
+  }
 };

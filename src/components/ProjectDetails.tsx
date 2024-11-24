@@ -36,14 +36,16 @@ const ProjectDetails = ({ overview, features, challenges, improvements, document
           <h2 className="text-2xl font-semibold gradient-text">
             Project Overview
           </h2>
-          <Button
-            variant="outline"
-            className="glass transition-all duration-300 hover:scale-105"
-            onClick={handleDownload}
-          >
-            <FileDown className="mr-2 h-4 w-4" />
-            Documentation
-          </Button>
+          {documentUrl && (
+            <Button
+              variant="outline"
+              className="glass transition-all duration-300 hover:scale-105"
+              onClick={handleDownload}
+            >
+              <FileDown className="mr-2 h-4 w-4" />
+              Documentation
+            </Button>
+          )}
         </div>
         <p className="text-muted-foreground">{overview}</p>
       </Card>

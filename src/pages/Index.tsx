@@ -103,36 +103,38 @@ const Index = () => {
       </section>
 
       {/* Projects Section */}
-      <section className="py-20 px-4 md:px-8 lg:px-16" id="projects">
-        <h2 className="text-3xl font-bold mb-12 text-center gradient-text">Featured Projects</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          {projects.map((project, index) => (
-            <Card
-              key={index}
-              className="glass-card p-6"
-              style={{ animationDelay: `${index * 200}ms` }}
-            >
-              <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
-              <p className="text-muted-foreground mb-4">{project.description}</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tech.map((tech, i) => (
-                  <span
-                    key={i}
-                    className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-              <Button
-                variant="outline"
-                className="w-full glass transition-all duration-300 hover:scale-105"
-                onClick={() => handleViewProject(project)}
+      <section className="py-20 px-4 md:px-8 lg:px-16 flex justify-center" id="projects">
+        <div className="max-w-7xl w-full">
+          <h2 className="text-3xl font-bold mb-12 text-center gradient-text">Featured Projects</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+            {projects.map((project, index) => (
+              <Card
+                key={index}
+                className="glass-card p-6 w-full max-w-md"
+                style={{ animationDelay: `${index * 200}ms` }}
               >
-                <ExternalLink className="mr-2 h-4 w-4" /> View Project
-              </Button>
-            </Card>
-          ))}
+                <h3 className="text-xl font-semibold mb-3">{project.title}</h3>
+                <p className="text-muted-foreground mb-4">{project.description}</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.tech.map((tech, i) => (
+                    <span
+                      key={i}
+                      className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <Button
+                  variant="outline"
+                  className="w-full glass transition-all duration-300 hover:scale-105"
+                  onClick={() => handleViewProject(project)}
+                >
+                  <ExternalLink className="mr-2 h-4 w-4" /> View Project
+                </Button>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
 

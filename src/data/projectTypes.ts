@@ -1,25 +1,19 @@
-export interface ProjectImage {
-  url: string;
-  alt: string;
-  caption: string;
-}
-
-export interface Challenge {
-  title: string;
-  description: string;
-}
-
 export interface ProjectDetails {
-  images: ProjectImage[];
   overview: string;
   features: string[];
-  challenges: Challenge[];
+  challenges: Array<{
+    title: string;
+    description: string;
+  }>;
   improvements: string[];
-  documentUrl?: string; // Optional document URL
+  images: Array<{
+    url: string;
+    alt: string;
+    caption: string;
+  }>;
+  documentUrl?: string;
 }
 
 export interface ProjectData {
-  title: string;
-  description: string;
-  tech: string[];
+  [key: string]: ProjectDetails;
 }

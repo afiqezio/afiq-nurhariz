@@ -25,19 +25,4 @@ const App = () => (
   </QueryClientProvider>
 );
 
-// const App = () => (
-//   <QueryClientProvider client={queryClient}>
-//     <TooltipProvider>
-//       <Toaster />
-//       <Sonner />
-//       <BrowserRouter basename={'/afiq-nurhariz/'}>
-//         <Routes>
-//           <Route path="/" element={<Index />} />
-//           <Route path="/view" element={<View />} />
-//         </Routes>
-//       </BrowserRouter>
-//     </TooltipProvider>
-//   </QueryClientProvider>
-// );
-
 export default App;

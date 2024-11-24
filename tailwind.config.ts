@@ -74,12 +74,17 @@ export default {
           "0%": { transform: "translateY(100px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
         },
+        fadeOut: {
+          "0%": { opacity: "1", transform: "scale(1)" },
+          "100%": { opacity: "0", transform: "scale(1.5)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         fadeIn: "fadeIn 1s ease-out",
         slideUp: "slideUp 0.5s ease-out",
+        fadeOut: "fadeOut 1s ease-out",
       },
     },
   },

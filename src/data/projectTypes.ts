@@ -5,7 +5,7 @@ export interface ProjectDetails {
     title: string;
     description: string;
   }>;
-  improvements: string[];
+  improvementss: string[];
   images: Array<{
     url: string;
     alt: string;

@@ -24,6 +24,12 @@ const Index = () => {
       tech: ["Flutter", "PHP", "MySQL"],
       link: "#",
     },
+    {
+      title: "Customer Churn Prediction and Analysis Project",
+      description: "Analyzing customer behavior to identify reasons for churn and predicting potential attrition using machine learning models",
+      tech: ["Python", "Pandas", "XGBoost", "Logistic Regressions", "Decision Tree"],
+      link: "#",
+    }
   ];
 
   const skills = [

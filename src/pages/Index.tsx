@@ -52,9 +52,9 @@ const Index = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+      <section className="min-h-[90vh] flex items-center justify-center px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
-        <div className="text-center space-y-8 animate-fadeIn relative z-10">
+        <div className="text-center space-y-6 animate-fadeIn relative z-10 max-w-3xl mx-auto">
           <div className="relative inline-block floating-element">
             <div className="absolute inset-0 bg-primary/10 rounded-full blur-2xl transform -translate-x-1/2 -translate-y-1/2 w-48 h-48" />
             <Avatar className="h-32 w-32 border-2 border-primary/20 transition-transform duration-300 hover:scale-105 relative">
@@ -94,7 +94,7 @@ const Index = () => {
       </section>
 
       {/* About Section */}
-      <section className="py-20 px-4 md:px-8 lg:px-16" id="about">
+      <section className="py-16 px-4 md:px-8 lg:px-16" id="about">
         <div className="max-w-3xl mx-auto glass-card p-8 transform hover:scale-[1.01] transition-all duration-500">
           <h2 className="text-3xl font-bold mb-6 gradient-text">About Me</h2>
           <div className="space-y-4 text-muted-foreground">
@@ -109,10 +109,10 @@ const Index = () => {
       </section>
 
       {/* Projects Section */}
-      <section className="py-20 px-4 md:px-8 lg:px-16 flex justify-center" id="projects">
-        <div className="max-w-7xl w-full">
+      <section className="py-16 px-4 md:px-8 lg:px-16 flex justify-center" id="projects">
+        <div className="max-w-6xl w-full">
           <h2 className="text-3xl font-bold mb-12 text-center gradient-text">Featured Projects</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, index) => (
               <Card
                 key={index}
@@ -145,10 +145,10 @@ const Index = () => {
       </section>
 
       {/* Skills Section */}
-      <section className="py-20 px-4 md:px-8 lg:px-16" id="skills">
-        <h2 className="text-3xl font-bold mb-12 text-center gradient-text">Skills</h2>
+      <section className="py-16 px-4 md:px-8 lg:px-16" id="skills">
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <h2 className="text-3xl font-bold mb-12 text-center gradient-text">Skills</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
             {skills.map((skill, index) => (
               <div
                 key={index}
@@ -163,8 +163,8 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20 px-4 md:px-8 lg:px-16" id="contact">
-        <div className="max-w-3xl mx-auto glass-card p-8">
+      <section className="py-16 px-4 md:px-8 lg:px-16 mb-8" id="contact">
+        <div className="max-w-2xl mx-auto glass-card p-8">
           <h2 className="text-3xl font-bold mb-6 text-center gradient-text">Get In Touch</h2>
           <div className="flex justify-center gap-6">
             <Button 

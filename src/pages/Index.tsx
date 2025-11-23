@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { LiquidEther, CleanNav } from "@/components/reactbits";
+import { CleanNav } from "@/components/reactbits";
+import DarkVeil from "@/components/DarkVeil";
 import { navItems } from "@/constants/data";
 import { Project } from "@/types";
 import HeroSection from "@/sections/HeroSection";
@@ -18,13 +19,13 @@ const Index = () => {
   return (
     <div className="min-h-screen relative">
       {/* Background */}
-      <LiquidEther speed={0.8} intensity={0.6} />
+      <DarkVeil />
       
       {/* Navigation */}
       <CleanNav items={navItems} />
 
       {/* Main Content */}
-      <main>
+      <main className="relative z-10">
         <HeroSection />
         <AboutSection />
         <ProjectsSection onViewProject={handleViewProject} />

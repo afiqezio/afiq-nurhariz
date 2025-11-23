@@ -18,10 +18,10 @@ const ReactBitsButton = ({
   const baseStyles = 'relative inline-flex items-center justify-center font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
   
   const variants = {
-    default: 'bg-slate-900 text-white hover:bg-slate-800 shadow-lg hover:shadow-xl focus:ring-slate-500 backdrop-blur-sm',
-    outline: 'border-2 border-white/20 bg-white/10 backdrop-blur-xl text-slate-800 hover:border-white/30 hover:bg-white/20 shadow-lg hover:shadow-xl focus:ring-slate-400',
-    ghost: 'bg-transparent text-slate-700 hover:bg-white/10 backdrop-blur-sm focus:ring-slate-300',
-    gradient: 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white hover:shadow-2xl hover:scale-105 focus:ring-purple-500 relative overflow-hidden',
+    default: 'bg-slate-800 text-white hover:bg-slate-700 shadow-lg hover:shadow-xl focus:ring-slate-500 backdrop-blur-sm',
+    outline: 'border-2 border-white/20 bg-white/5 backdrop-blur-xl text-slate-200 hover:border-white/30 hover:bg-white/10 shadow-lg hover:shadow-xl focus:ring-slate-400',
+    ghost: 'bg-transparent text-slate-300 hover:bg-white/10 backdrop-blur-sm focus:ring-slate-400',
+    gradient: 'bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white hover:shadow-2xl hover:scale-105 focus:ring-purple-400 relative overflow-hidden',
   };
   
   const sizes = {

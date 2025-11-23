@@ -30,42 +30,42 @@ const AboutSection = () => {
           {/* Content */}
             <div className="space-y-8">
             <div className="space-y-6">
-              <p className="text-lg md:text-xl lg:text-2xl leading-relaxed text-slate-700">
-                I'm a passionate <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">full-stack developer</span> and <span className="font-semibold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">AI enthusiast</span> with a creative approach to problem-solving.
+              <p className="text-lg md:text-xl lg:text-2xl leading-relaxed text-slate-200">
+                I'm a passionate <span className="font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">full-stack developer</span> and <span className="font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">AI enthusiast</span> with a creative approach to problem-solving.
               </p>
 
-              <p className="text-lg md:text-xl leading-relaxed text-slate-600">
-                Currently pursuing <span className="font-semibold text-slate-900">Artificial Intelligence</span> at Universiti Teknologi Mara, I specialize in creating intelligent solutions that bridge the gap between technology and real-world applications.
+              <p className="text-lg md:text-xl leading-relaxed text-slate-300">
+                A graduate with a degree in <span className="font-semibold text-slate-100">Artificial Intelligence</span> from Universiti Teknologi Mara, I bring a blend of academic knowledge and practical experience from both full-time and part-time development roles.
               </p>
 
-              <p className="text-lg md:text-xl leading-relaxed text-slate-600">
-                My journey spans from crafting elegant web applications to developing machine learning models that drive meaningful insights from complex datasets.
+              <p className="text-lg md:text-xl leading-relaxed text-slate-300">
+                My experience spans from crafting elegant web applications to developing machine learning models that drive meaningful insights from complex datasets. I thrive on turning complex problems into elegant, scalable solutions.
               </p>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 pt-8">
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600 mb-2">
+                <div className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400 mb-2">
                   1+
                 </div>
-                <p className="text-sm text-slate-500 uppercase tracking-wider">
+                <p className="text-sm text-slate-400 uppercase tracking-wider">
                   Years Experience
                 </p>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-2">
+                <div className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-2">
                   5+
                 </div>
-                <p className="text-sm text-slate-500 uppercase tracking-wider">
+                <p className="text-sm text-slate-400 uppercase tracking-wider">
                   Projects Completed
                 </p>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-red-600 mb-2">
+                <div className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-red-400 mb-2">
                   ∞
                 </div>
-                <p className="text-sm text-slate-500 uppercase tracking-wider">
+                <p className="text-sm text-slate-400 uppercase tracking-wider">
                   Learning Journey
                 </p>
               </div>
@@ -83,10 +83,10 @@ const AboutSection = () => {
                       <span className="text-white font-bold text-xl">🚀</span>
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-900">
+                      <p className="font-semibold text-slate-100">
                         Innovation
                       </p>
-                      <p className="text-sm text-slate-600">
+                      <p className="text-sm text-slate-400">
                         Pushing boundaries
                       </p>
                     </div>
@@ -97,10 +97,10 @@ const AboutSection = () => {
                       <span className="text-white font-bold text-xl">🎯</span>
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-900">
+                      <p className="font-semibold text-slate-100">
                         Precision
                       </p>
-                      <p className="text-sm text-slate-600">
+                      <p className="text-sm text-slate-400">
                         Attention to detail
                       </p>
                     </div>
@@ -111,10 +111,10 @@ const AboutSection = () => {
                       <span className="text-white font-bold text-xl">⚡</span>
                     </div>
                     <div>
-                      <p className="font-semibold text-slate-900">
+                      <p className="font-semibold text-slate-100">
                         Performance
                       </p>
-                      <p className="text-sm text-slate-600">
+                      <p className="text-sm text-slate-400">
                         Optimized solutions
                       </p>
                     </div>

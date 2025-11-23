@@ -53,7 +53,7 @@ const SkillCard = ({ skill }: SkillCardProps) => {
         </div>
 
         {/* Skill Name */}
-        <p className="text-lg md:text-xl font-bold text-slate-800 group-hover:text-slate-900 transition-colors duration-300">
+        <p className="text-lg md:text-xl font-bold text-slate-200 group-hover:text-slate-100 transition-colors duration-300">
           {skill}
         </p>
 

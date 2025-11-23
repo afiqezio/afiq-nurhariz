@@ -67,7 +67,7 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
-          ? 'bg-white/70 backdrop-blur-2xl border-b border-white/20 shadow-lg'
+          ? 'bg-slate-900/80 backdrop-blur-2xl border-b border-white/10 shadow-2xl'
           : 'bg-transparent',
         className
       )}
@@ -100,14 +100,14 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
                     'text-sm font-medium transition-all duration-300',
                     'flex items-center gap-2',
                     isActive
-                      ? 'text-slate-900'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-white/50'
+                      ? 'text-slate-100'
+                      : 'text-slate-400 hover:text-slate-100 hover:bg-white/10'
                   )}
                 >
                   {item.icon && (
                     <span className={cn(
                       'w-4 h-4 transition-colors duration-300',
-                      isActive ? 'text-blue-600' : 'text-slate-500'
+                      isActive ? 'text-blue-400' : 'text-slate-400'
                     )}>
                       {item.icon}
                     </span>
@@ -125,7 +125,7 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-white/50 transition-colors"
+            className="md:hidden p-2 rounded-lg text-slate-400 hover:bg-white/10 transition-colors"
             aria-label="Toggle menu"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
@@ -159,7 +159,7 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-white/20 mt-2 pt-4 pb-4">
+          <div className="md:hidden border-t border-white/10 mt-2 pt-4 pb-4">
             <div className="flex flex-col gap-2">
               {items.map((item, index) => {
                 const isActive = active === item.href;
@@ -176,14 +176,14 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
                       'text-sm font-medium transition-all duration-300',
                       'flex items-center gap-3',
                       isActive
-                        ? 'text-slate-900 bg-white/30'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-white/20'
+                        ? 'text-slate-100 bg-white/20'
+                        : 'text-slate-400 hover:text-slate-100 hover:bg-white/10'
                     )}
                   >
                     {item.icon && (
                       <span className={cn(
                         'w-5 h-5 transition-colors duration-300',
-                        isActive ? 'text-blue-600' : 'text-slate-500'
+                        isActive ? 'text-blue-400' : 'text-slate-400'
                       )}>
                         {item.icon}
                       </span>

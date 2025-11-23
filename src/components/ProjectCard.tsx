@@ -10,28 +10,28 @@ interface ProjectCardProps {
 const ProjectCard = ({ project, onViewProject }: ProjectCardProps) => {
   const getTechColor = (tech: string) => {
     const colors = {
-      'Python': 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100',
-      'Flutter': 'bg-cyan-50 text-cyan-700 border-cyan-200 hover:bg-cyan-100',
-      'React': 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100',
-      'JavaScript': 'bg-yellow-50 text-yellow-700 border-yellow-200 hover:bg-yellow-100',
-      'C#': 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100',
-      'PHP': 'bg-indigo-50 text-indigo-700 border-indigo-200 hover:bg-indigo-100',
-      'MySQL': 'bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100',
-      'MSSQL': 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100',
-      'SQL': 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100',
-      'YoloV5': 'bg-green-50 text-green-700 border-green-200 hover:bg-green-100',
-      'CNN': 'bg-teal-50 text-teal-700 border-teal-200 hover:bg-teal-100',
-      'Pandas': 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100',
-      'XGBoost': 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100',
-      'Logistic Regressions': 'bg-pink-50 text-pink-700 border-pink-200 hover:bg-pink-100',
-      'Decision Tree': 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100',
-      'Dart': 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100',
-      '.NET': 'bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100',
-      'Laravel': 'bg-red-50 text-red-700 border-red-200 hover:bg-red-100',
-      'Database Migration': 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100',
-      'Performance Tuning': 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100',
+      'Python': 'bg-blue-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30',
+      'Flutter': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/30',
+      'React': 'bg-blue-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30',
+      'JavaScript': 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30 hover:bg-yellow-500/30',
+      'C#': 'bg-purple-500/20 text-purple-300 border-purple-500/30 hover:bg-purple-500/30',
+      'PHP': 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30 hover:bg-indigo-500/30',
+      'MySQL': 'bg-orange-500/20 text-orange-300 border-orange-500/30 hover:bg-orange-500/30',
+      'MSSQL': 'bg-red-500/20 text-red-300 border-red-500/30 hover:bg-red-500/30',
+      'SQL': 'bg-slate-500/20 text-slate-300 border-slate-500/30 hover:bg-slate-500/30',
+      'YoloV5': 'bg-green-500/20 text-green-300 border-green-500/30 hover:bg-green-500/30',
+      'CNN': 'bg-teal-500/20 text-teal-300 border-teal-500/30 hover:bg-teal-500/30',
+      'Pandas': 'bg-blue-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30',
+      'XGBoost': 'bg-purple-500/20 text-purple-300 border-purple-500/30 hover:bg-purple-500/30',
+      'Logistic Regressions': 'bg-pink-500/20 text-pink-300 border-pink-500/30 hover:bg-pink-500/30',
+      'Decision Tree': 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/30',
+      'Dart': 'bg-blue-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30',
+      '.NET': 'bg-purple-500/20 text-purple-300 border-purple-500/30 hover:bg-purple-500/30',
+      'Laravel': 'bg-red-500/20 text-red-300 border-red-500/30 hover:bg-red-500/30',
+      'Database Migration': 'bg-slate-500/20 text-slate-300 border-slate-500/30 hover:bg-slate-500/30',
+      'Performance Tuning': 'bg-amber-500/20 text-amber-300 border-amber-500/30 hover:bg-amber-500/30',
     };
-    return colors[tech as keyof typeof colors] || 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100';
+    return colors[tech as keyof typeof colors] || 'bg-slate-500/20 text-slate-300 border-slate-500/30 hover:bg-slate-500/30';
   };
 
   return (
@@ -54,11 +54,11 @@ const ProjectCard = ({ project, onViewProject }: ProjectCardProps) => {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-xl md:text-2xl font-bold text-slate-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 transition-all duration-300">
+            <h3 className="text-xl md:text-2xl font-bold text-slate-100 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-400 transition-all duration-300">
               {project.title}
             </h3>
 
-            <p className="text-slate-600 leading-relaxed text-base md:text-lg">
+            <p className="text-slate-300 leading-relaxed text-base md:text-lg">
               {project.description}
             </p>
           </div>

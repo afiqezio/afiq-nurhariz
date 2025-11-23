@@ -18,7 +18,7 @@ const HeroSection = () => {
                 <img
                   src={heroData.profileImage}
                   alt={`${heroData.name} profile`}
-                  className="h-32 w-32 md:h-36 md:w-36 rounded-full object-cover ring-4 ring-white/20"
+                  className="h-32 w-32 md:h-36 md:w-36 rounded-full object-cover ring-4 ring-white/10"
                   width={144}
                   height={144}
                 />
@@ -31,7 +31,7 @@ const HeroSection = () => {
         {/* Name and Title with Better Hierarchy */}
         <div className="space-y-8">
           <div className="space-y-4">
-            <p className="text-lg md:text-xl text-slate-600 font-light tracking-wider uppercase">
+            <p className="text-lg md:text-xl text-slate-400 font-light tracking-wider uppercase">
               {heroData.greeting}
             </p>
 
@@ -49,11 +49,11 @@ const HeroSection = () => {
           </div>
 
           <div className="space-y-6">
-            <p className="text-xl md:text-2xl lg:text-3xl text-slate-700 font-medium tracking-wide">
+            <p className="text-xl md:text-2xl lg:text-3xl text-slate-200 font-medium tracking-wide">
               {heroData.roles.join(" • ")}
             </p>
 
-            <p className="text-lg md:text-xl text-slate-500 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
               {heroData.description}
             </p>
           </div>
@@ -80,10 +80,12 @@ const HeroSection = () => {
             size="lg"
             onClick={() => window.open('https://github.com/afiqezio', '_blank')}
             aria-label="Visit GitHub profile"
-            className="backdrop-blur-xl bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/30"
+            className="group backdrop-blur-xl bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/30"
           >
-            <Github className="mr-3 h-5 w-5 group-hover:scale-110 transition-transform duration-300" aria-hidden="true" />
-            View GitHub
+            <span className="flex items-center">
+              <Github className="mr-3 h-5 w-5 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" aria-hidden="true" />
+              View GitHub
+            </span>
           </ReactBitsButton>
         </div>
       </div>

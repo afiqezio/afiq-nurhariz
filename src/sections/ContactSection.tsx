@@ -25,33 +25,39 @@ const ContactSection = () => {
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 mx-auto rounded-full mb-8"></div>
 
-          <p className="text-xl md:text-2xl text-slate-600 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto">
             Ready to bring your ideas to life? Let's collaborate and create something amazing together.
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {contactLinks.map((link, index) => (
+          {contactLinks.map((link) => (
             <TiltedCard key={link.label} intensity={8} className="group">
-              <GlassSurface className="p-8 text-center relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <button
+                onClick={() => window.open(link.href, '_blank')}
+                className="w-full text-left"
+                aria-label={`Open ${link.label}`}
+              >
+                <GlassSurface className="p-8 text-center relative overflow-hidden cursor-pointer">
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                <div className="relative space-y-4">
-                  <div className="w-16 h-16 mx-auto bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center text-white text-2xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                    {link.icon}
+                  <div className="relative space-y-4">
+                    <div className="w-16 h-16 mx-auto bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                      {link.icon}
+                    </div>
+
+                    <p className="text-lg font-bold text-slate-100 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-purple-400 transition-all duration-300">
+                      {link.label}
+                    </p>
+
+                    <p className="text-sm text-slate-400">
+                      {link.label === 'Email' ? 'Send me a message' :
+                       link.label === 'LinkedIn' ? 'Connect professionally' :
+                       'Explore my code'}
+                    </p>
                   </div>
-
-                  <p className="text-lg font-bold text-slate-900 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 transition-all duration-300">
-                    {link.label}
-                  </p>
-
-                  <p className="text-sm text-slate-500">
-                    {link.label === 'Email' ? 'Send me a message' :
-                     link.label === 'LinkedIn' ? 'Connect professionally' :
-                     'Explore my code'}
-                  </p>
-                </div>
-              </GlassSurface>
+                </GlassSurface>
+              </button>
             </TiltedCard>
           ))}
         </div>
@@ -62,36 +68,13 @@ const ContactSection = () => {
             <GlassSurface className="p-8 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5"></div>
               <div className="relative space-y-6">
-                <h3 className="text-2xl md:text-3xl font-bold text-slate-900">
+                <h3 className="text-2xl md:text-3xl font-bold text-slate-100">
                   Let's Build Something Together
                 </h3>
 
-                <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+                <p className="text-lg text-slate-300 max-w-2xl mx-auto">
                   Whether you have a project in mind, need technical consultation, or just want to chat about technology, I'm always open to interesting conversations.
                 </p>
-
-                <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                  <ReactBitsButton
-                    variant="gradient"
-                    size="lg"
-                    onClick={() => window.open('mailto:afiqnurhariz@gmail.com', '_blank')}
-                    aria-label="Send email"
-                  >
-                    <span className="mr-2">✉️</span>
-                    Start a Conversation
-                  </ReactBitsButton>
-
-                  <ReactBitsButton
-                    variant="outline"
-                    size="lg"
-                    onClick={() => window.open('https://calendly.com/afiqnurhariz', '_blank')}
-                    aria-label="Schedule a call"
-                    className="backdrop-blur-xl bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/30"
-                  >
-                    <span className="mr-2">📅</span>
-                    Schedule a Call
-                  </ReactBitsButton>
-                </div>
               </div>
             </GlassSurface>
           </TiltedCard>

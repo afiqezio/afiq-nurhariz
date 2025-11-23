@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -35,28 +35,146 @@
   }
   body {
     @apply bg-background text-foreground font-['Inter'];
-    background: radial-gradient(circle at top left, #F1F5F9, #E2E8F0),
-                radial-gradient(circle at bottom right, #E2E8F0, #F1F5F9);
-    background-blend-mode: overlay;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 20%, rgba(236, 72, 153, 0.05) 0%, transparent 50%),
+      linear-gradient(135deg, #f8f9fa 0%, #f1f3f5 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
 }
 
 .glass {
-  @apply backdrop-blur-xl bg-white/80 border border-white/20 shadow-sm hover:shadow-lg transition-all duration-300;
+  @apply backdrop-blur-xl bg-white/70 border border-white/30 shadow-lg hover:shadow-2xl transition-all duration-500;
 }
 
 .glass-card {
-  @apply glass rounded-2xl hover:bg-white/90 hover:scale-[1.02] transition-all duration-300;
+  @apply glass rounded-3xl hover:bg-white/85 hover:scale-[1.02] transition-all duration-500;
+  box-shadow: 
+    0 8px 32px 0 rgba(31, 38, 135, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+}
+
+.glass-card:hover {
+  box-shadow: 
+    0 20px 60px 0 rgba(31, 38, 135, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.4) inset;
 }
 
 .section-padding {
-  @apply py-16 px-4 md:px-8 lg:px-16;
+  @apply py-20 px-4 md:px-8 lg:px-16;
 }
 
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600 animate-glow;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-purple-600 to-pink-500;
+  background-size: 200% 200%;
+  animation: gradient-shift 4s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .floating-element {
   @apply animate-float;
+}
+
+/* Modern button styles */
+.btn-modern {
+  @apply relative overflow-hidden transition-all duration-300;
+}
+
+.btn-modern::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/20 opacity-0 transition-opacity duration-300;
+}
+
+.btn-modern:hover::before {
+  @apply opacity-100;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced card hover effects */
+.card-hover {
+  @apply transition-all duration-500 ease-out;
+  transform-style: preserve-3d;
+}
+
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Animated background elements */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  33% {
+    transform: translateY(-20px) translateX(10px);
+  }
+  66% {
+    transform: translateY(10px) translateX(-10px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+/* Pulse glow effect */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Slide in from bottom */
+@keyframes slide-in-bottom {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in-bottom {
+  animation: slide-in-bottom 0.6s ease-out forwards;
+}
+
+/* Fade in with scale */
+@keyframes fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in-scale {
+  animation: fade-in-scale 0.6s ease-out forwards;
 }

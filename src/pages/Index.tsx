@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Mail, ExternalLink, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import LiquidBackground from "@/components/LiquidBackground";
 
 const Index = () => {
   const projectsRef = useRef<HTMLDivElement>(null);
@@ -86,20 +87,15 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
+      {/* Liquid Background */}
+      <LiquidBackground />
+
       {/* Hero Section */}
-      <section className="min-h-[100vh] flex items-center justify-center px-4 relative overflow-hidden pt-20">
-        {/* Animated background elements */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse-glow" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-float-slow" />
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-pink-500/5 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1s' }} />
-        </div>
+      <section className="min-h-[100vh] flex items-center justify-center px-4 relative overflow-hidden pt-20 bg-gradient-to-b from-white via-blue-50/30 to-purple-50/20">
         
         <div className="text-center space-y-8 animate-fadeIn relative z-10 max-w-4xl mx-auto">
-          <div className="relative inline-block floating-element">
-            <div className="absolute inset-0 bg-primary/20 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 animate-pulse-glow" />
-            <div className="absolute inset-0 bg-purple-500/10 rounded-full blur-2xl transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 animate-float-slow" />
-            <Avatar className="h-36 w-36 md:h-40 md:w-40 border-4 border-primary/30 shadow-2xl transition-all duration-500 hover:scale-110 hover:border-primary/50 relative z-10">
+          <div className="relative inline-block">
+            <Avatar className="h-36 w-36 md:h-40 md:w-40 border-4 border-slate-200 shadow-lg transition-all duration-500 hover:scale-105 hover:shadow-xl relative z-10 bg-white">
               <AvatarImage
                 src="assets/afiqnhz.jpg"
                 alt="Profile"
@@ -109,33 +105,35 @@ const Index = () => {
             </Avatar>
           </div>
           <div className="space-y-6 animate-slideInBottom" style={{ animationDelay: '0.2s' }}>
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+            <h1 className="text-5xl md:text-7xl font-bold leading-tight text-slate-900">
               Hi, I'm <br />
-              <span className="gradient-text">Afiq Nurhariz</span>
+              <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Afiq Nurhariz
+              </span>
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground font-medium">
+            <p className="text-xl md:text-2xl text-slate-600 font-medium">
               Software Developer | Mobile Developer | AI Engineer
             </p>
-            <p className="text-base md:text-lg text-muted-foreground/80 max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-slate-500 max-w-2xl mx-auto">
               Crafting innovative solutions with cutting-edge technology and creative problem-solving
             </p>
           </div>
           <div className="flex flex-wrap gap-4 justify-center animate-fadeInScale" style={{ animationDelay: '0.4s' }}>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="default"
               size="lg"
-              className="glass-card px-8 py-6 text-base font-semibold transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:bg-primary/10 group"
+              className="px-8 py-6 text-base font-semibold bg-slate-900 text-white hover:bg-slate-800 shadow-md hover:shadow-lg transition-all duration-300"
               onClick={() => window.open('https://drive.google.com/uc?export=download&id=1i6d_Tmi5mSNWLJsGsaX4_IiE0p9Mg44o', '_blank')}
             >
-              <FileText className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" /> Resume
+              <FileText className="mr-2 h-5 w-5" /> Resume
             </Button>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="lg"
-              className="glass-card px-8 py-6 text-base font-semibold transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:bg-primary/10 group"
+              className="px-8 py-6 text-base font-semibold border-2 border-slate-300 hover:border-slate-400 hover:bg-slate-50 shadow-sm hover:shadow-md transition-all duration-300"
               onClick={() => window.open('https://github.com/afiqezio', '_blank')}
             >
-              <Github className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" /> GitHub
+              <Github className="mr-2 h-5 w-5" /> GitHub
             </Button>
           </div>
         </div>
@@ -144,16 +142,16 @@ const Index = () => {
       {/* About Section */}
       <section className="section-padding" id="about">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center gradient-text animate-fadeIn">
+          <h2 className="text-4xl md:text-5xl font-bold mb-12 text-center text-slate-900 animate-fadeIn">
             About Me
           </h2>
-          <div className="glass-card p-10 md:p-12 card-hover animate-fadeInScale">
-            <div className="space-y-6 text-muted-foreground">
+          <div className="bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl p-10 md:p-12 shadow-sm hover:shadow-md transition-all duration-300 animate-fadeInScale">
+            <div className="space-y-6 text-slate-600">
               <p className="text-lg md:text-xl leading-relaxed">
-                I am a creative professional with experience working with tech startups and universities. As a graduate student in <span className="text-foreground font-semibold">Artificial Intelligence</span> at Universiti Teknologi Mara, Shah Alam, I enjoy working on new ideas and exciting projects.
+                I am a creative professional with experience working with tech startups and universities. As a graduate student in <span className="text-slate-900 font-semibold">Artificial Intelligence</span> at Universiti Teknologi Mara, Shah Alam, I enjoy working on new ideas and exciting projects.
               </p>
               <p className="text-lg md:text-xl leading-relaxed">
-                I am strongly interested in <span className="text-foreground font-semibold">data and AI</span>, creating smart algorithms, building data pipelines, and working with large datasets to find insights. I also have experience in <span className="text-foreground font-semibold">web and mobile development</span>, creating user-friendly applications. My studies in Web Development and AI have given me solid skills, and I am always ready to learn and improve.
+                I am strongly interested in <span className="text-slate-900 font-semibold">data and AI</span>, creating smart algorithms, building data pipelines, and working with large datasets to find insights. I also have experience in <span className="text-slate-900 font-semibold">web and mobile development</span>, creating user-friendly applications. My studies in Web Development and AI have given me solid skills, and I am always ready to learn and improve.
               </p>
             </div>
           </div>
@@ -163,30 +161,30 @@ const Index = () => {
       {/* Projects Section */}
       <section className="section-padding flex justify-center" id="projects">
         <div className="max-w-7xl w-full" ref={projectsRef}>
-          <h2 className="text-4xl md:text-5xl font-bold mb-16 text-center gradient-text animate-fadeIn">
+          <h2 className="text-4xl md:text-5xl font-bold mb-16 text-center text-slate-900 animate-fadeIn">
             Featured Projects
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.map((project, index) => (
               <Card
                 key={index}
-                className="project-card glass-card p-8 w-full card-hover group opacity-0"
-                style={{ 
+                className="project-card bg-white/80 backdrop-blur-sm border border-slate-200 p-8 w-full hover:shadow-lg hover:border-slate-300 transition-all duration-300 group opacity-0"
+                style={{
                   animationDelay: `${index * 150}ms`
                 }}
               >
                 <div className="space-y-4">
-                  <h3 className="text-xl md:text-2xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">
+                  <h3 className="text-xl md:text-2xl font-bold mb-4 text-slate-900 group-hover:text-blue-600 transition-colors duration-300">
                     {project.title}
                   </h3>
-                  <p className="text-muted-foreground mb-6 leading-relaxed min-h-[60px]">
+                  <p className="text-slate-600 mb-6 leading-relaxed min-h-[60px]">
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-6">
                     {project.tech.map((tech, i) => (
                       <span
                         key={i}
-                        className="text-xs px-3 py-1.5 rounded-full bg-primary/10 text-primary font-medium border border-primary/20 hover:bg-primary/20 transition-colors duration-300"
+                        className="text-xs px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 font-medium border border-slate-200 hover:bg-slate-200 hover:border-slate-300 transition-colors duration-300"
                       >
                         {tech}
                       </span>
@@ -195,7 +193,7 @@ const Index = () => {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="w-full glass transition-all duration-500 hover:scale-105 hover:bg-primary/10 hover:border-primary/30 group/btn"
+                    className="w-full border-2 border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-all duration-300 group/btn"
                     onClick={() => handleViewProject(project)}
                   >
                     <ExternalLink className="mr-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-300" /> 
@@ -211,19 +209,19 @@ const Index = () => {
       {/* Skills Section */}
       <section className="section-padding" id="skills">
         <div className="max-w-5xl mx-auto" ref={skillsRef}>
-          <h2 className="text-4xl md:text-5xl font-bold mb-16 text-center gradient-text animate-fadeIn">
+          <h2 className="text-4xl md:text-5xl font-bold mb-16 text-center text-slate-900 animate-fadeIn">
             Skills & Technologies
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
             {skills.map((skill, index) => (
               <div
                 key={index}
-                className="skill-card glass-card p-6 rounded-xl text-center font-semibold transform transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:bg-primary/10 hover:border-primary/30 group cursor-default opacity-0"
-                style={{ 
+                className="skill-card bg-white/80 backdrop-blur-sm border border-slate-200 p-6 rounded-xl text-center font-semibold text-slate-700 transform transition-all duration-300 hover:scale-105 hover:shadow-md hover:border-slate-300 hover:bg-slate-50 cursor-default opacity-0"
+                style={{
                   animationDelay: `${index * 80}ms`
                 }}
               >
-                <span className="group-hover:text-primary transition-colors duration-300">
+                <span className="transition-colors duration-300">
                   {skill}
                 </span>
               </div>
@@ -235,18 +233,18 @@ const Index = () => {
       {/* Contact Section */}
       <section className="section-padding mb-8" id="contact">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-center gradient-text animate-fadeIn">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-center text-slate-900 animate-fadeIn">
             Get In Touch
           </h2>
-          <p className="text-center text-muted-foreground mb-12 text-lg">
+          <p className="text-center text-slate-600 mb-12 text-lg">
             Let's connect and discuss opportunities
           </p>
-          <div className="glass-card p-10 md:p-12 animate-fadeInScale">
+          <div className="bg-white/80 backdrop-blur-sm border border-slate-200 rounded-2xl p-10 md:p-12 shadow-sm animate-fadeInScale">
             <div className="flex flex-wrap justify-center gap-4 md:gap-6">
               <Button 
                 variant="outline" 
                 size="lg"
-                className="glass-card px-8 py-6 text-base font-semibold transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:bg-primary/10 group flex-1 min-w-[140px]"
+                className="px-8 py-6 text-base font-semibold border-2 border-slate-300 hover:border-slate-400 hover:bg-slate-50 shadow-sm hover:shadow-md transition-all duration-300 group flex-1 min-w-[140px]"
                 onClick={() => window.open('mailto:afiqnurhariz@gmail.com', '_blank')}
               >
                 <Mail className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" /> 
@@ -255,7 +253,7 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="glass-card px-8 py-6 text-base font-semibold transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:bg-primary/10 group flex-1 min-w-[140px]"
+                className="px-8 py-6 text-base font-semibold border-2 border-slate-300 hover:border-slate-400 hover:bg-slate-50 shadow-sm hover:shadow-md transition-all duration-300 group flex-1 min-w-[140px]"
                 onClick={() => window.open('https://www.linkedin.com/in/afiqnurhariz/', '_blank')}
               >
                 <Linkedin className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" /> 
@@ -264,7 +262,7 @@ const Index = () => {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="glass-card px-8 py-6 text-base font-semibold transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:bg-primary/10 group flex-1 min-w-[140px]"
+                className="px-8 py-6 text-base font-semibold border-2 border-slate-300 hover:border-slate-400 hover:bg-slate-50 shadow-sm hover:shadow-md transition-all duration-300 group flex-1 min-w-[140px]"
                 onClick={() => window.open('https://github.com/afiqezio', '_blank')}
               >
                 <Github className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" /> 

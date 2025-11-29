@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { ThemeColors } from '@/lib/theme';
 
 interface GradientButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -17,9 +18,24 @@ const GradientButton: React.FC<GradientButtonProps> = ({
   const baseClasses = 'relative inline-flex items-center justify-center font-semibold transition-all duration-300 rounded-lg overflow-hidden group';
 
   const variantClasses = {
-    primary: 'bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white hover:from-purple-600 hover:via-pink-600 hover:to-red-600 shadow-lg hover:shadow-xl transform hover:scale-105',
-    secondary: 'bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 text-white hover:from-blue-600 hover:via-cyan-600 hover:to-teal-600 shadow-lg hover:shadow-xl transform hover:scale-105',
-    accent: 'bg-gradient-to-r from-emerald-500 via-green-500 to-lime-500 text-white hover:from-emerald-600 hover:via-green-600 hover:to-lime-600 shadow-lg hover:shadow-xl transform hover:scale-105'
+    primary: 'text-white shadow-lg hover:shadow-xl transform hover:scale-105',
+    secondary: 'text-white shadow-lg hover:shadow-xl transform hover:scale-105',
+    accent: 'text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+  };
+
+  const variantStyles = {
+    primary: {
+      background: ThemeColors.gradients.primary,
+      boxShadow: `0 10px 30px ${ThemeColors.accent.purple}40`,
+    },
+    secondary: {
+      background: ThemeColors.gradients.secondary,
+      boxShadow: `0 10px 30px ${ThemeColors.accent.blue}40`,
+    },
+    accent: {
+      background: ThemeColors.gradients.accent,
+      boxShadow: `0 10px 30px ${ThemeColors.accent.cyan}40`,
+    }
   };
 
   const sizeClasses = {
@@ -36,6 +52,7 @@ const GradientButton: React.FC<GradientButtonProps> = ({
         sizeClasses[size],
         className
       )}
+      style={variantStyles[variant]}
       {...props}
     >
       {/* Animated background gradient */}

@@ -57,7 +57,7 @@ const DEFAULT_ITEMS: CarouselItem[] = [
 const DRAG_BUFFER = 0;
 const VELOCITY_THRESHOLD = 500;
 const GAP = 16;
-const SPRING_OPTIONS = { type: 'spring', stiffness: 300, damping: 30 };
+const SPRING_OPTIONS = { type: 'spring' as const, stiffness: 300, damping: 30 };
 
 export default function Carousel({
   items = DEFAULT_ITEMS,
@@ -110,7 +110,7 @@ export default function Carousel({
     }
   }, [autoplay, autoplayDelay, isHovered, loop, items.length, carouselItems.length, pauseOnHover]);
 
-  const effectiveTransition = isResetting ? { duration: 0 } : SPRING_OPTIONS;
+  const effectiveTransition = isResetting ? { duration: 0 } as const : SPRING_OPTIONS;
 
   const handleAnimationComplete = () => {
     if (loop && currentIndex === carouselItems.length - 1) {
@@ -152,7 +152,7 @@ export default function Carousel({
     <div
       ref={containerRef}
       className={`relative overflow-hidden p-4 ${
-        round ? 'rounded-full border border-white' : 'rounded-[24px] border border-[#222]'
+        round ? 'rounded-full border border-white/20' : 'rounded-[24px] border border-[#060010]'
       }`}
       style={{
         width: `${baseWidth}px`,
@@ -185,7 +185,7 @@ export default function Carousel({
               className={`relative shrink-0 flex flex-col ${
                 round
                   ? 'items-center justify-center text-center bg-[#060010] border-0'
-                  : 'items-start justify-between bg-[#222] border border-[#222] rounded-[12px]'
+                  : 'items-start justify-between bg-[#0a0015] border border-[#060010] rounded-[12px]'
               } overflow-hidden cursor-grab active:cursor-grabbing`}
               style={{
                 width: itemWidth,
@@ -217,10 +217,10 @@ export default function Carousel({
                 currentIndex % items.length === index
                   ? round
                     ? 'bg-white'
-                    : 'bg-[#333333]'
+                    : 'bg-[#8b5cf6]'
                   : round
                     ? 'bg-[#555]'
-                    : 'bg-[rgba(51,51,51,0.4)]'
+                    : 'bg-[rgba(139,92,246,0.3)]'
               }`}
               animate={{
                 scale: currentIndex % items.length === index ? 1.2 : 1

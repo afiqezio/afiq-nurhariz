@@ -19,3 +19,5 @@ export interface ContactLink {
   icon: React.ReactNode;
 }
 
+// Re-export theme for convenience (deprecated - use @/lib/theme instead)
+export { ThemeColors } from '@/lib/theme';

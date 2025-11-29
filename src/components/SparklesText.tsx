@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { ThemeColors } from '@/lib/theme';
 
 interface SparklesTextProps {
   children: React.ReactNode;
@@ -11,13 +12,38 @@ const SparklesText: React.FC<SparklesTextProps> = ({
   children,
   className = '',
   sparklesCount = 20,
-  colors = ['#ffd700', '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57']
+  colors = [
+    ThemeColors.accent.purple,
+    ThemeColors.accent.purpleLight,
+    ThemeColors.accent.pink,
+    ThemeColors.accent.pinkLight,
+    ThemeColors.accent.blue,
+    ThemeColors.accent.blueLight,
+    ThemeColors.accent.cyan,
+  ]
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sparklesRef = useRef<HTMLDivElement[]>([]);
+  const animationIdRef = useRef<string>(`sparkle-${Math.random().toString(36).substr(2, 9)}`);
 
   useEffect(() => {
     if (!containerRef.current) return;
+
+    // Create keyframes dynamically
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ${animationIdRef.current} {
+        0%, 100% {
+          opacity: 0;
+          transform: scale(0) rotate(0deg);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1) rotate(180deg);
+        }
+      }
+    `;
+    document.head.appendChild(style);
 
     const container = containerRef.current;
     const sparkles: HTMLDivElement[] = [];
@@ -35,7 +61,7 @@ const SparklesText: React.FC<SparklesTextProps> = ({
         border-radius: 50%;
         pointer-events: none;
         opacity: 0;
-        animation: sparkle ${2 + Math.random() * 3}s ease-in-out infinite;
+        animation: ${animationIdRef.current} ${2 + Math.random() * 3}s ease-in-out infinite;
         animation-delay: ${Math.random() * 2}s;
       `;
 
@@ -65,6 +91,7 @@ const SparklesText: React.FC<SparklesTextProps> = ({
     // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
+      document.head.removeChild(style);
       sparkles.forEach((sparkle) => {
         if (sparkle.parentNode) {
           sparkle.parentNode.removeChild(sparkle);
@@ -74,28 +101,9 @@ const SparklesText: React.FC<SparklesTextProps> = ({
   }, [sparklesCount, colors]);
 
   return (
-    <>
-      <style jsx>{`
-        @keyframes sparkle {
-          0%, 100% {
-            opacity: 0;
-            transform: scale(0) rotate(0deg);
-          }
-          50% {
-            opacity: 1;
-            transform: scale(1) rotate(180deg);
-          }
-        }
-
-        .sparkle-container {
-          position: relative;
-          display: inline-block;
-        }
-      `}</style>
-      <div ref={containerRef} className={`sparkle-container ${className}`}>
-        {children}
-      </div>
-    </>
+    <div ref={containerRef} className={`sparkle-container ${className}`} style={{ position: 'relative', display: 'inline-block' }}>
+      {children}
+    </div>
   );
 };
 

@@ -3,15 +3,14 @@ import { useLocation } from "react-router-dom";
 import ImageModal from "@/components/ImageModal";
 import ProjectHeader from "@/components/ProjectHeader";
 import { projectData, ProjectData } from "@/data/projectData";
-import Carousel, { CarouselItem } from "@/components/Carousel";
-import MagicBento from '@/components/MagicBento';
 import { CleanNav } from "@/components/reactbits";
-import DarkVeil from "@/components/DarkVeil";
+import Squares from '@/components/Squares';
 import { navItems } from "@/constants/data";
 import { Card } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { FileDown, Image as ImageIcon, Code, Zap, Target, TrendingUp, Lightbulb } from "lucide-react";
+import { DarkVeilClasses, ThemeColors, getGradientText } from "@/lib/theme";
 
 const View = () => {
   const location = useLocation();
@@ -25,7 +24,15 @@ const View = () => {
   if (!project) {
     return (
       <div className="min-h-screen relative">
-        <DarkVeil />
+        <div className="absolute inset-0 -z-10 h-full min-h-screen">
+          <Squares 
+          speed={0.2} 
+          squareSize={45}
+          direction='diagonal' // up, down, left, right, diagonal
+          borderColor='#362a4c'
+          hoverFillColor='#222'
+          />
+        </div>
         <CleanNav items={navItems} />
         <div className="min-h-screen section-padding relative z-10 flex items-center justify-center">
           <Card className="glass-card p-8">
@@ -41,7 +48,15 @@ const View = () => {
   if (!currentProjectData) {
     return (
       <div className="min-h-screen relative">
-        <DarkVeil />
+        <div className="absolute inset-0 -z-10 h-full min-h-screen">
+          <Squares 
+          speed={0.2} 
+          squareSize={45}
+          direction='diagonal' // up, down, left, right, diagonal
+          borderColor='#362a4c'
+          hoverFillColor='#222'
+          />
+        </div>
         <CleanNav items={navItems} />
         <div className="min-h-screen section-padding relative z-10 flex items-center justify-center">
           <Card className="glass-card p-8">
@@ -52,34 +67,18 @@ const View = () => {
     );
   }
 
-  // Create carousel items from images for the image showcase
-  const imageCarouselItems: CarouselItem[] = currentProjectData.images.map((image, index) => ({
-    id: index + 1,
-    title: image.caption,
-    description: image.alt,
-    icon: <ImageIcon className="h-[16px] w-[16px] text-white" />
-  }));
-
-  // Create carousel items for features and challenges
-  const featureCarouselItems: CarouselItem[] = [
-    ...currentProjectData.features.map((feature, index) => ({
-      id: index + 1,
-      title: feature,
-      description: `Key feature of ${project.title}`,
-      icon: <Zap className="h-[16px] w-[16px] text-white" />
-    })),
-    ...currentProjectData.challenges.map((challenge, index) => ({
-      id: currentProjectData.features.length + index + 1,
-      title: challenge.title,
-      description: challenge.description,
-      icon: <Target className="h-[16px] w-[16px] text-white" />
-    }))
-  ];
-
   return (
     <div className="min-h-screen relative">
       {/* Background */}
-      <DarkVeil />
+      <div className="absolute inset-0 -z-10 h-full min-h-screen">    
+        <Squares 
+        speed={0.2} 
+        squareSize={45}
+        direction='diagonal' // up, down, left, right, diagonal
+        borderColor='#362a4c'
+        hoverFillColor='#222'
+        />
+      </div>
       
       {/* Navigation */}
       <CleanNav items={navItems} />
@@ -96,15 +95,15 @@ const View = () => {
             />
 
             {/* Image Showcase */}
-            <Card className="glass-card p-8 animate-slideUp">
-              <h2 className="text-2xl font-semibold mb-6 gradient-text">
+            <Card className={DarkVeilClasses.glassCard + " p-8 " + DarkVeilClasses.slideUp}>
+              <h2 className="text-2xl font-semibold mb-6" style={getGradientText('text')}>
                 Project Showcase
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {currentProjectData.images.map((image, index) => (
                   <div
                     key={index}
-                    className="cursor-pointer transition-all duration-300 hover:scale-105 glass-card p-2 rounded-lg"
+                    className={`cursor-pointer ${DarkVeilClasses.hoverScale} ${DarkVeilClasses.glassCard} p-2 rounded-lg`}
                     onClick={() => setSelectedImageIndex(index)}
                   >
                     <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden">
@@ -123,17 +122,17 @@ const View = () => {
             </Card>
 
             {/* Project Details Grid */}
-            <div className="animate-slideUp" style={{ animationDelay: "200ms" }}>
+            <div className={DarkVeilClasses.slideUp} style={{ animationDelay: "200ms" }}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="glass-card p-6 hover:scale-[1.02] transition-all duration-300">
-                  <h2 className="text-2xl font-semibold mb-4 gradient-text">
+                <Card className={`${DarkVeilClasses.glassCard} p-6 ${DarkVeilClasses.hoverScale}`}>
+                  <h2 className="text-2xl font-semibold mb-4" style={getGradientText('text')}>
                     Project Overview
                   </h2>
                   <p className="text-muted-foreground">{currentProjectData.overview}</p>
                 </Card>
 
-                <Card className="glass-card p-6 hover:scale-[1.02] transition-all duration-300">
-                  <h2 className="text-2xl font-semibold mb-4 gradient-text">
+                <Card className={`${DarkVeilClasses.glassCard} p-6 ${DarkVeilClasses.hoverScale}`}>
+                  <h2 className="text-2xl font-semibold mb-4" style={getGradientText('text')}>
                     Key Features
                   </h2>
                   <ul className="list-disc list-inside space-y-2 text-muted-foreground">
@@ -145,8 +144,8 @@ const View = () => {
                   </ul>
                 </Card>
 
-                <Card className="glass-card p-6 hover:scale-[1.02] transition-all duration-300">
-                  <h2 className="text-2xl font-semibold mb-4 gradient-text">
+                <Card className={`${DarkVeilClasses.glassCard} p-6 ${DarkVeilClasses.hoverScale}`}>
+                  <h2 className="text-2xl font-semibold mb-4" style={getGradientText('text')}>
                     Challenges & Solutions
                   </h2>
                   <div className="space-y-4">
@@ -159,8 +158,8 @@ const View = () => {
                   </div>
                 </Card>
 
-                <Card className="glass-card p-6 hover:scale-[1.02] transition-all duration-300">
-                  <h2 className="text-2xl font-semibold mb-4 gradient-text">
+                <Card className={`${DarkVeilClasses.glassCard} p-6 ${DarkVeilClasses.hoverScale}`}>
+                  <h2 className="text-2xl font-semibold mb-4" style={getGradientText('text')}>
                     Future Improvements
                   </h2>
                   <ul className="list-disc list-inside space-y-2 text-muted-foreground">
@@ -176,10 +175,10 @@ const View = () => {
 
             {/* Documentation Button */}
             {currentProjectData.documentUrl && (
-              <Card className="glass-card p-6 animate-slideUp flex justify-center" style={{ animationDelay: "400ms" }}>
+              <Card className={`${DarkVeilClasses.glassCard} p-6 ${DarkVeilClasses.slideUp} flex justify-center`} style={{ animationDelay: "400ms" }}>
                 <Button
                   variant="outline"
-                  className="glass transition-all duration-300 hover:scale-105"
+                  className={`${DarkVeilClasses.glass} ${DarkVeilClasses.hoverScale}`}
                   onClick={() => window.open(currentProjectData.documentUrl, '_blank')}
                 >
                   <FileDown className="mr-2 h-4 w-4" />

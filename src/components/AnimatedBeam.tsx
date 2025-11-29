@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
+import { ThemeColors } from '@/lib/theme';
 
 interface AnimatedBeamProps {
   className?: string;
@@ -12,11 +13,12 @@ interface AnimatedBeamProps {
 const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
   className = '',
   duration = 3,
-  color = '#8b5cf6',
+  color = ThemeColors.accent.purple,
   width = 200,
   height = 2
 }) => {
   const beamRef = useRef<HTMLDivElement>(null);
+  const animationIdRef = useRef<string>(`beamMove-${Math.random().toString(36).substr(2, 9)}`);
 
   useEffect(() => {
     const beam = beamRef.current;
@@ -32,8 +34,25 @@ const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
       beam.style.transform = 'scaleX(1)';
     }, 100);
 
-    return () => clearTimeout(timer);
-  }, []);
+    // Create keyframes dynamically
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ${animationIdRef.current} {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(${width + 30}px);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      clearTimeout(timer);
+      document.head.removeChild(style);
+    };
+  }, [width]);
 
   return (
     <div className={cn('flex justify-center items-center py-8', className)}>
@@ -53,7 +72,7 @@ const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
           style={{
             width: '30px',
             background: `linear-gradient(90deg, transparent, ${color}80, transparent)`,
-            animation: `beamMove ${duration}s linear infinite`,
+            animation: `${animationIdRef.current} ${duration}s linear infinite`,
             boxShadow: `0 0 30px ${color}60`,
           }}
         />
@@ -66,17 +85,6 @@ const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
           }}
         />
       </div>
-
-      <style jsx>{`
-        @keyframes beamMove {
-          0% {
-            transform: translateX(-100%);
-          }
-          100% {
-            transform: translateX(${width + 30}px);
-          }
-        }
-      `}</style>
     </div>
   );
 };

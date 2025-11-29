@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface NavItem {
   label: string;
@@ -17,6 +18,7 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
   const [active, setActive] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,6 +80,7 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
           <a
             href="#"
             onClick={(e) => {
+              navigate('/');
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}

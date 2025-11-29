@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
+import { ThemeColors } from '@/lib/theme';
 
 interface GlowBorderProps {
   children: React.ReactNode;
@@ -12,10 +13,33 @@ interface GlowBorderProps {
 const GlowBorder: React.FC<GlowBorderProps> = ({
   children,
   className = '',
-  glowColor = '#8b5cf6', // Default purple
+  glowColor = ThemeColors.accent.purple,
   glowIntensity = 'medium',
   animation = true
 }) => {
+  const animationIdRef = useRef<string>(`borderGlow-${Math.random().toString(36).substr(2, 9)}`);
+
+  useEffect(() => {
+    if (!animation) return;
+
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ${animationIdRef.current} {
+        0%, 100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.8;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, [animation]);
+
   const intensityClasses = {
     low: 'shadow-lg',
     medium: 'shadow-xl',
@@ -48,7 +72,7 @@ const GlowBorder: React.FC<GlowBorderProps> = ({
         )}
         style={{
           background: `linear-gradient(45deg, ${glowColor}20, transparent, ${glowColor}20)`,
-          animation: animation ? 'borderGlow 3s ease-in-out infinite' : 'none'
+          animation: animation ? `${animationIdRef.current} 3s ease-in-out infinite` : 'none'
         }}
       />
 
@@ -56,17 +80,6 @@ const GlowBorder: React.FC<GlowBorderProps> = ({
       <div className="relative z-10">
         {children}
       </div>
-
-      <style jsx>{`
-        @keyframes borderGlow {
-          0%, 100% {
-            opacity: 0.3;
-          }
-          50% {
-            opacity: 0.8;
-          }
-        }
-      `}</style>
     </div>
   );
 };

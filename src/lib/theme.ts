@@ -216,6 +216,11 @@ export const getTechColor = (tech: string): string => {
     'MSSQL': `${ThemeColors.accent.pink}, ${ThemeColors.accent.purple}`,
     'SQL': `${ThemeColors.accent.blue}, ${ThemeColors.accent.purple}`,
     '.NET': `${ThemeColors.accent.purple}, ${ThemeColors.accent.blue}`,
+    'Airflow': `${ThemeColors.accent.blue}, ${ThemeColors.accent.cyan}`,
+    'Go': `${ThemeColors.accent.purple}, ${ThemeColors.accent.pink}`,
+    'Docker': `${ThemeColors.accent.blue}, ${ThemeColors.accent.cyan}`,
+    'MongoDB': `${ThemeColors.accent.purple}, ${ThemeColors.accent.pink}`,
+    'PostgreSQL': `${ThemeColors.accent.blue}, ${ThemeColors.accent.cyan}`,
   };
   
   return colorMap[tech] || `${ThemeColors.accent.blue}, ${ThemeColors.accent.purple}`;
@@ -244,6 +249,12 @@ export const getTechBadgeClasses = (tech: string): string => {
     'Dart': 'bg-blue-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30',
     '.NET': 'bg-purple-500/20 text-purple-300 border-purple-500/30 hover:bg-purple-500/30',
     'Laravel': 'bg-red-500/20 text-red-300 border-red-500/30 hover:bg-red-500/30',
+    'Airflow': 'bg-blue-500/20 text-blue-300 border-blue-500/30 hover:bg-blue-500/30',
+    'Go': 'bg-purple-500/20 text-purple-300 border-purple-500/30 hover:bg-purple-500/30',
+    'Docker': 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30 hover:bg-cyan-500/30',
+    'MongoDB': 'bg-green-500/20 text-green-300 border-green-500/30 hover:bg-green-500/30',
+    'PostgreSQL': 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30 hover:bg-indigo-500/30',
+    'Redis': 'bg-red-500/20 text-red-300 border-red-500/30 hover:bg-red-500/30',
     'Database Migration': 'bg-slate-500/20 text-slate-300 border-slate-500/30 hover:bg-slate-500/30',
     'Performance Tuning': 'bg-amber-500/20 text-amber-300 border-amber-500/30 hover:bg-amber-500/30',
   };

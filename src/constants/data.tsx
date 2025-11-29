@@ -41,7 +41,8 @@ export const projects: Project[] = [
 
 export const skills: string[] = [
   "Python", "JavaScript", "C#", "PHP", "Dart",
-  "React", "Flutter", ".NET", "Laravel", "MySQL", "MSSQL", "SQL"
+  "React", "Flutter", ".NET", "Laravel", "MySQL", "MSSQL", "SQL", 
+  "Airflow", "Go", "Docker", "MongoDB", "PostgreSQL", "Redis"
 ];
 
 export const navItems: NavItem[] = [

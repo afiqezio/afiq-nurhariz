@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 
 type CanvasStrokeStyle = string | CanvasGradient | CanvasPattern;
 
@@ -28,11 +28,27 @@ const Squares: React.FC<SquaresProps> = ({
   const numSquaresY = useRef<number>(0);
   const gridOffset = useRef<GridOffset>({ x: 0, y: 0 });
   const hoveredSquareRef = useRef<GridOffset | null>(null);
+  const lastFrameTime = useRef<number>(0);
+  const mouseMoveThrottle = useRef<number>(0);
+
+  // Detect if device is low-end for performance optimization
+  const isLowEndDevice = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isLowMemory = (navigator as any).deviceMemory && (navigator as any).deviceMemory < 4;
+    return isMobile || isLowMemory;
+  }, []);
+
+  // Adjust frame rate for low-end devices (target 30fps instead of 60fps)
+  const targetFPS = isLowEndDevice ? 30 : 60;
+  const frameInterval = 1000 / targetFPS;
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false }); // Disable alpha for better performance
+
+    if (!ctx) return;
 
     const resizeCanvas = () => {
       canvas.width = canvas.offsetWidth;
@@ -41,12 +57,16 @@ const Squares: React.FC<SquaresProps> = ({
       numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
     };
 
-    window.addEventListener('resize', resizeCanvas);
+    let resizeTimeout: number;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = window.setTimeout(resizeCanvas, 100); // Debounce resize
+    };
+
+    window.addEventListener('resize', handleResize, { passive: true });
     resizeCanvas();
 
     const drawGrid = () => {
-      if (!ctx) return;
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const startX = Math.floor(gridOffset.current.x / squareSize) * squareSize;
@@ -86,7 +106,14 @@ const Squares: React.FC<SquaresProps> = ({
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
 
-    const updateAnimation = () => {
+    const updateAnimation = (currentTime: number) => {
+      // Throttle frame rate for better performance
+      if (currentTime - lastFrameTime.current < frameInterval) {
+        requestRef.current = requestAnimationFrame(updateAnimation);
+        return;
+      }
+      lastFrameTime.current = currentTime;
+
       const effectiveSpeed = Math.max(speed, 0.1);
       switch (direction) {
         case 'right':
@@ -114,6 +141,11 @@ const Squares: React.FC<SquaresProps> = ({
     };
 
     const handleMouseMove = (event: MouseEvent) => {
+      // Throttle mouse move events
+      const now = performance.now();
+      if (now - mouseMoveThrottle.current < 50) return; // Max 20 updates per second
+      mouseMoveThrottle.current = now;
+
       const rect = canvas.getBoundingClientRect();
       const mouseX = event.clientX - rect.left;
       const mouseY = event.clientY - rect.top;
@@ -137,17 +169,18 @@ const Squares: React.FC<SquaresProps> = ({
       hoveredSquareRef.current = null;
     };
 
-    canvas.addEventListener('mousemove', handleMouseMove);
+    canvas.addEventListener('mousemove', handleMouseMove, { passive: true });
     canvas.addEventListener('mouseleave', handleMouseLeave);
     requestRef.current = requestAnimationFrame(updateAnimation);
 
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('resize', handleResize);
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
       canvas.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('mouseleave', handleMouseLeave);
+      clearTimeout(resizeTimeout);
     };
-  }, [direction, speed, borderColor, hoverFillColor, squareSize]);
+  }, [direction, speed, borderColor, hoverFillColor, squareSize, isLowEndDevice, frameInterval]);
 
   return <canvas ref={canvasRef} className="w-full h-full border-none block"></canvas>;
 };

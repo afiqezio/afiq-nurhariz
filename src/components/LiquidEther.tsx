@@ -132,9 +132,18 @@ export default function LiquidEther({
       clock: THREE.Clock | null = null;
       init(container: HTMLElement) {
         this.container = container;
-        this.pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+        // Reduce pixel ratio on mobile/low-end devices for better performance
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isLowMemory = (navigator as any).deviceMemory && (navigator as any).deviceMemory < 4;
+        const maxPixelRatio = isMobile || isLowMemory ? 1 : 2;
+        this.pixelRatio = Math.min(window.devicePixelRatio || 1, maxPixelRatio);
         this.resize();
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        // Disable antialiasing on mobile for better performance
+        this.renderer = new THREE.WebGLRenderer({ 
+          antialias: !isMobile && !isLowMemory, 
+          alpha: true,
+          powerPreference: isMobile || isLowMemory ? 'low-power' : 'high-performance'
+        });
         // Always transparent
         this.renderer.autoClear = false;
         this.renderer.setClearColor(new THREE.Color(0x000000), 0);

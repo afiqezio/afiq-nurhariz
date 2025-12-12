@@ -21,6 +21,8 @@ const HeroSection = () => {
                   className="h-32 w-32 md:h-36 md:w-36 rounded-full object-cover ring-4 ring-white/10"
                   width={144}
                   height={144}
+                  loading="eager"
+                  decoding="async"
                 />
                 <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-500/10 via-purple-500/10 to-pink-500/10"></div>
               </div>

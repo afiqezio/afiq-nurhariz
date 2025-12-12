@@ -113,6 +113,8 @@ const ImageModal = ({ isOpen, onClose, images, currentIndex }: ImageModalProps) 
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
               draggable={false}
+              loading="eager"
+              decoding="async"
             />
           </AspectRatio>
           <button

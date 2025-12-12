@@ -111,6 +111,8 @@ const View = () => {
                         src={image.url}
                         alt={image.alt}
                         className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
                       />
                     </AspectRatio>
                     <p className="text-sm text-muted-foreground text-center mt-2">

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { lazy, Suspense, useMemo } from "react";
 import { CleanNav } from "@/components/reactbits";
 import LiquidEther from '@/components/LiquidEther';
+import Footer from '@/components/Footer';
 import { navItems } from "@/constants/data";
 import { Project } from "@/types";
 import HeroSection from "@/sections/HeroSection";
@@ -102,6 +103,8 @@ const Index = () => {
           <ContactSection />
         </Suspense>
       </main>
+
+      <Footer />
     </div>
   );
 };

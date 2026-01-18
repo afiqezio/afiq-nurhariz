@@ -9,6 +9,14 @@ export interface Challenge {
   description: string;
 }
 
+export interface CaseStudy {
+  problem: string;
+  challenge: string;
+  solution: string;
+  results: string[];
+  techStack: string[];
+}
+
 export interface ProjectDetails {
   images: ProjectImage[];
   overview: string;
@@ -17,6 +25,7 @@ export interface ProjectDetails {
   improvements: string[];
   documentUrl?: string;
   duration?: string;
+  caseStudy?: CaseStudy;
 }
 
 export interface ProjectData {

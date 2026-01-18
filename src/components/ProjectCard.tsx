@@ -1,5 +1,5 @@
 import { ExternalLink } from "lucide-react";
-import { TiltedCard, GlassSurface, ReactBitsText, ReactBitsButton } from "@/components/reactbits";
+import { TiltedCard, GlassSurface, ReactBitsButton } from "@/components/reactbits";
 import { Project } from "@/types";
 import { ThemeColors, getTechBadgeClasses } from "@/lib/theme";
 
@@ -19,19 +19,6 @@ const ProjectCard = ({ project, onViewProject }: ProjectCardProps) => {
         }}></div>
 
         <div className="relative space-y-6 flex-1">
-          {/* Project Icon/Emoji based on tech */}
-          <div className="flex items-start justify-between">
-            {/* <div className="text-3xl opacity-60">
-              {project.tech.includes('AI') || project.tech.includes('CNN') ? '🤖' :
-               project.tech.includes('Flutter') ? '📱' :
-               project.tech.includes('React') ? '⚛️' :
-               project.tech.includes('Python') ? '🐍' :
-               project.tech.includes('Database') ? '🗄️' : '💻'}
-            </div>
-            <div className="w-2 h-2 rounded-full animate-pulse" style={{
-              background: `linear-gradient(135deg, ${ThemeColors.accent.blue}, ${ThemeColors.accent.purple})`
-            }}></div> */}
-          </div>
 
           <div className="space-y-4">
             <h3 className="text-xl md:text-2xl font-bold text-slate-100 transition-all duration-300 relative">

@@ -4,7 +4,7 @@ export interface Project {
   description: string;
   tech: string[];
   link: string;
-  image?: string;
+  imageUrl: string;
 }
 
 export interface NavItem {

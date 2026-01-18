@@ -8,6 +8,7 @@ export const projects: Project[] = [
     description: "One photo can simplify the time-consuming task of manually calculating food calories.",
     tech: ["Python", "YoloV5", "CNN"],
     link: "#",
+    imageUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format',
   },
   {
     id: 'mobile-attendance',
@@ -15,6 +16,7 @@ export const projects: Project[] = [
     description: "Mobile app project integrated with TAMS for remote employee attendance tracking",
     tech: ["Flutter", ".NET", "MSSQL"],
     link: "#",
+    imageUrl: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=1200&auto=format',
   },
   {
     id: 'hair-saloon',
@@ -22,6 +24,7 @@ export const projects: Project[] = [
     description: "Simple mobile app project for hair saloon booking",
     tech: ["Flutter", "PHP", "MySQL"],
     link: "#",
+    imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format',
   },
   {
     id: 'churn-prediction',
@@ -29,6 +32,7 @@ export const projects: Project[] = [
     description: "Analyzing customer behavior to identify reasons for churn and predicting potential attrition using machine learning models",
     tech: ["Python", "Pandas", "XGBoost", "Logistic Regressions", "Decision Tree"],
     link: "#",
+    imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format',
   },
   {
     id: 'database-optimization',
@@ -36,13 +40,15 @@ export const projects: Project[] = [
     description: "Development and optimization of database scripts and SQL queries for large-scale data systems",
     tech: ["MySQL", "SQL", "Database Migration", "Performance Tuning"],
     link: "#",
+    imageUrl: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?q=80&w=1200&auto=format',
   }
 ];
 
 export const skills: string[] = [
   "Python", "JavaScript", "C#", "PHP", "Dart",
   "React", "Flutter", ".NET", "Laravel", "MySQL", "MSSQL", "SQL", 
-  "Airflow", "Go", "Docker", "MongoDB", "PostgreSQL", "Redis"
+  "Airflow", "Go", "Docker", "MongoDB", "PostgreSQL", "Redis",
+  "YoloV5", "CNN", "Pandas", "Logistic Regressions", "Decision Tree"
 ];
 
 export const navItems: NavItem[] = [
@@ -92,7 +98,7 @@ export const heroData = {
   roles: ["Software Developer", "Mobile Developer", "AI Engineer"],
   description: "Crafting innovative solutions with cutting-edge technology and creative problem-solving",
   resumeUrl: "https://drive.google.com/uc?export=download&id=1i6d_Tmi5mSNWLJsGsaX4_IiE0p9Mg44o",
-  profileImage: "assets/afiqnhz.jpg",
+  profileImage: "assets/afiq-sitting.png",
 };
 
 export const aboutContent = {

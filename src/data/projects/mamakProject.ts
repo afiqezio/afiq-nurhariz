@@ -51,5 +51,16 @@ export const mamakProject: ProjectDetails = {
     "Add nutritional breakdown features"
   ],
   documentUrl: "https://drive.google.com/uc?export=download&id=104hjdPEQC6MvjGkwr1nKRfrXIzSdOxeE",
-  duration: "6 months"
+  duration: "6 months",
+  caseStudy: {
+    problem: "Manually calculating calories for complex local dishes like Mamak food is time-consuming and prone to error.",
+    challenge: "Identifying overlapping food items in a single plate and estimating portions from 2D images.",
+    solution: "Developed a custom YOLOv5 model trained on local food datasets combined with a CNN for fine-grained calorie estimation based on detected volume.",
+    results: [
+      "Achieved 89% accuracy on top-5 common local dishes.",
+      "Reduced logging time from minutes to seconds.",
+      "Integrated localized nutrient database for specific Mamak ingredients."
+    ],
+    techStack: ["Python", "YoloV5", "CNN"]
+  }
 };

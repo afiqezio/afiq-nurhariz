@@ -59,5 +59,16 @@ export const saloonProject: ProjectDetails = {
     "Implement push notifications",
     "Add review and rating system"
   ],
-  duration: "3 months"
+  duration: "2 months",
+  caseStudy: {
+    problem: "Small salons struggle with appointment overlaps and manual booking via phone calls.",
+    challenge: "Creating a simple, low-cost solution that doesn't require complex training for salon staff.",
+    solution: "Mobile-first approach with a PHP/MySQL backend for lightweight data management and calendar syncing.",
+    results: [
+      "Reduced double-bookings by 100%.",
+      "Improved customer retention through automated reminders.",
+      "Easy-to-use stylist management dashboard."
+    ],
+    techStack: ["Flutter", "PHP", "MySQL"]
+  }
 };

@@ -39,5 +39,16 @@ export const churnProject: ProjectDetails = {
     "Implement real-time dashboards to monitor churn trends"
   ],
   documentUrl: "https://drive.google.com/uc?export=download&id=1tNrWm2t8m2NQWEgZDsBbrbZ2OFScr7mR",
-  duration: "1 months"
+  duration: "1 months",
+  caseStudy: {
+    problem: "High customer acquisition costs making churn prevention a critical business priority.",
+    challenge: "Handling imbalanced datasets where churners are the minority class.",
+    solution: "Utilized SMOTE for balancing and compared Logistic Regressions, Decision Trees, and XGBoost for the highest F1-score.",
+    results: [
+      "Identified top 3 predictors of churn: Tenure, Contract Type, and Monthly Charges.",
+      "Achieved an AUC-ROC of 0.85 with XGBoost.",
+      "Provided actionable insights for the marketing team's retention strategy."
+    ],
+    techStack: ["Python", "Pandas", "Logistic Regressions", "Decision Tree", "XGBoost"]
+  }
 };

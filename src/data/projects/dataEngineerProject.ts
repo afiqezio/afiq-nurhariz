@@ -39,5 +39,16 @@ export const dataEngineerProject: ProjectDetails = {
     "Implement automated testing for database migrations",
     "Create comprehensive documentation for all database procedures"
   ],
-  duration: "6 months"
+  duration: "6 months",
+  caseStudy: {
+    problem: "Legacy database queries were causing significant application lag during peak hours.",
+    challenge: "Optimizing live production databases without downtime.",
+    solution: "Refined indexing strategies, rewrote subqueries as joins, and implemented query caching layers.",
+    results: [
+      "Reduced slow query count by 70%.",
+      "Improved large dataset database response time by 200ms on average.",
+      "Streamlined migration scripts for future scalability."
+    ],
+    techStack: ["MySQL", "PostgreSQL", "Slow Query Log"]
+  }
 };

@@ -1,95 +1,59 @@
-import { FileText, Github } from "lucide-react";
-import { ReactBitsButton, TiltedCard, GlassSurface, ReactBitsText, SplitText } from "@/components/reactbits";
 import { heroData } from "@/constants/data";
 
 const HeroSection = () => {
   return (
-    <section
-      className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden pt-24 md:pt-32"
-      aria-label="Hero section"
-    >
-      <div className="text-center space-y-12 relative z-10 max-w-5xl mx-auto">
-        {/* Profile Image with Floating Animation */}
-        <div className="relative inline-block animate-float" aria-label="Profile picture">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 rounded-full blur-3xl scale-150"></div>
-          <TiltedCard intensity={15}>
-            <GlassSurface className="p-1 rounded-full">
-              <div className="relative">
-                <img
-                  src={heroData.profileImage}
-                  alt={`${heroData.name} profile`}
-                  className="h-32 w-32 md:h-36 md:w-36 rounded-full object-cover ring-4 ring-white/10"
-                  width={144}
-                  height={144}
-                  loading="eager"
-                  decoding="async"
-                />
-                <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-blue-500/10 via-purple-500/10 to-pink-500/10"></div>
-              </div>
-            </GlassSurface>
-          </TiltedCard>
+    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      {/* Video Background Layer - Optional, can be replaced with gradient */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950"></div>
+        <div className="absolute inset-0 hero-video-overlay"></div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-xs font-semibold text-primary-400 mb-8 animate-bounce">
+          <span className="w-2 h-2 rounded-full bg-primary-500"></span>
+          Available for new opportunities
         </div>
+        
+        <h1 className="font-display text-5xl md:text-8xl font-black tracking-tight mb-6 leading-tight">
+          Crafting the <br />
+          <span className="gradient-text">Future of Tech</span>
+        </h1>
+        
+        <p className="max-w-2xl mx-auto text-lg md:text-xl text-slate-400 mb-10 leading-relaxed font-light">
+          I'm <span className="text-white font-medium">{heroData.name}</span>, a <span className="text-white font-medium">Full-Stack Engineer</span> and <span className="text-white font-medium">AI Developer</span> specializing in building intelligent, high-performance applications that bridge the gap between human intuition and machine intelligence.
+        </p>
 
-        {/* Name and Title with Better Hierarchy */}
-        <div className="space-y-8">
-          <div className="space-y-4">
-            <p className="text-lg md:text-xl text-slate-400 font-light tracking-wider uppercase">
-              {heroData.greeting}
-            </p>
-
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black leading-[0.9] tracking-tight">
-              <SplitText
-                delay={0.3}
-                duration={0.8}
-                stagger={0.03}
-                gradient={true}
-                gradientColors={['#3b82f6', '#8b5cf6', '#ec4899', '#06b6d4']}
-              >
-                {heroData.name}
-              </SplitText>
-            </h1>
-          </div>
-
-          <div className="space-y-6">
-            <p className="text-xl md:text-2xl lg:text-3xl text-slate-200 font-medium tracking-wide">
-              {heroData.roles.join(" • ")}
-            </p>
-
-            <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-              {heroData.description}
-            </p>
-          </div>
-        </div>
-
-        {/* CTA Buttons with Better Design */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center pt-8">
-          <ReactBitsButton
-            variant="gradient"
-            size="lg"
-            onClick={() => window.open(heroData.resumeUrl, '_blank')}
-            aria-label="Download resume"
-            className="group relative overflow-hidden"
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <a 
+            href="#projects" 
+            className="px-8 py-4 rounded-full bg-primary-600 hover:bg-primary-500 text-white font-bold transition-all shadow-xl shadow-primary-500/25 flex items-center gap-2 group"
           >
-            <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl scale-150"></span>
-            <span className="relative z-10 flex items-center">
-              <FileText className="mr-3 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" aria-hidden="true" />
-              Download Resume
-            </span>
-          </ReactBitsButton>
-
-          <ReactBitsButton
-            variant="outline"
-            size="lg"
-            onClick={() => window.open('https://github.com/afiqezio', '_blank')}
-            aria-label="Visit GitHub profile"
-            className="group backdrop-blur-xl bg-white/5 border-white/20 hover:bg-white/10 hover:border-white/30"
+            Explore My Work
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+          <a 
+            href="#about" 
+            className="px-8 py-4 rounded-full glass hover:bg-slate-800 text-white font-bold transition-all"
           >
-            <span className="flex items-center">
-              <Github className="mr-3 h-5 w-5 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" aria-hidden="true" />
-              View GitHub
-            </span>
-          </ReactBitsButton>
+            Learn About Me
+          </a>
         </div>
+
+        {/* Floating tech badges */}
+        <div className="mt-20 flex flex-wrap justify-center gap-6 opacity-50 grayscale hover:grayscale-0 transition-all duration-700">
+          <span className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-lg text-sm">Full-Stack</span>
+          <span className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-lg text-sm">Mobile Developer</span>
+          <span className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-lg text-sm">AI Engineer</span>
+        </div>
+      </div>
+
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
       </div>
     </section>
   );

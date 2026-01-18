@@ -69,140 +69,110 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
-          ? 'bg-slate-900/80 backdrop-blur-2xl border-b border-white/10 shadow-2xl'
-          : 'bg-transparent',
+          ? 'glass py-3'
+          : 'bg-transparent py-6',
         className
       )}
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        {/* Logo */}
+        <a
+          href="#"
+          onClick={(e) => {
+            navigate('/');
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          className="font-display text-2xl font-bold tracking-tighter flex items-center gap-2"
+        >
+          <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-ai flex items-center justify-center text-white text-base">AN</span>
+          AFIQ<span className="text-primary-400">NURHARIZ</span>
+        </a>
+
+        {/* Desktop Menu */}
+        <div className="hidden md:flex gap-8 items-center">
+          {items.map((item, index) => {
+            const isActive = active === item.href;
+            
+            return (
+              <a
+                key={index}
+                href={item.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleClick(item);
+                }}
+                className="text-sm font-medium text-slate-300 hover:text-white transition-colors relative group"
+              >
+                {item.label}
+                <span className={cn(
+                  "absolute -bottom-1 left-0 h-0.5 bg-primary-400 transition-all",
+                  isActive ? "w-full" : "w-0 group-hover:w-full"
+                )}></span>
+              </a>
+            );
+          })}
           <a
-            href="#"
+            href="#contact"
             onClick={(e) => {
-              navigate('/');
               e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              const element = document.getElementById('contact');
+              element?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="text-2xl font-black tracking-tight bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent hover:scale-105 transition-transform duration-300"
+            className="px-5 py-2 rounded-full bg-white text-slate-950 text-sm font-bold hover:bg-primary-400 hover:text-white transition-all shadow-lg shadow-primary-500/10"
           >
-            ANHZ
+            Hire Me
           </a>
-
-          {/* Navigation Items */}
-          <div className="hidden md:flex items-center gap-1">
-            {items.map((item, index) => {
-              const isActive = active === item.href;
-              
-              return (
-                <button
-                  key={index}
-                  onClick={() => handleClick(item)}
-                  className={cn(
-                    'relative px-6 py-3 rounded-lg',
-                    'text-sm font-medium transition-all duration-300',
-                    'flex items-center gap-2',
-                    isActive
-                      ? 'text-slate-100'
-                      : 'text-slate-400 hover:text-slate-100 hover:bg-white/10'
-                  )}
-                >
-                  {item.icon && (
-                    <span className={cn(
-                      'w-4 h-4 transition-colors duration-300',
-                      isActive ? 'text-blue-400' : 'text-slate-400'
-                    )}>
-                      {item.icon}
-                    </span>
-                  )}
-                  <span>{item.label}</span>
-                  
-                  {/* Active Indicator */}
-                  {isActive && (
-                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-0.5 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-full"></span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 rounded-lg text-slate-400 hover:bg-white/10 transition-colors"
-            aria-label="Toggle menu"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? (
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            ) : (
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-            )}
-          </button>
         </div>
 
-        {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-white/10 mt-2 pt-4 pb-4">
-            <div className="flex flex-col gap-2">
-              {items.map((item, index) => {
-                const isActive = active === item.href;
-                
-                return (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      handleClick(item);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className={cn(
-                      'relative px-4 py-3 rounded-lg text-left',
-                      'text-sm font-medium transition-all duration-300',
-                      'flex items-center gap-3',
-                      isActive
-                        ? 'text-slate-100 bg-white/20'
-                        : 'text-slate-400 hover:text-slate-100 hover:bg-white/10'
-                    )}
-                  >
-                    {item.icon && (
-                      <span className={cn(
-                        'w-5 h-5 transition-colors duration-300',
-                        isActive ? 'text-blue-400' : 'text-slate-400'
-                      )}>
-                        {item.icon}
-                      </span>
-                    )}
-                    <span>{item.label}</span>
-                    
-                    {isActive && (
-                      <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-gradient-to-b from-blue-600 via-purple-600 to-pink-600 rounded-r-full"></span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
+        {/* Mobile Toggle */}
+        <button 
+          className="md:hidden text-white p-2"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          )}
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden absolute top-full left-0 right-0 glass border-t border-slate-800 p-6 flex flex-col gap-4 animate-in fade-in slide-in-from-top-4">
+          {items.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="text-lg font-medium text-slate-300"
+              onClick={(e) => {
+                e.preventDefault();
+                handleClick(item);
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              {item.label}
+            </a>
+          ))}
+          <a
+            href="#contact"
+            className="w-full py-3 rounded-xl bg-primary-500 text-white font-bold text-center"
+            onClick={(e) => {
+              e.preventDefault();
+              const element = document.getElementById('contact');
+              element?.scrollIntoView({ behavior: 'smooth' });
+              setIsMobileMenuOpen(false);
+            }}
+          >
+            Hire Me
+          </a>
+        </div>
+      )}
     </nav>
   );
 };

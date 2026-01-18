@@ -43,5 +43,16 @@ export const tamsProject: ProjectDetails = {
     "Add face recognition feature",
     "Implement team management features"
   ],
-  duration: "6 months"
+  duration: "6 months",
+  caseStudy: {
+    problem: "TAMS systems often lack mobility for off-site or remote employees, leading to inaccurate attendance data.",
+    challenge: "Ensuring secure, spoof-proof location logging while maintaining app performance on low-end devices.",
+    solution: "Built a Flutter application with real-time GPS verification and biometric authentication, synced to a .NET backend.",
+    results: [
+      "Eliminated 'buddy punching' for remote sites.",
+      "Real-time visibility for HR on distributed workforce.",
+      "Automated payroll integration through MSSQL triggers."
+    ],
+    techStack: ["Flutter", ".NET Core", "MSSQL", "Google Maps API", "Azure"]
+  }
 };

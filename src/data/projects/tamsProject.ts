@@ -53,6 +53,6 @@ export const tamsProject: ProjectDetails = {
       "Real-time visibility for HR on distributed workforce.",
       "Automated payroll integration through MSSQL triggers."
     ],
-    techStack: ["Flutter", ".NET Core", "MSSQL", "Google Maps API", "Azure"]
+    techStack: ["Flutter", ".NET Core", "MSSQL"]
   }
 };

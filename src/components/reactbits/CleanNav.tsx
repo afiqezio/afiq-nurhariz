@@ -69,12 +69,12 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
-          ? 'glass py-3'
-          : 'bg-transparent py-6',
+          ? 'glass py-2 sm:py-3'
+          : 'bg-transparent py-4 sm:py-6',
         className
       )}
     >
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center">
         {/* Logo */}
         <a
           href="#"
@@ -83,10 +83,11 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className="font-display text-2xl font-bold tracking-tighter flex items-center gap-2"
+          className="font-display text-lg sm:text-xl md:text-2xl font-bold tracking-tighter flex items-center gap-1.5 sm:gap-2"
         >
-          <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-ai flex items-center justify-center text-white text-base">AN</span>
-          AFIQ<span className="text-primary-400">NURHARIZ</span>
+          <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-ai flex items-center justify-center text-white text-sm sm:text-base">AN</span>
+          <span className="hidden sm:inline">AFIQ</span><span className="text-primary-400 hidden sm:inline">NURHARIZ</span>
+          <span className="sm:hidden">AN</span>
         </a>
 
         {/* Desktop Menu */}
@@ -144,12 +145,12 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 glass border-t border-slate-800 p-6 flex flex-col gap-4 animate-in fade-in slide-in-from-top-4">
+        <div className="md:hidden absolute top-full left-0 right-0 glass border-t border-slate-800 p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 animate-in fade-in slide-in-from-top-4">
           {items.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="text-lg font-medium text-slate-300"
+              className="text-base sm:text-lg font-medium text-slate-300 min-h-[44px] flex items-center"
               onClick={(e) => {
                 e.preventDefault();
                 handleClick(item);
@@ -161,7 +162,7 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
           ))}
           <a
             href="#contact"
-            className="w-full py-3 rounded-xl bg-primary-500 text-white font-bold text-center"
+            className="w-full py-3 rounded-xl bg-primary-500 text-white font-bold text-center text-sm sm:text-base min-h-[44px] flex items-center justify-center"
             onClick={(e) => {
               e.preventDefault();
               const element = document.getElementById('contact');

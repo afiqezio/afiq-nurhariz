@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { lazy, Suspense, useMemo } from "react";
+import { lazy, Suspense, useMemo, useCallback } from "react";
 import { CleanNav } from "@/components/reactbits";
-import LiquidEther from '@/components/LiquidEther';
-import Footer from '@/components/Footer';
+import LiquidEther from "@/components/LiquidEther";
+import Footer from "@/components/Footer";
 import { navItems } from "@/constants/data";
 import { Project } from "@/types";
 import HeroSection from "@/sections/HeroSection";
@@ -23,9 +23,9 @@ const SectionLoader = () => (
 const Index = () => {
   const navigate = useNavigate();
 
-  const handleViewProject = (project: Project) => {
-    navigate('/view', { state: project });
-  };
+  const handleViewProject = useCallback((project: Project) => {
+    navigate("/view", { state: project });
+  }, [navigate]);
 
   // Detect device capabilities for performance optimization
   const isLowEndDevice = useMemo(() => {

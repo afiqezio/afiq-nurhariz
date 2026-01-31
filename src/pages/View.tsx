@@ -4,12 +4,7 @@ import ImageModal from "@/components/ImageModal";
 import { projectData, ProjectData } from "@/data/projectData";
 import { Project } from "@/types";
 import { CleanNav } from "@/components/reactbits";
-import Squares from '@/components/Squares';
 import { navItems } from "@/constants/data";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Mail } from "lucide-react";
-import { DarkVeilClasses, getGradientText, getTechBadgeClasses } from "@/lib/theme";
 
 const View = () => {
   const location = useLocation();
@@ -23,20 +18,11 @@ const View = () => {
 
   if (!project) {
     return (
-      <div className="min-h-screen relative bg-slate-950">
-        <div className="absolute inset-0 -z-10 h-full min-h-screen">
-          <Squares 
-            speed={0.2} 
-            squareSize={45}
-            direction='diagonal'
-            borderColor='#362a4c'
-            hoverFillColor='#222'
-          />
-        </div>
+      <div className="min-h-screen bg-slate-950 text-slate-50">
         <CleanNav items={navItems} />
-        <div className="min-h-screen section-padding relative z-10 flex items-center justify-center">
-          <div className="glass-card p-8">
-            <p className="text-muted-foreground">Project not found.</p>
+        <div className="min-h-screen flex items-center justify-center px-6">
+          <div className="glass p-8 rounded-3xl border border-slate-800">
+            <p className="text-slate-400">Project not found.</p>
           </div>
         </div>
       </div>
@@ -47,20 +33,11 @@ const View = () => {
 
   if (!currentProjectData) {
     return (
-      <div className="min-h-screen relative bg-slate-950">
-        <div className="absolute inset-0 -z-10 h-full min-h-screen">
-          <Squares 
-            speed={0.2} 
-            squareSize={45}
-            direction='diagonal'
-            borderColor='#362a4c'
-            hoverFillColor='#222'
-          />
-        </div>
+      <div className="min-h-screen bg-slate-950 text-slate-50">
         <CleanNav items={navItems} />
-        <div className="min-h-screen section-padding relative z-10 flex items-center justify-center">
-          <div className="glass-card p-8">
-            <p className="text-muted-foreground">Project details not found.</p>
+        <div className="min-h-screen flex items-center justify-center px-6">
+          <div className="glass p-8 rounded-3xl border border-slate-800">
+            <p className="text-slate-400">Project details not found.</p>
           </div>
         </div>
       </div>
@@ -72,11 +49,12 @@ const View = () => {
   const caseStudy = currentProjectData.caseStudy;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50">
-      {/* Top Header - Sticky */}
-      <div className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800 px-6 py-4">
+    <div className="min-h-screen bg-slate-950 text-slate-50 pb-24">
+      {/* Top Header - matches example CaseStudy */}
+      <div className="sticky top-0 z-50 glass border-b border-slate-800 px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <button 
+          <button
+            type="button"
             onClick={() => navigate(-1)}
             className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors group"
             aria-label="Go back to projects"
@@ -92,27 +70,29 @@ const View = () => {
         </div>
       </div>
 
-      {/* Hero Section */}
+      {/* Hero Section - matches example */}
       <div className="relative w-full h-[60vh] overflow-hidden">
-        <img 
-          src={projectImage} 
-          alt={project.title} 
+        <img
+          src={projectImage}
+          alt={project.title}
           className="w-full h-full object-cover opacity-60"
+          loading="eager"
+          decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
           <div className="max-w-7xl mx-auto">
             <div className="flex gap-3 mb-4 flex-wrap">
-              {project.tech.slice(0, 3).map(tag => (
+              {project.tech.slice(0, 3).map((tag) => (
                 <span key={tag} className="px-3 py-1 bg-primary-500/20 text-primary-400 text-[10px] font-bold tracking-widest uppercase rounded-full backdrop-blur-sm border border-primary-500/30">
                   {tag}
                 </span>
               ))}
             </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4" style={getGradientText('text')}>
+            <h1 className="text-5xl md:text-7xl font-display font-black tracking-tight mb-4 text-white">
               {project.title}
             </h1>
-            <p className="text-slate-300 text-lg md:text-xl max-w-2xl leading-relaxed">
+            <p className="text-slate-300 text-lg md:text-xl max-w-2xl leading-relaxed font-light">
               {project.description}
             </p>
           </div>
@@ -123,7 +103,7 @@ const View = () => {
       <div className="max-w-7xl mx-auto px-6 mt-16 grid grid-cols-1 lg:grid-cols-3 gap-12 pb-24">
         {/* Main Narrative */}
         <div className="lg:col-span-2 space-y-16">
-          {/* Problem Section */}
+          {/* Problem Section - matches example */}
           {caseStudy && (
             <section>
               <h2 className="text-sm font-bold text-primary-400 uppercase tracking-[0.2em] mb-4">01. The Problem</h2>
@@ -195,17 +175,17 @@ const View = () => {
             )}
           </section>
 
-          {/* Challenge Section */}
+          {/* Challenge Section - matches example (accent-ai) */}
           {caseStudy && (
             <section>
-              <h2 className="text-sm font-bold text-primary-400 uppercase tracking-[0.2em] mb-4">02. The Challenge</h2>
+              <h2 className="text-sm font-bold text-accent-ai uppercase tracking-[0.2em] mb-4">02. The Challenge</h2>
               <p className="text-xl text-slate-300 leading-relaxed font-light">
                 {caseStudy.challenge}
               </p>
             </section>
           )}
 
-          {/* Solution Section */}
+          {/* Solution Section - matches example (accent-mobile, glass-style card) */}
           {caseStudy && (
             <section className="p-8 md:p-12 rounded-3xl bg-slate-900 border border-slate-800 relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:rotate-12 transition-transform">
@@ -213,7 +193,7 @@ const View = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                 </svg>
               </div>
-              <h2 className="text-sm font-bold text-primary-400 uppercase tracking-[0.2em] mb-6">03. The Solution</h2>
+              <h2 className="text-sm font-bold text-accent-mobile uppercase tracking-[0.2em] mb-6">03. The Solution</h2>
               <p className="text-lg text-slate-400 leading-relaxed mb-0">
                 {caseStudy.solution}
               </p>
@@ -261,27 +241,26 @@ const View = () => {
           )}
         </div>
 
-        {/* Sidebar Details */}
+        {/* Sidebar Details - matches example (glass, plain span for tech) */}
         <div className="space-y-12">
           {/* Tech Stack */}
-          <div className="bg-slate-900/40 backdrop-blur-xl p-8 rounded-3xl border border-slate-800">
+          <div className="glass p-8 rounded-3xl border border-slate-800">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Stack Architecture</h3>
             <div className="flex flex-wrap gap-2">
-              {(caseStudy?.techStack || project.tech).map(tech => (
-                <Badge
+              {(caseStudy?.techStack ?? project.tech).map((tech) => (
+                <span
                   key={tech}
-                  variant="outline"
-                  className={`${getTechBadgeClasses(tech)} text-xs font-mono`}
+                  className="px-3 py-1.5 bg-slate-800 rounded-lg text-xs font-mono text-slate-300 border border-slate-700"
                 >
                   {tech}
-                </Badge>
+                </span>
               ))}
             </div>
           </div>
 
-          {/* Key Results / Features */}
+          {/* Key Results - matches example */}
           {caseStudy && caseStudy.results.length > 0 && (
-            <div className="bg-slate-900/40 backdrop-blur-xl p-8 rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950">
+            <div className="glass p-8 rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950">
               <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Impact & Results</h3>
               <ul className="space-y-6">
                 {caseStudy.results.map((result, i) => (
@@ -300,7 +279,7 @@ const View = () => {
 
           {/* Features (if no case study) */}
           {!caseStudy && currentProjectData.features.length > 0 && (
-            <div className="bg-slate-900/40 backdrop-blur-xl p-8 rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950">
+            <div className="glass p-8 rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950">
               <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Key Features</h3>
               <ul className="space-y-4">
                 {currentProjectData.features.map((feature, i) => (
@@ -319,36 +298,35 @@ const View = () => {
 
           {/* Duration */}
           {currentProjectData.duration && (
-            <div className="bg-slate-900/40 backdrop-blur-xl p-8 rounded-3xl border border-slate-800">
+            <div className="glass p-8 rounded-3xl border border-slate-800">
               <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Project Duration</h3>
               <p className="text-lg text-slate-300 font-semibold">{currentProjectData.duration}</p>
             </div>
           )}
 
-          {/* Call to Action */}
+          {/* Call to Action - matches example */}
           <div className="p-8 rounded-3xl bg-primary-600 flex flex-col items-center text-center">
             <h3 className="text-xl font-bold mb-4">Ready to start?</h3>
             <p className="text-primary-100 text-sm mb-6">Discuss how I can bring similar innovation to your project.</p>
-            <a 
-              href="mailto:afiqnurhariz@gmail.com" 
-              className="w-full py-3 bg-white text-slate-950 font-bold rounded-xl hover:bg-slate-100 transition-colors flex items-center justify-center gap-2"
+            <a
+              href="mailto:afiqnurhariz@gmail.com"
+              className="w-full py-3 bg-white text-slate-950 font-bold rounded-xl hover:bg-slate-100 transition-colors flex items-center justify-center"
               aria-label="Contact Afiq via email"
             >
-              <Mail className="h-4 w-4" />
               Contact Afiq
             </a>
           </div>
 
-          {/* Documentation Button */}
+          {/* Documentation */}
           {currentProjectData.documentUrl && (
-            <div className="bg-slate-900/40 backdrop-blur-xl p-8 rounded-3xl border border-slate-800">
-              <Button
-                variant="outline"
-                className="w-full glass hover:scale-105 transition-all"
-                onClick={() => window.open(currentProjectData.documentUrl, '_blank')}
+            <div className="glass p-8 rounded-3xl border border-slate-800">
+              <button
+                type="button"
+                className="w-full py-3 rounded-xl border border-slate-700 bg-slate-800/50 text-slate-200 font-semibold hover:bg-slate-800 hover:border-slate-600 transition-all"
+                onClick={() => window.open(currentProjectData.documentUrl, "_blank")}
               >
                 View Documentation
-              </Button>
+              </button>
             </div>
           )}
         </div>

@@ -3,6 +3,7 @@ import { tamsProject } from "./projects/tamsProject";
 import { saloonProject } from "./projects/saloonProject";
 import { churnProject } from "./projects/churnProject";
 import { dataEngineerProject } from "./projects/dataEngineerProject";
+import { weddingInvitationProject } from "./projects/weddingInvitation";
 import { ProjectData } from "./projectTypes";
 
 export type { ProjectData };
@@ -12,5 +13,6 @@ export const projectData = {
   "Mobile Time Attendance With Locations": tamsProject,
   "Hair Saloon Booking Mobile Application": saloonProject,
   "Customer Churn Prediction and Analysis Project": churnProject,
-  "Database Management and Optimization Projects": dataEngineerProject
+  "Database Management and Optimization Projects": dataEngineerProject,
+  "Wedding Invitation Platform": weddingInvitationProject
 };

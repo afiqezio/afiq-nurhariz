@@ -107,20 +107,6 @@ const HeroSection = () => {
           ))}
         </motion.div>
       </motion.div>
-
-      <motion.div
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 opacity-20"
-      >
-        <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center p-1">
-          <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-1 h-2 bg-white rounded-full"
-          />
-        </div>
-      </motion.div>
     </section>
   );
 };

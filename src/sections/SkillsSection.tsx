@@ -78,7 +78,22 @@ const SkillCard = memo(function SkillCard({ skill, level, category, index, reduc
   }, [iconUrl]);
 
   const transition = reducedMotion ? { duration: 0 } : { duration: 0.35, ease: [0.22, 1, 0.36, 1] as const, delay: Math.min(index * 0.04, 0.4) };
-  const progressTransition = reducedMotion ? { duration: 0 } : { duration: 1, ease: "easeOut" as const, delay: 0.15 + Math.min(index * 0.02, 0.2) };
+
+  // Progress bar: fill on scroll into view (like example_apps) – initial 0, whileInView to level%, 1.5s easeOut, delay 0.1
+  const progressBar = reducedMotion ? (
+    <div
+      className="h-full bg-gradient-to-r from-primary-600 to-accent-ai rounded-full"
+      style={{ width: `${level}%` }}
+    />
+  ) : (
+    <motion.div
+      initial={{ width: 0 }}
+      whileInView={{ width: `${level}%` }}
+      viewport={{ once: true }}
+      transition={{ duration: 1.5, ease: "easeOut", delay: 0.1 }}
+      className="h-full bg-gradient-to-r from-primary-600 to-accent-ai rounded-full"
+    />
+  );
 
   return (
     <motion.div
@@ -107,12 +122,7 @@ const SkillCard = memo(function SkillCard({ skill, level, category, index, reduc
         <span className="text-xs font-bold text-primary-400">{level}%</span>
       </div>
       <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-        <motion.div
-          initial={reducedMotion ? false : { width: 0 }}
-          animate={{ width: `${level}%` }}
-          transition={progressTransition}
-          className="h-full bg-gradient-to-r from-primary-600 to-accent-ai rounded-full"
-        />
+        {progressBar}
       </div>
     </motion.div>
   );

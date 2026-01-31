@@ -63,7 +63,7 @@ const AboutSection = () => {
               <div className="text-xs sm:text-sm text-slate-500 uppercase tracking-widest font-semibold">Years Exp.</div>
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }} className="group">
-              <div className="text-2xl sm:text-3xl font-bold text-white mb-1 group-hover:text-primary-400 transition-colors">8+</div>
+              <div className="text-2xl sm:text-3xl font-bold text-white mb-1 group-hover:text-primary-400 transition-colors">9+</div>
               <div className="text-xs sm:text-sm text-slate-500 uppercase tracking-widest font-semibold">Projects Done</div>
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }} className="group">

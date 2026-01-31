@@ -325,7 +325,7 @@ const View = () => {
                 className="w-full py-3 rounded-xl border border-slate-700 bg-slate-800/50 text-slate-200 font-semibold hover:bg-slate-800 hover:border-slate-600 transition-all"
                 onClick={() => window.open(currentProjectData.documentUrl, "_blank")}
               >
-                View Documentation
+                View Project
               </button>
             </div>
           )}

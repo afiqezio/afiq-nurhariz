@@ -41,6 +41,14 @@ export const projects: Project[] = [
     tech: ["MySQL", "SQL", "Database Migration", "Performance Tuning"],
     link: "#",
     imageUrl: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?q=80&w=1200&auto=format',
+  },
+  {
+    id: 'wedding-invitation',
+    title: "Wedding Invitation Platform",
+    description: "A platform for creating and managing wedding invitations",
+    tech: ["React", "Tailwind CSS", "Framer Motion", "Firebase"],
+    link: "#",
+    imageUrl: 'https://images.pexels.com/photos/18535623/pexels-photo-18535623.jpeg?_gl=1*1w12ep9*_ga*MTExODQ5OTMzMy4xNzY5ODQ2MjEx*_ga_8JE65Q40S6*czE3Njk4NDYyMTEkbzEkZzEkdDE3Njk4NDY1NDckajU0JGwwJGgw',
   }
 ];
 

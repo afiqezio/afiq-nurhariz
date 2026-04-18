@@ -46,7 +46,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename="/afiq-nurhariz/">
+      <BrowserRouter basename="/">
         <Suspense fallback={<PageLoader />}>
           <AnimatedRoutes />
         </Suspense>

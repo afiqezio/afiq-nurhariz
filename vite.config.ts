@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: '/afiq-nurhariz/',
+  base: '/',
   build: {
     // Optimize build output
     target: 'esnext',

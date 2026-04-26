@@ -1,70 +1,127 @@
-import { motion } from "framer-motion";
-import { contactLinks } from "@/constants/data";
+import { motion } from 'framer-motion';
 
-const ContactSection = () => {
-  return (
-    <section id="contact" className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 bg-slate-950 relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] sm:w-[800px] h-[600px] sm:h-[800px] bg-primary-900/10 rounded-full blur-[120px] pointer-events-none" />
+const CONTACT_LINKS = [
+  {
+    label: 'afiqnurhariz@gmail.com',
+    href:  'mailto:afiqnurhariz@gmail.com',
+    icon: (
+      <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+        <rect x="2" y="4" width="20" height="16" rx="2"/>
+        <path d="m2 7 10 7 10-7"/>
+      </svg>
+    ),
+  },
+  {
+    label: 'LinkedIn',
+    href:  'https://www.linkedin.com/in/afiqnurhariz/',
+    icon: (
+      <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+        <rect x="2" y="9" width="4" height="12"/>
+        <circle cx="4" cy="4" r="2"/>
+      </svg>
+    ),
+  },
+  {
+    label: 'GitHub',
+    href:  'https://github.com/afiqezio',
+    icon: (
+      <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+      </svg>
+    ),
+  },
+];
 
-      <div className="max-w-4xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12 sm:mb-16"
+const ContactSection = () => (
+  <section
+    id="contact"
+    style={{
+      borderTop: '1px solid var(--line)',
+      padding: 'clamp(80px, 10vw, 140px) clamp(24px, 5vw, 80px)',
+      textAlign: 'center',
+    }}
+  >
+    <motion.span
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+      style={{
+        display: 'block',
+        fontFamily: 'JetBrains Mono, monospace',
+        fontSize: 11, letterSpacing: '0.12em',
+        color: 'var(--cyan)', textTransform: 'uppercase', marginBottom: 24,
+      }}
+    >
+      Let&apos;s work together
+    </motion.span>
+
+    <motion.h2
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+      style={{
+        fontSize: 'clamp(36px, 5vw, 72px)',
+        fontWeight: 700, letterSpacing: '-0.03em',
+        lineHeight: 1.05, marginBottom: 20,
+        color: 'var(--text)',
+      }}
+    >
+      Have an idea?<br />Let&apos;s build it.
+    </motion.h2>
+
+    <motion.p
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: 0.15 }}
+      style={{ fontSize: 16, color: 'var(--muted)', marginBottom: 48 }}
+    >
+      Open to freelance, full-time, and collaborative opportunities.
+    </motion.p>
+
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+      style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}
+    >
+      {CONTACT_LINKS.map(link => (
+        <a
+          key={link.label}
+          href={link.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="contact-link"
+          style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            fontSize: 13, fontFamily: 'JetBrains Mono, monospace', letterSpacing: '0.06em',
+            color: 'var(--muted)',
+            border: '1px solid rgba(34,211,238,0.14)',
+            padding: '12px 24px', borderRadius: 4, textDecoration: 'none',
+            background: 'rgba(34,211,238,0.05)',
+            backdropFilter: 'blur(12px)',
+            transition: 'color 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s',
+          }}
         >
-          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
-            Let&apos;s build <br />
-            <span className="text-primary-400">something great.</span>
-          </h2>
-          <p className="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto">
-            Have a project in mind or just want to chat about AI and the future of web development? Drop me a line!
-          </p>
-        </motion.div>
+          {link.icon}
+          {link.label}
+        </a>
+      ))}
+    </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="glass p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl border border-slate-800"
-        >
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {contactLinks.map((link, idx) => (
-              <motion.a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                whileHover={{ scale: 1.03, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="group flex flex-col items-center sm:items-start p-4 sm:p-6 rounded-xl bg-slate-900/50 border border-slate-800 hover:border-primary-500/50 transition-all duration-300 hover:bg-slate-900/80"
-              >
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-2xl sm:text-3xl mb-4 group-hover:scale-110 group-hover:bg-primary-500/10 transition-all duration-300">
-                  {link.icon}
-                </div>
-                <h4 className="font-bold text-white text-base sm:text-lg mb-2 text-center sm:text-left">
-                  {link.label}
-                </h4>
-                <p className="text-slate-400 hover:text-primary-400 transition-colors text-sm sm:text-base text-center sm:text-left break-words">
-                  {link.label === "Email"
-                    ? "afiqnurhariz@gmail.com"
-                    : link.label === "LinkedIn"
-                      ? "linkedin.com/in/afiqnurhariz"
-                      : "github.com/afiqezio"}
-                </p>
-              </motion.a>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
+    <style>{`
+      .contact-link:hover {
+        color: var(--cyan) !important;
+        border-color: rgba(34,211,238,0.4) !important;
+        background: rgba(34,211,238,0.10) !important;
+        box-shadow: 0 6px 24px rgba(34,211,238,0.14) !important;
+      }
+    `}</style>
+  </section>
+);
 
 export default ContactSection;

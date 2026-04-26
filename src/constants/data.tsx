@@ -5,7 +5,7 @@ export const projects: Project[] = [
   {
     id: 'mamak-food',
     title: "Mamak Food Calories Estimation Based on Image Classification",
-    description: "One photo can simplify the time-consuming task of manually calculating food calories.",
+    description: "Computer vision pipeline for estimating nutritional content from food photographs using object detection.",
     tech: ["Python", "YoloV5", "CNN"],
     link: "#",
     imageUrl: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format',
@@ -13,7 +13,7 @@ export const projects: Project[] = [
   {
     id: 'mobile-attendance',
     title: "Mobile Time Attendance With Locations",
-    description: "Mobile app project integrated with TAMS for remote employee attendance tracking",
+    description: "Cross-platform attendance system with GPS verification, real-time reporting, and enterprise backend.",
     tech: ["Flutter", ".NET", "MSSQL"],
     link: "#",
     imageUrl: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=1200&auto=format',
@@ -21,7 +21,7 @@ export const projects: Project[] = [
   {
     id: 'hair-saloon',
     title: "Hair Saloon Booking Mobile Application",
-    description: "Simple mobile app project for hair saloon booking",
+    description: "Full-featured salon management app — scheduling, stylist profiles, and customer portal.",
     tech: ["Flutter", "PHP", "MySQL"],
     link: "#",
     imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format',
@@ -29,7 +29,7 @@ export const projects: Project[] = [
   {
     id: 'churn-prediction',
     title: "Customer Churn Prediction and Analysis Project",
-    description: "Analyzing customer behavior to identify reasons for churn and predicting potential attrition using machine learning models",
+    description: "End-to-end ML pipeline to predict churn risk using gradient boosting and feature engineering on telco data.",
     tech: ["Python", "Pandas", "XGBoost", "Logistic Regressions", "Decision Tree"],
     link: "#",
     imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format',
@@ -37,7 +37,7 @@ export const projects: Project[] = [
   {
     id: 'database-optimization',
     title: "Database Management and Optimization Projects",
-    description: "Development and optimization of database scripts and SQL queries for large-scale data systems",
+    description: "Schema redesign, query optimisation, and migration strategy for legacy enterprise databases.",
     tech: ["MySQL", "SQL", "Database Migration", "Performance Tuning"],
     link: "#",
     imageUrl: 'https://images.unsplash.com/photo-1544383835-bda2bc66a55d?q=80&w=1200&auto=format',
@@ -45,10 +45,10 @@ export const projects: Project[] = [
   {
     id: 'wedding-invitation',
     title: "Wedding Invitation Platform",
-    description: "A platform for creating and managing wedding invitations",
+    description: "Bespoke digital invitation builder with animated templates, RSVP management, and guest analytics.",
     tech: ["React", "Tailwind CSS", "Framer Motion", "Firebase"],
     link: "#",
-    imageUrl: 'https://images.pexels.com/photos/18535623/pexels-photo-18535623.jpeg?_gl=1*1w12ep9*_ga*MTExODQ5OTMzMy4xNzY5ODQ2MjEx*_ga_8JE65Q40S6*czE3Njk4NDYyMTEkbzEkZzEkdDE3Njk4NDY1NDckajU0JGwwJGgw',
+    imageUrl: 'https://images.pexels.com/photos/18535623/pexels-photo-18535623.jpeg',
   }
 ];
 

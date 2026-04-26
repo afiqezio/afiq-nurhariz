@@ -5,6 +5,29 @@ import { projectData, ProjectData } from "@/data/projectData";
 import { Project } from "@/types";
 import { CleanNav } from "@/components/reactbits";
 import { navItems } from "@/constants/data";
+import CustomCursor from "@/components/CustomCursor";
+
+/* ── shared card style ── */
+const glassCard: React.CSSProperties = {
+  background: 'var(--bg2)',
+  border: '1px solid rgba(34,211,238,0.12)',
+  borderRadius: 8,
+  backdropFilter: 'blur(12px)',
+  padding: '28px 32px',
+};
+
+/* ── section label ── */
+const SectionLabel = ({ n, text, color }: { n: string; text: string; color?: string }) => (
+  <p style={{
+    fontFamily: 'JetBrains Mono, monospace',
+    fontSize: 11, letterSpacing: '0.16em',
+    color: color ?? 'var(--cyan)',
+    textTransform: 'uppercase',
+    marginBottom: 16,
+  }}>
+    {n}. {text}
+  </p>
+);
 
 const View = () => {
   const location = useLocation();
@@ -12,17 +35,16 @@ const View = () => {
   const project = location.state as Project & ProjectData;
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
+  /* ── not-found states ── */
   if (!project) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-50">
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)' }}>
         <CleanNav items={navItems} />
-        <div className="min-h-screen flex items-center justify-center px-6">
-          <div className="glass p-8 rounded-3xl border border-slate-800">
-            <p className="text-slate-400">Project not found.</p>
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 24px' }}>
+          <div style={{ ...glassCard }}>
+            <p style={{ color: 'var(--muted)' }}>Project not found.</p>
           </div>
         </div>
       </div>
@@ -33,205 +55,281 @@ const View = () => {
 
   if (!currentProjectData) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-50">
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)' }}>
         <CleanNav items={navItems} />
-        <div className="min-h-screen flex items-center justify-center px-6">
-          <div className="glass p-8 rounded-3xl border border-slate-800">
-            <p className="text-slate-400">Project details not found.</p>
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 24px' }}>
+          <div style={{ ...glassCard }}>
+            <p style={{ color: 'var(--muted)' }}>Project details not found.</p>
           </div>
         </div>
       </div>
     );
   }
 
-  // Get project image URL - use imageUrl from project if available, otherwise fallback to first project detail image
   const projectImage = project.imageUrl || currentProjectData.images[0]?.url || '';
   const caseStudy = currentProjectData.caseStudy;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 pb-24">
-      {/* Top Header - matches example CaseStudy */}
-      <div className="sticky top-0 z-50 glass border-b border-slate-800 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors group"
-            aria-label="Go back to projects"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            <span className="font-medium text-sm">Back to Projects</span>
-          </button>
-          <div className="text-xs font-mono text-primary-400 tracking-[0.2em] uppercase">
-            Project Showcase // {project.id}
-          </div>
-        </div>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)', paddingBottom: 96 }}>
+      <CustomCursor />
+
+      {/* ── Sticky header ── */}
+      <div style={{
+        position: 'sticky', top: 0, zIndex: 50,
+        background: 'var(--frosted-bg)',
+        borderBottom: '1px solid var(--line)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        padding: '0 clamp(24px,5vw,80px)',
+        height: 60,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <button
+          onClick={() => navigate(-1)}
+          className="view-back-btn"
+          style={{
+            display: 'flex', alignItems: 'center', gap: 8,
+            color: 'var(--muted)', background: 'none', border: 'none',
+            cursor: 'pointer', fontSize: 13, fontWeight: 500,
+            transition: 'color 0.2s',
+          }}
+        >
+          <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+          Back
+        </button>
+        <span style={{
+          fontFamily: 'JetBrains Mono, monospace',
+          fontSize: 11, letterSpacing: '0.14em',
+          color: 'var(--cyan)', textTransform: 'uppercase',
+        }}>
+          Project // {project.id}
+        </span>
       </div>
 
-      {/* Hero Section - matches example */}
-      <div className="relative w-full h-[60vh] overflow-hidden">
+      {/* ── Hero banner ── */}
+      <div style={{ position: 'relative', width: '100%', height: '60vh', overflow: 'hidden' }}>
         <img
           src={projectImage}
           alt={project.title}
-          className="w-full h-full object-cover opacity-60"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.55)' }}
           loading="eager"
-          decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex gap-3 mb-4 flex-wrap">
-              {project.tech.slice(0, 3).map((tag) => (
-                <span key={tag} className="px-3 py-1 bg-primary-500/20 text-primary-400 text-[10px] font-bold tracking-widest uppercase rounded-full backdrop-blur-sm border border-primary-500/30">
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to top, var(--bg) 0%, transparent 50%, transparent 80%, var(--bg) 100%)',
+        }} />
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          padding: 'clamp(24px,4vw,64px) clamp(24px,5vw,80px)',
+        }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+            <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+              {project.tech.slice(0, 3).map(tag => (
+                <span key={tag} style={{
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: 10, letterSpacing: '0.08em',
+                  color: 'var(--cyan)',
+                  border: '1px solid rgba(34,211,238,0.35)',
+                  padding: '4px 10px', borderRadius: 3,
+                  background: 'var(--cyan-dim)',
+                  backdropFilter: 'blur(8px)',
+                }}>
                   {tag}
                 </span>
               ))}
             </div>
-            <h1 className="text-5xl md:text-7xl font-display font-black tracking-tight mb-4 text-white">
+            <h1 style={{
+              fontFamily: 'Space Grotesk, sans-serif',
+              fontSize: 'clamp(28px,4.5vw,64px)',
+              fontWeight: 700, letterSpacing: '-0.03em',
+              lineHeight: 1.1, marginBottom: 12,
+              color: 'var(--text)',
+            }}>
               {project.title}
             </h1>
-            <p className="text-slate-300 text-lg md:text-xl max-w-2xl leading-relaxed font-light">
+            <p style={{
+              fontSize: 'clamp(14px,1.4vw,18px)',
+              color: 'var(--muted)', maxWidth: 600,
+              lineHeight: 1.7, fontWeight: 400,
+            }}>
               {project.description}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 mt-16 grid grid-cols-1 lg:grid-cols-3 gap-12 pb-24">
-        {/* Main Narrative */}
-        <div className="lg:col-span-2 space-y-16">
-          {/* Problem Section - matches example */}
+      {/* ── Main content ── */}
+      <div style={{
+        maxWidth: 1200, margin: '0 auto',
+        padding: '64px clamp(24px,5vw,80px) 0',
+        display: 'grid',
+        gridTemplateColumns: '1fr 340px',
+        gap: 48,
+      }} className="view-content-grid">
+
+        {/* ── Left column ── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 56 }}>
+
+          {/* Problem */}
           {caseStudy && (
             <section>
-              <h2 className="text-sm font-bold text-primary-400 uppercase tracking-[0.2em] mb-4">01. The Problem</h2>
-              <p className="text-xl text-slate-300 leading-relaxed font-light">
+              <SectionLabel n="01" text="The Problem" />
+              <p style={{ fontSize: 18, color: 'var(--muted)', lineHeight: 1.8, fontWeight: 400 }}>
                 {caseStudy.problem}
               </p>
             </section>
           )}
 
-          {/* Project Gallery */}
-          <section className="space-y-8">
-            <h2 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em]">Project Gallery</h2>
-            {currentProjectData.images.length > 0 && (
-              <>
-                {currentProjectData.images.length >= 2 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {currentProjectData.images.slice(0, 2).map((image, index) => (
-                      <div 
-                        key={index}
-                        className="rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 aspect-video group relative cursor-pointer"
-                        onClick={() => setSelectedImageIndex(index)}
-                      >
-                        <img 
-                          src={image.url} 
-                          alt={image.alt} 
-                          className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" 
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                          <span className="text-xs font-mono text-white">{image.caption}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {currentProjectData.images.length > 2 && (
-                  <div className="w-full rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 aspect-[21/9] group relative cursor-pointer">
-                    <img 
-                      src={currentProjectData.images[2].url} 
-                      alt={currentProjectData.images[2].alt} 
-                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" 
-                      onClick={() => setSelectedImageIndex(2)}
-                    />
-                    <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-slate-950 to-transparent">
-                      <p className="text-sm text-slate-300">{currentProjectData.images[2].caption}</p>
+          {/* Gallery */}
+          <section>
+            <p style={{
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: 11, letterSpacing: '0.16em',
+              color: 'var(--subtle)', textTransform: 'uppercase', marginBottom: 20,
+            }}>
+              Project Gallery
+            </p>
+            {currentProjectData.images.length >= 2 && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+                {currentProjectData.images.slice(0, 2).map((img, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => setSelectedImageIndex(idx)}
+                    style={{
+                      borderRadius: 8, overflow: 'hidden',
+                      border: '1px solid var(--line)',
+                      background: 'var(--bg2)',
+                      aspectRatio: '16/9', cursor: 'pointer',
+                      position: 'relative',
+                    }}
+                    className="gallery-tile"
+                  >
+                    <img src={img.url} alt={img.alt} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8, transition: 'opacity 0.2s' }} className="gallery-img" />
+                    <div className="gallery-overlay" style={{
+                      position: 'absolute', inset: 0,
+                      background: 'linear-gradient(to top, rgba(13,15,20,0.8), transparent)',
+                      opacity: 0, transition: 'opacity 0.2s',
+                      display: 'flex', alignItems: 'flex-end', padding: 12,
+                    }}>
+                      <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--text)' }}>{img.caption}</span>
                     </div>
                   </div>
-                )}
-                {currentProjectData.images.length > 3 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {currentProjectData.images.slice(3).map((image, index) => (
-                      <div 
-                        key={index + 3}
-                        className="rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 aspect-video group relative cursor-pointer"
-                        onClick={() => setSelectedImageIndex(index + 3)}
-                      >
-                        <img 
-                          src={image.url} 
-                          alt={image.alt} 
-                          className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" 
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                          <span className="text-xs font-mono text-white">{image.caption}</span>
-                        </div>
-                      </div>
-                    ))}
+                ))}
+              </div>
+            )}
+            {currentProjectData.images.length > 2 && (
+              <div
+                onClick={() => setSelectedImageIndex(2)}
+                style={{
+                  borderRadius: 8, overflow: 'hidden',
+                  border: '1px solid var(--line)',
+                  background: 'var(--bg2)',
+                  aspectRatio: '21/9', cursor: 'pointer',
+                  position: 'relative', marginBottom: 12,
+                }}
+                className="gallery-tile"
+              >
+                <img src={currentProjectData.images[2].url} alt={currentProjectData.images[2].alt} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} className="gallery-img" />
+                <div style={{
+                  position: 'absolute', bottom: 0, left: 0, right: 0,
+                  padding: 16,
+                  background: 'linear-gradient(to top, rgba(13,15,20,0.85), transparent)',
+                }}>
+                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--muted)' }}>{currentProjectData.images[2].caption}</span>
+                </div>
+              </div>
+            )}
+            {currentProjectData.images.length > 3 && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
+                {currentProjectData.images.slice(3).map((img, idx) => (
+                  <div
+                    key={idx + 3}
+                    onClick={() => setSelectedImageIndex(idx + 3)}
+                    style={{
+                      borderRadius: 8, overflow: 'hidden',
+                      border: '1px solid var(--line)',
+                      background: 'var(--bg2)',
+                      aspectRatio: '16/9', cursor: 'pointer',
+                      position: 'relative',
+                    }}
+                    className="gallery-tile"
+                  >
+                    <img src={img.url} alt={img.alt} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} className="gallery-img" />
+                    <div className="gallery-overlay" style={{
+                      position: 'absolute', inset: 0,
+                      background: 'linear-gradient(to top, rgba(13,15,20,0.8), transparent)',
+                      opacity: 0, transition: 'opacity 0.2s',
+                      display: 'flex', alignItems: 'flex-end', padding: 12,
+                    }}>
+                      <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: 10, color: 'var(--text)' }}>{img.caption}</span>
+                    </div>
                   </div>
-                )}
-              </>
+                ))}
+              </div>
             )}
           </section>
 
-          {/* Challenge Section - matches example (accent-ai) */}
+          {/* Challenge */}
           {caseStudy && (
             <section>
-              <h2 className="text-sm font-bold text-accent-ai uppercase tracking-[0.2em] mb-4">02. The Challenge</h2>
-              <p className="text-xl text-slate-300 leading-relaxed font-light">
+              <SectionLabel n="02" text="The Challenge" />
+              <p style={{ fontSize: 18, color: 'var(--muted)', lineHeight: 1.8, fontWeight: 400 }}>
                 {caseStudy.challenge}
               </p>
             </section>
           )}
 
-          {/* Solution Section - matches example (accent-mobile, glass-style card) */}
+          {/* Solution */}
           {caseStudy && (
-            <section className="p-8 md:p-12 rounded-3xl bg-slate-900 border border-slate-800 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:rotate-12 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-32 w-32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                </svg>
-              </div>
-              <h2 className="text-sm font-bold text-accent-mobile uppercase tracking-[0.2em] mb-6">03. The Solution</h2>
-              <p className="text-lg text-slate-400 leading-relaxed mb-0">
+            <section style={{
+              ...glassCard,
+              position: 'relative', overflow: 'hidden',
+            }}>
+              <div style={{
+                position: 'absolute', top: -24, right: -24,
+                width: 120, height: 120,
+                background: 'var(--cyan-dim)',
+                borderRadius: '50%',
+                filter: 'blur(32px)',
+              }} />
+              <SectionLabel n="03" text="The Solution" />
+              <p style={{ fontSize: 16, color: 'var(--muted)', lineHeight: 1.8 }}>
                 {caseStudy.solution}
               </p>
             </section>
           )}
 
-          {/* Additional Details */}
+          {/* Overview + features + challenges (when no caseStudy) */}
           {!caseStudy && (
             <>
               <section>
-                <h2 className="text-sm font-bold text-primary-400 uppercase tracking-[0.2em] mb-4">Project Overview</h2>
-                <p className="text-xl text-slate-300 leading-relaxed font-light">
+                <SectionLabel n="01" text="Project Overview" />
+                <p style={{ fontSize: 18, color: 'var(--muted)', lineHeight: 1.8, fontWeight: 400 }}>
                   {currentProjectData.overview}
                 </p>
               </section>
-
               {currentProjectData.features.length > 0 && (
                 <section>
-                  <h2 className="text-sm font-bold text-primary-400 uppercase tracking-[0.2em] mb-4">Key Features</h2>
-                  <ul className="space-y-3">
-                    {currentProjectData.features.map((feature, index) => (
-                      <li key={index} className="text-lg text-slate-300 leading-relaxed flex items-start gap-3">
-                        <span className="text-primary-400 mt-1">•</span>
-                        <span>{feature}</span>
+                  <SectionLabel n="02" text="Key Features" />
+                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                    {currentProjectData.features.map((f, i) => (
+                      <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, fontSize: 16, color: 'var(--muted)', lineHeight: 1.7 }}>
+                        <span style={{ color: 'var(--cyan)', marginTop: 4, flexShrink: 0 }}>—</span>
+                        {f}
                       </li>
                     ))}
                   </ul>
                 </section>
               )}
-
               {currentProjectData.challenges.length > 0 && (
                 <section>
-                  <h2 className="text-sm font-bold text-primary-400 uppercase tracking-[0.2em] mb-4">Challenges & Solutions</h2>
-                  <div className="space-y-6">
-                    {currentProjectData.challenges.map((challenge, index) => (
-                      <div key={index}>
-                        <h3 className="text-lg font-semibold text-slate-200 mb-2">{challenge.title}</h3>
-                        <p className="text-lg text-slate-300 leading-relaxed">{challenge.description}</p>
+                  <SectionLabel n="03" text="Challenges & Solutions" />
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                    {currentProjectData.challenges.map((c, i) => (
+                      <div key={i}>
+                        <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--text)', marginBottom: 6 }}>{c.title}</p>
+                        <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.7 }}>{c.description}</p>
                       </div>
                     ))}
                   </div>
@@ -241,55 +339,90 @@ const View = () => {
           )}
         </div>
 
-        {/* Sidebar Details - matches example (glass, plain span for tech) */}
-        <div className="space-y-12">
-          {/* Tech Stack */}
-          <div className="glass p-8 rounded-3xl border border-slate-800">
-            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Stack Architecture</h3>
-            <div className="flex flex-wrap gap-2">
-              {(caseStudy?.techStack ?? project.tech).map((tech) => (
-                <span
-                  key={tech}
-                  className="px-3 py-1.5 bg-slate-800 rounded-lg text-xs font-mono text-slate-300 border border-slate-700"
-                >
+        {/* ── Right sidebar ── */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+          {/* Tech stack */}
+          <div style={glassCard}>
+            <p style={{
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: 10, letterSpacing: '0.14em',
+              textTransform: 'uppercase', color: 'var(--subtle)', marginBottom: 16,
+            }}>
+              Stack Architecture
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {(caseStudy?.techStack ?? project.tech).map(tech => (
+                <span key={tech} style={{
+                  padding: '5px 10px',
+                  background: 'var(--bg3)',
+                  border: '1px solid var(--line)',
+                  borderRadius: 4,
+                  fontFamily: 'JetBrains Mono, monospace',
+                  fontSize: 11, color: 'var(--text)',
+                }}>
                   {tech}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* Key Results - matches example */}
+          {/* Results */}
           {caseStudy && caseStudy.results.length > 0 && (
-            <div className="glass p-8 rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950">
-              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Impact & Results</h3>
-              <ul className="space-y-6">
-                {caseStudy.results.map((result, i) => (
-                  <li key={i} className="flex gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-[10px] font-bold">
+            <div style={glassCard}>
+              <p style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 10, letterSpacing: '0.14em',
+                textTransform: 'uppercase', color: 'var(--subtle)', marginBottom: 20,
+              }}>
+                Impact &amp; Results
+              </p>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                {caseStudy.results.map((r, i) => (
+                  <li key={i} style={{ display: 'flex', gap: 12 }}>
+                    <span style={{
+                      flexShrink: 0,
+                      width: 22, height: 22, borderRadius: '50%',
+                      background: 'var(--cyan-dim)',
+                      border: '1px solid rgba(34,211,238,0.25)',
+                      display: 'grid', placeItems: 'center',
+                      fontFamily: 'JetBrains Mono, monospace',
+                      fontSize: 10, color: 'var(--cyan)', fontWeight: 700,
+                    }}>
                       {i + 1}
-                    </div>
-                    <p className="text-sm text-slate-400 leading-relaxed">
-                      {result}
-                    </p>
+                    </span>
+                    <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{r}</p>
                   </li>
                 ))}
               </ul>
             </div>
           )}
 
-          {/* Features (if no case study) */}
+          {/* Features sidebar (no caseStudy) */}
           {!caseStudy && currentProjectData.features.length > 0 && (
-            <div className="glass p-8 rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950">
-              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Key Features</h3>
-              <ul className="space-y-4">
-                {currentProjectData.features.map((feature, i) => (
-                  <li key={i} className="flex gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-[10px] font-bold">
+            <div style={glassCard}>
+              <p style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 10, letterSpacing: '0.14em',
+                textTransform: 'uppercase', color: 'var(--subtle)', marginBottom: 20,
+              }}>
+                Key Features
+              </p>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {currentProjectData.features.map((f, i) => (
+                  <li key={i} style={{ display: 'flex', gap: 12 }}>
+                    <span style={{
+                      flexShrink: 0,
+                      width: 22, height: 22, borderRadius: '50%',
+                      background: 'var(--cyan-dim)',
+                      border: '1px solid rgba(34,211,238,0.25)',
+                      display: 'grid', placeItems: 'center',
+                      fontFamily: 'JetBrains Mono, monospace',
+                      fontSize: 10, color: 'var(--cyan)', fontWeight: 700,
+                    }}>
                       {i + 1}
-                    </div>
-                    <p className="text-sm text-slate-400 leading-relaxed">
-                      {feature}
-                    </p>
+                    </span>
+                    <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{f}</p>
                   </li>
                 ))}
               </ul>
@@ -298,32 +431,64 @@ const View = () => {
 
           {/* Duration */}
           {currentProjectData.duration && (
-            <div className="glass p-8 rounded-3xl border border-slate-800">
-              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Project Duration</h3>
-              <p className="text-lg text-slate-300 font-semibold">{currentProjectData.duration}</p>
+            <div style={glassCard}>
+              <p style={{
+                fontFamily: 'JetBrains Mono, monospace',
+                fontSize: 10, letterSpacing: '0.14em',
+                textTransform: 'uppercase', color: 'var(--subtle)', marginBottom: 10,
+              }}>
+                Project Duration
+              </p>
+              <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--text)' }}>
+                {currentProjectData.duration}
+              </p>
             </div>
           )}
 
-          {/* Call to Action - matches example */}
-          <div className="p-8 rounded-3xl bg-primary-600 flex flex-col items-center text-center">
-            <h3 className="text-xl font-bold mb-4">Ready to start?</h3>
-            <p className="text-primary-100 text-sm mb-6">Discuss how I can bring similar innovation to your project.</p>
+          {/* CTA */}
+          <div style={{
+            padding: '28px 32px', borderRadius: 8,
+            background: 'var(--cyan)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+          }}>
+            <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--bg)', marginBottom: 8 }}>
+              Ready to start?
+            </h3>
+            <p style={{ fontSize: 13, color: 'rgba(13,15,20,0.7)', marginBottom: 20, lineHeight: 1.5 }}>
+              Discuss how I can bring similar innovation to your project.
+            </p>
             <a
               href="mailto:afiqnurhariz@gmail.com"
-              className="w-full py-3 bg-white text-slate-950 font-bold rounded-xl hover:bg-slate-100 transition-colors flex items-center justify-center"
-              aria-label="Contact Afiq via email"
+              style={{
+                display: 'block', width: '100%',
+                padding: '10px 0', borderRadius: 4,
+                background: 'var(--bg)', color: 'var(--cyan)',
+                fontWeight: 700, fontSize: 14,
+                fontFamily: 'JetBrains Mono, monospace',
+                letterSpacing: '0.04em',
+                textDecoration: 'none', textAlign: 'center',
+                transition: 'opacity 0.2s',
+              }}
+              className="cta-contact-btn"
             >
               Contact Afiq
             </a>
           </div>
 
-          {/* Documentation */}
+          {/* Docs */}
           {currentProjectData.documentUrl && (
-            <div className="glass p-8 rounded-3xl border border-slate-800">
+            <div style={glassCard}>
               <button
-                type="button"
-                className="w-full py-3 rounded-xl border border-slate-700 bg-slate-800/50 text-slate-200 font-semibold hover:bg-slate-800 hover:border-slate-600 transition-all"
-                onClick={() => window.open(currentProjectData.documentUrl, "_blank")}
+                onClick={() => window.open(currentProjectData.documentUrl, '_blank')}
+                style={{
+                  width: '100%', padding: '11px 0', borderRadius: 4,
+                  border: '1px solid var(--line)',
+                  background: 'var(--bg2)', color: 'var(--text)',
+                  fontWeight: 600, fontSize: 14, cursor: 'pointer',
+                  transition: 'border-color 0.2s, background 0.2s',
+                  fontFamily: 'Space Grotesk, sans-serif',
+                }}
+                className="view-doc-btn"
               >
                 View Project
               </button>
@@ -332,13 +497,24 @@ const View = () => {
         </div>
       </div>
 
-      {/* Image Modal */}
+      {/* Image modal */}
       <ImageModal
         isOpen={selectedImageIndex !== null}
         onClose={() => setSelectedImageIndex(null)}
         images={currentProjectData.images}
         currentIndex={selectedImageIndex ?? 0}
       />
+
+      <style>{`
+        .view-back-btn:hover { color: var(--text) !important; }
+        .gallery-tile:hover .gallery-img { opacity: 1 !important; }
+        .gallery-tile:hover .gallery-overlay { opacity: 1 !important; }
+        .cta-contact-btn:hover { opacity: 0.85; }
+        .view-doc-btn:hover { border-color: var(--cyan) !important; background: var(--cyan-dim) !important; }
+        @media (max-width: 900px) {
+          .view-content-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   );
 };

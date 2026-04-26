@@ -1,29 +1,45 @@
-import { contactLinks } from "@/constants/data";
-
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="py-8 sm:py-12 px-4 sm:px-6 border-t border-slate-800 text-center text-slate-400 text-xs sm:text-sm">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4">
-        <p className="break-words">© {currentYear} Afiq Nurhariz. Built with React, Tailwind & TypeScript.</p>
-        <div className="flex gap-4 sm:gap-6 flex-wrap justify-center">
-          {contactLinks.map((link) => (
-            <a 
-              key={link.label}
-              href={link.href} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hover:text-primary-400 transition-colors min-h-[44px] flex items-center"
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
+    <footer style={{
+      borderTop: '1px solid var(--line)',
+      padding: `28px clamp(24px, 5vw, 80px)`,
+      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      flexWrap: 'wrap', gap: 12,
+    }}>
+      <span style={{
+        fontFamily: 'JetBrains Mono, monospace',
+        fontSize: 11, color: 'var(--subtle)', letterSpacing: '0.06em',
+      }}>
+        © {year} Afiq Nurhariz. All rights reserved.
+      </span>
+
+      <div style={{ display: 'flex', gap: 24 }}>
+        {['About', 'Projects', 'Contact'].map(label => (
+          <a
+            key={label}
+            href={`#${label.toLowerCase()}`}
+            onClick={e => {
+              e.preventDefault();
+              document.getElementById(label.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="footer-link"
+            style={{
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: 11, color: 'var(--subtle)',
+              textDecoration: 'none', letterSpacing: '0.06em',
+              transition: 'color 0.2s',
+            }}
+          >
+            {label}
+          </a>
+        ))}
       </div>
+
+      <style>{`.footer-link:hover { color: var(--cyan) !important; }`}</style>
     </footer>
   );
 };
 
 export default Footer;
-

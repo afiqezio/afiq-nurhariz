@@ -1,116 +1,215 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 222 47% 11%;
-    --foreground: 213 31% 91%;
-    --card: 222 47% 11%;
-    --card-foreground: 213 31% 91%;
-    --popover: 222 47% 11%;
-    --popover-foreground: 213 31% 91%;
-    --primary: 252 100% 69%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 213 31% 91%;
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 217 33% 17%;
-    --accent-foreground: 213 31% 91%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 252 100% 69%;
-    --radius: 1rem;
-  }
+/* ── Design tokens ── */
+:root {
+  --bg:        #0d0f14;
+  --bg2:       #111520;
+  --bg3:       #16192a;
+  --line:      #1e2435;   /* border color for the new design */
+  --text:      #e8eaef;
+  --muted:     #6b7280;
+  --subtle:    #374151;
+  --cyan:      #22d3ee;
+  --cyan-dim:  rgba(34, 211, 238, 0.12);
+  --cyan-glow: rgba(34, 211, 238, 0.25);
+  --frosted-bg: rgba(13,15,20,0.75);
+
+  /* shadcn/ui compat (kept as HSL triplets for hsl() wrapper) */
+  --background: 222 47% 11%;
+  --foreground: 213 31% 91%;
+  --card: 222 47% 11%;
+  --card-foreground: 213 31% 91%;
+  --popover: 222 47% 11%;
+  --popover-foreground: 213 31% 91%;
+  --primary: 187 85% 53%;
+  --primary-foreground: 0 0% 5%;
+  --secondary: 217 33% 17%;
+  --secondary-foreground: 213 31% 91%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 217 33% 17%;
+  --accent-foreground: 213 31% 91%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 222 30% 16%;  /* HSL for Tailwind/shadcn: hsl(222 30% 16%) ≈ #1e2435 */
+  --input: 217 33% 17%;
+  --ring: 187 85% 53%;
+  --radius: 0.25rem;
+}
+
+[data-theme="light"] {
+  --bg:        #f5f7fa;
+  --bg2:       #edf0f5;
+  --bg3:       #e2e6ed;
+  --line:      #d1d5db;
+  --text:      #111827;
+  --muted:     #6b7280;
+  --subtle:    #9ca3af;
+  --cyan:      #0891b2;
+  --cyan-dim:  rgba(8, 145, 178, 0.10);
+  --cyan-glow: rgba(8, 145, 178, 0.20);
+  --border: 213 20% 82%;
+  --frosted-bg: rgba(245,247,250,0.92);
 }
 
 @layer base {
   * {
-    @apply border-border;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  html {
+    scroll-behavior: smooth;
   }
   body {
-    background-color: #020617;
-    color: #f8fafc;
-    font-family: 'Inter', sans-serif;
-    min-height: 100vh;
-  }
-  
-  .selection\:bg-primary-500 *::selection {
-    background-color: rgb(14 165 233);
-    color: white;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    transition: background 0.3s ease, color 0.3s ease;
   }
 }
 
-html {
-  scroll-behavior: smooth;
+/* ── Custom cursor ── */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  mix-blend-mode: difference;
 }
 
-@keyframes gradientShift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--cyan);
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s;
+  pointer-events: none;
+}
+
+.cursor-ring {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--cyan);
+  border-radius: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  transition: width 0.12s ease, height 0.12s ease, opacity 0.12s ease;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+body.cursor-hovering .cursor-dot {
+  width: 10px;
+  height: 10px;
+}
+
+body.cursor-hovering .cursor-ring {
+  width: 44px;
+  height: 44px;
+  opacity: 1;
+}
+
+/* Hide native cursor on desktop when custom cursor is present */
+@media (pointer: fine) {
+  body.has-custom-cursor,
+  body.has-custom-cursor a,
+  body.has-custom-cursor button {
+    cursor: none;
   }
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+/* ── Section label ── */
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--cyan);
+  flex-shrink: 0;
 }
 
+/* ── Scroll indicator animation ── */
+@keyframes scrollLine {
+  0%   { transform: scaleY(0); transform-origin: top; }
+  50%  { transform: scaleY(1); transform-origin: top; }
+  51%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+.scroll-line {
+  animation: scrollLine 2s ease-in-out infinite;
+}
+
+/* ── Badge pulse ── */
+@keyframes badgePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+.badge-dot {
+  animation: badgePulse 2s ease-in-out infinite;
+}
+
+/* ── Project card border reveal ── */
+.project-card-border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--cyan);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s ease;
+}
+
+/* ── Fade-in on scroll (used by IntersectionObserver) ── */
+.fade-section {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Utility: glass surface ── */
 @layer utilities {
   .glass {
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(13, 15, 20, 0.6);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .glass-card {
-    @apply bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
+    border: 1px solid var(--border);
   }
 
   .gradient-text {
-    background: linear-gradient(to right, #0ea5e9, #8b5cf6, #10b981);
+    background: linear-gradient(to right, #22d3ee, #818cf8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-  }
-
-  .section-padding {
-    @apply py-24 px-4 md:px-8 lg:px-16;
-  }
-
-  .hero-video-overlay {
-    background: radial-gradient(circle at center, transparent 0%, rgba(2, 6, 23, 0.8) 100%);
-  }
-
-  /* Custom Scan Animation */
-  @keyframes scan {
-    0% { top: 0%; opacity: 0; }
-    10% { opacity: 1; }
-    90% { opacity: 1; }
-    100% { top: 100%; opacity: 0; }
-  }
-  
-  .animate-scan {
-    animation: scan 3s linear infinite;
-  }
-
-  .perspective-1000 {
-    perspective: 1000px;
   }
 }

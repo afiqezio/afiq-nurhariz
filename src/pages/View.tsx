@@ -50,8 +50,8 @@ const View = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50 pb-24">
-      {/* Top Header - matches example CaseStudy */}
-      <div className="sticky top-0 z-50 glass border-b border-slate-800 px-6 py-4">
+      {/* Top Header */}
+      <div className="sticky top-0 z-50 glass border-b border-white/5 px-6 py-3.5">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <button
             type="button"
@@ -59,40 +59,40 @@ const View = () => {
             className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors group"
             aria-label="Go back to projects"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            <span className="font-medium text-sm">Back to Projects</span>
+            <span className="font-medium text-sm">Back</span>
           </button>
-          <div className="text-xs font-mono text-primary-400 tracking-[0.2em] uppercase">
-            Project Showcase // {project.id}
+          <div className="text-[10px] font-mono text-slate-500 tracking-[0.25em] uppercase">
+            Case Study &mdash; {project.id}
           </div>
         </div>
       </div>
 
-      {/* Hero Section - matches example */}
-      <div className="relative w-full h-[60vh] overflow-hidden">
+      {/* Hero Section */}
+      <div className="relative w-full h-[55vh] overflow-hidden">
         <img
           src={projectImage}
           alt={project.title}
-          className="w-full h-full object-cover opacity-60"
+          className="w-full h-full object-cover opacity-50"
           loading="eager"
           decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-slate-950/10" />
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
           <div className="max-w-7xl mx-auto">
-            <div className="flex gap-3 mb-4 flex-wrap">
+            <div className="flex gap-2 mb-5 flex-wrap">
               {project.tech.slice(0, 3).map((tag) => (
-                <span key={tag} className="px-3 py-1 bg-primary-500/20 text-primary-400 text-[10px] font-bold tracking-widest uppercase rounded-full backdrop-blur-sm border border-primary-500/30">
+                <span key={tag} className="px-3 py-1 bg-slate-900/80 text-slate-300 text-[10px] font-bold tracking-widest uppercase rounded-full backdrop-blur-sm border border-slate-700/60">
                   {tag}
                 </span>
               ))}
             </div>
-            <h1 className="text-5xl md:text-7xl font-display font-black tracking-tight mb-4 text-white">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-black tracking-tight mb-4 text-white leading-[1.02]">
               {project.title}
             </h1>
-            <p className="text-slate-300 text-lg md:text-xl max-w-2xl leading-relaxed font-light">
+            <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed font-light">
               {project.description}
             </p>
           </div>
@@ -103,10 +103,10 @@ const View = () => {
       <div className="max-w-7xl mx-auto px-6 mt-16 grid grid-cols-1 lg:grid-cols-3 gap-12 pb-24">
         {/* Main Narrative */}
         <div className="lg:col-span-2 space-y-16">
-          {/* Problem Section - matches example */}
+          {/* Problem Section */}
           {caseStudy && (
             <section>
-              <h2 className="text-sm font-bold text-primary-400 uppercase tracking-[0.2em] mb-4">01. The Problem</h2>
+              <p className="eyebrow text-primary-400 mb-3">01 &mdash; The Problem</p>
               <p className="text-xl text-slate-300 leading-relaxed font-light">
                 {caseStudy.problem}
               </p>
@@ -114,8 +114,8 @@ const View = () => {
           )}
 
           {/* Project Gallery */}
-          <section className="space-y-8">
-            <h2 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em]">Project Gallery</h2>
+          <section className="space-y-6">
+            <p className="eyebrow text-slate-500">Project Gallery</p>
             {currentProjectData.images.length > 0 && (
               <>
                 {currentProjectData.images.length >= 2 && (
@@ -175,26 +175,26 @@ const View = () => {
             )}
           </section>
 
-          {/* Challenge Section - matches example (accent-ai) */}
+          {/* Challenge Section */}
           {caseStudy && (
             <section>
-              <h2 className="text-sm font-bold text-accent-ai uppercase tracking-[0.2em] mb-4">02. The Challenge</h2>
+              <p className="eyebrow text-accent-ai mb-3">02 &mdash; The Challenge</p>
               <p className="text-xl text-slate-300 leading-relaxed font-light">
                 {caseStudy.challenge}
               </p>
             </section>
           )}
 
-          {/* Solution Section - matches example (accent-mobile, glass-style card) */}
+          {/* Solution Section */}
           {caseStudy && (
-            <section className="p-8 md:p-12 rounded-3xl bg-slate-900 border border-slate-800 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:rotate-12 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-32 w-32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <section className="p-8 md:p-10 rounded-2xl bg-slate-900 border border-slate-800 relative overflow-hidden group card-highlight">
+              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:rotate-12 transition-transform duration-500">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-32 w-32 text-accent-mobile" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                 </svg>
               </div>
-              <h2 className="text-sm font-bold text-accent-mobile uppercase tracking-[0.2em] mb-6">03. The Solution</h2>
-              <p className="text-lg text-slate-400 leading-relaxed mb-0">
+              <p className="eyebrow text-accent-mobile mb-5">03 &mdash; The Solution</p>
+              <p className="text-lg text-slate-400 leading-relaxed">
                 {caseStudy.solution}
               </p>
             </section>
@@ -204,7 +204,7 @@ const View = () => {
           {!caseStudy && (
             <>
               <section>
-                <h2 className="text-sm font-bold text-primary-400 uppercase tracking-[0.2em] mb-4">Project Overview</h2>
+                <p className="eyebrow text-primary-400 mb-3">Project Overview</p>
                 <p className="text-xl text-slate-300 leading-relaxed font-light">
                   {currentProjectData.overview}
                 </p>
@@ -212,11 +212,11 @@ const View = () => {
 
               {currentProjectData.features.length > 0 && (
                 <section>
-                  <h2 className="text-sm font-bold text-primary-400 uppercase tracking-[0.2em] mb-4">Key Features</h2>
+                  <p className="eyebrow text-primary-400 mb-4">Key Features</p>
                   <ul className="space-y-3">
                     {currentProjectData.features.map((feature, index) => (
-                      <li key={index} className="text-lg text-slate-300 leading-relaxed flex items-start gap-3">
-                        <span className="text-primary-400 mt-1">•</span>
+                      <li key={index} className="text-base text-slate-300 leading-relaxed flex items-start gap-3">
+                        <span className="text-primary-400 mt-1.5 text-xs">●</span>
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -226,12 +226,12 @@ const View = () => {
 
               {currentProjectData.challenges.length > 0 && (
                 <section>
-                  <h2 className="text-sm font-bold text-primary-400 uppercase tracking-[0.2em] mb-4">Challenges & Solutions</h2>
+                  <p className="eyebrow text-primary-400 mb-4">Challenges &amp; Solutions</p>
                   <div className="space-y-6">
                     {currentProjectData.challenges.map((challenge, index) => (
                       <div key={index}>
-                        <h3 className="text-lg font-semibold text-slate-200 mb-2">{challenge.title}</h3>
-                        <p className="text-lg text-slate-300 leading-relaxed">{challenge.description}</p>
+                        <h3 className="text-base font-semibold text-slate-200 mb-2">{challenge.title}</h3>
+                        <p className="text-base text-slate-400 leading-relaxed">{challenge.description}</p>
                       </div>
                     ))}
                   </div>
@@ -244,8 +244,8 @@ const View = () => {
         {/* Sidebar Details - matches example (glass, plain span for tech) */}
         <div className="space-y-12">
           {/* Tech Stack */}
-          <div className="glass p-8 rounded-3xl border border-slate-800">
-            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Stack Architecture</h3>
+          <div className="glass p-7 rounded-2xl border border-slate-800 card-highlight">
+            <p className="eyebrow text-slate-500 mb-5">Stack Architecture</p>
             <div className="flex flex-wrap gap-2">
               {(caseStudy?.techStack ?? project.tech).map((tech) => (
                 <span
@@ -258,10 +258,10 @@ const View = () => {
             </div>
           </div>
 
-          {/* Key Results - matches example */}
+          {/* Key Results */}
           {caseStudy && caseStudy.results.length > 0 && (
-            <div className="glass p-8 rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950">
-              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Impact & Results</h3>
+            <div className="glass p-7 rounded-2xl border border-slate-800 card-highlight">
+              <p className="eyebrow text-slate-500 mb-5">Impact &amp; Results</p>
               <ul className="space-y-6">
                 {caseStudy.results.map((result, i) => (
                   <li key={i} className="flex gap-4">
@@ -279,8 +279,8 @@ const View = () => {
 
           {/* Features (if no case study) */}
           {!caseStudy && currentProjectData.features.length > 0 && (
-            <div className="glass p-8 rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950">
-              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-6">Key Features</h3>
+            <div className="glass p-7 rounded-2xl border border-slate-800 card-highlight">
+              <p className="eyebrow text-slate-500 mb-5">Key Features</p>
               <ul className="space-y-4">
                 {currentProjectData.features.map((feature, i) => (
                   <li key={i} className="flex gap-4">
@@ -298,19 +298,22 @@ const View = () => {
 
           {/* Duration */}
           {currentProjectData.duration && (
-            <div className="glass p-8 rounded-3xl border border-slate-800">
-              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">Project Duration</h3>
-              <p className="text-lg text-slate-300 font-semibold">{currentProjectData.duration}</p>
+            <div className="glass p-7 rounded-2xl border border-slate-800 card-highlight">
+              <p className="eyebrow text-slate-500 mb-3">Project Duration</p>
+              <p className="text-base text-slate-300 font-semibold">{currentProjectData.duration}</p>
             </div>
           )}
 
-          {/* Call to Action - matches example */}
-          <div className="p-8 rounded-3xl bg-primary-600 flex flex-col items-center text-center">
-            <h3 className="text-xl font-bold mb-4">Ready to start?</h3>
-            <p className="text-primary-100 text-sm mb-6">Discuss how I can bring similar innovation to your project.</p>
+          {/* Call to Action */}
+          <div className="p-7 rounded-2xl bg-gradient-to-br from-primary-600 to-accent-ai flex flex-col items-center text-center relative overflow-hidden">
+            <div className="absolute inset-0 dot-pattern opacity-10 pointer-events-none" />
+            <h3 className="text-lg font-bold mb-2 relative">Ready to collaborate?</h3>
+            <p className="text-primary-100/80 text-sm mb-6 relative leading-relaxed">
+              Let&apos;s discuss how I can bring similar innovation to your project.
+            </p>
             <a
               href="mailto:afiqnurhariz@gmail.com"
-              className="w-full py-3 bg-white text-slate-950 font-bold rounded-xl hover:bg-slate-100 transition-colors flex items-center justify-center"
+              className="w-full py-3 bg-white text-slate-950 font-bold rounded-xl hover:bg-slate-100 transition-colors flex items-center justify-center text-sm relative"
               aria-label="Contact Afiq via email"
             >
               Contact Afiq
@@ -319,15 +322,13 @@ const View = () => {
 
           {/* Documentation */}
           {currentProjectData.documentUrl && (
-            <div className="glass p-8 rounded-3xl border border-slate-800">
-              <button
-                type="button"
-                className="w-full py-3 rounded-xl border border-slate-700 bg-slate-800/50 text-slate-200 font-semibold hover:bg-slate-800 hover:border-slate-600 transition-all"
-                onClick={() => window.open(currentProjectData.documentUrl, "_blank")}
-              >
-                View Project
-              </button>
-            </div>
+            <button
+              type="button"
+              className="w-full py-3.5 rounded-xl border border-slate-700 bg-slate-900/60 text-slate-300 font-semibold hover:bg-slate-800 hover:border-slate-600 hover:text-white transition-all text-sm"
+              onClick={() => window.open(currentProjectData.documentUrl, "_blank")}
+            >
+              View Project Docs
+            </button>
           )}
         </div>
       </div>

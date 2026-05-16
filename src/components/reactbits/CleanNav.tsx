@@ -22,7 +22,7 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 40);
 
       const sections = items
         .filter(item => item.href?.startsWith('#'))
@@ -33,19 +33,14 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
         const element = document.getElementById(section);
         if (!element) return false;
         const rect = element.getBoundingClientRect();
-        return rect.top <= 150 && rect.bottom >= 150;
+        return rect.top <= 120 && rect.bottom >= 120;
       });
 
-      if (currentSection) {
-        setActive(`#${currentSection}`);
-      } else {
-        setActive(null);
-      }
+      setActive(currentSection ? `#${currentSection}` : null);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-
     return () => window.removeEventListener('scroll', handleScroll);
   }, [items]);
 
@@ -59,9 +54,7 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
         window.open(item.href, '_blank');
       }
     }
-    if (item.onClick) {
-      item.onClick();
-    }
+    if (item.onClick) item.onClick();
   };
 
   return (
@@ -69,8 +62,8 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
-          ? 'glass py-2 sm:py-3'
-          : 'bg-transparent py-4 sm:py-6',
+          ? 'glass border-b border-white/5 py-3'
+          : 'bg-transparent py-5',
         className
       )}
     >
@@ -79,22 +72,23 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
         <a
           href="#"
           onClick={(e) => {
-            navigate('/');
             e.preventDefault();
+            navigate('/');
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          className="font-display text-lg sm:text-xl md:text-2xl font-bold tracking-tighter flex items-center gap-1.5 sm:gap-2"
+          className="font-display font-bold tracking-tighter flex items-center gap-2"
         >
-          <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-ai flex items-center justify-center text-white text-sm sm:text-base">AN</span>
-          <span className="hidden sm:inline">AFIQ</span><span className="text-primary-400 hidden sm:inline">NURHARIZ</span>
-          <span className="sm:hidden">AN</span>
+          <span className="hidden sm:flex items-center gap-0.5 text-xl">
+            <span className="text-slate-100">AFIQ</span>
+            <span className="text-primary-400">NURHARIZ</span>
+          </span>
+          <span className="sm:hidden w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-accent-ai flex items-center justify-center text-white text-xs font-black">AN</span>
         </a>
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 items-center">
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-7">
           {items.map((item, index) => {
             const isActive = active === item.href;
-            
             return (
               <a
                 key={index}
@@ -103,54 +97,65 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
                   e.preventDefault();
                   handleClick(item);
                 }}
-                className="text-sm font-medium text-slate-300 hover:text-white transition-colors relative group"
+                className={cn(
+                  "text-sm font-medium transition-colors relative group",
+                  isActive ? "text-white" : "text-slate-400 hover:text-slate-200"
+                )}
               >
                 {item.label}
-                <span className={cn(
-                  "absolute -bottom-1 left-0 h-0.5 bg-primary-400 transition-all",
-                  isActive ? "w-full" : "w-0 group-hover:w-full"
-                )}></span>
+                <span
+                  className={cn(
+                    "absolute -bottom-0.5 left-0 h-px bg-primary-400 transition-all duration-300",
+                    isActive ? "w-full" : "w-0 group-hover:w-full"
+                  )}
+                />
               </a>
             );
           })}
+
           <a
             href="#contact"
             onClick={(e) => {
               e.preventDefault();
-              const element = document.getElementById('contact');
-              element?.scrollIntoView({ behavior: 'smooth' });
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="px-5 py-2 rounded-full bg-white text-slate-950 text-sm font-bold hover:bg-primary-400 hover:text-white transition-all shadow-lg shadow-primary-500/10"
+            className="px-5 py-2 rounded-full bg-gradient-to-r from-primary-600 to-primary-500 text-white text-sm font-semibold hover:from-primary-500 hover:to-primary-400 transition-all shadow-md shadow-primary-500/20 hover:shadow-primary-500/30"
           >
             Hire Me
           </a>
         </div>
 
-        {/* Mobile Toggle */}
-        <button 
-          className="md:hidden text-white p-2"
+        {/* Mobile toggle */}
+        <button
+          className="md:hidden text-slate-300 hover:text-white p-2 transition-colors"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           )}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 glass border-t border-slate-800 p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 animate-in fade-in slide-in-from-top-4">
+        <div className="md:hidden absolute top-full left-0 right-0 glass border-t border-white/5 p-5 flex flex-col gap-1 animate-in fade-in slide-in-from-top-2 duration-200">
           {items.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="text-base sm:text-lg font-medium text-slate-300 min-h-[44px] flex items-center"
+              className={cn(
+                "text-base font-medium min-h-[48px] flex items-center px-3 rounded-xl transition-colors",
+                active === item.href
+                  ? "text-white bg-white/5"
+                  : "text-slate-400 hover:text-white hover:bg-white/5"
+              )}
               onClick={(e) => {
                 e.preventDefault();
                 handleClick(item);
@@ -162,11 +167,10 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
           ))}
           <a
             href="#contact"
-            className="w-full py-3 rounded-xl bg-primary-500 text-white font-bold text-center text-sm sm:text-base min-h-[44px] flex items-center justify-center"
+            className="mt-2 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-primary-500 text-white font-semibold text-center text-sm min-h-[48px] flex items-center justify-center"
             onClick={(e) => {
               e.preventDefault();
-              const element = document.getElementById('contact');
-              element?.scrollIntoView({ behavior: 'smooth' });
+              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
               setIsMobileMenuOpen(false);
             }}
           >
@@ -179,4 +183,3 @@ const CleanNav = ({ items, className = '' }: CleanNavProps) => {
 };
 
 export default CleanNav;
-

@@ -79,11 +79,15 @@ const ProjectsSection = () => {
     const counter = counterRef.current;
     if (!pin || !stage || !track) return;
 
-    const cardWidth = 480 + 36;
-    const totalWidth = cardWidth * projectData.length;
     const viewW = window.innerWidth;
     const viewH = window.innerHeight;
-    const maxTranslate = totalWidth - viewW + viewW * 0.16;
+    const isMobile = viewW <= 768;
+    const cardW = isMobile ? viewW * 0.86 : 480;
+    const cardWidth = cardW + 36; // card width + gap
+    const totalWidth = cardWidth * projectData.length;
+    const paddingX = viewW * 0.08;
+    // Scroll until the last card's right edge sits at (viewW - paddingX)
+    const maxTranslate = 2 * paddingX + totalWidth - 36 - viewW;
 
     pin.style.height = `${maxTranslate + viewH}px`;
 

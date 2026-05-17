@@ -113,7 +113,8 @@ const SkillsSection = () => {
             <SkillsCanvas skills={SKILLS_DATA} />
             <p className="skills-helper">
               <SkillsHelperIcon />
-              Drag the constellation · click a node to highlight
+              <span className="skills-helper-desktop">Drag the constellation · click a node to highlight</span>
+              <span className="skills-helper-mobile">Drag to rotate · tap a node to highlight</span>
             </p>
           </div>
 

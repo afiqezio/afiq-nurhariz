@@ -33,9 +33,7 @@ export default defineConfig(({ mode }) => ({
           'three-vendor': ['three'],
           'ui-vendor': [
             '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
             '@radix-ui/react-tooltip',
-            '@radix-ui/react-accordion',
           ],
         },
       },
@@ -51,6 +49,5 @@ export default defineConfig(({ mode }) => ({
       'react-router-dom',
       'three',
     ],
-    exclude: ['@appletosolutions/reactbits'],
   },
 }));

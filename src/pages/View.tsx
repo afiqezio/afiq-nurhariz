@@ -422,10 +422,6 @@ const View = () => {
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 12h14M13 5l7 7-7 7"/></svg>
                       </a>
                     )}
-                    <button type="button" className="pp-side-ghost" onClick={() => handleTocClick("gallery")}>
-                      View case gallery
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-                    </button>
                   </div>
                 </div>
               </aside>

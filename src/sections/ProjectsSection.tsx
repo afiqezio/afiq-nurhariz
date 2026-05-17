@@ -82,12 +82,15 @@ const ProjectsSection = () => {
     const cardWidth = 480 + 36;
     const totalWidth = cardWidth * projectData.length;
     const viewW = window.innerWidth;
+    const viewH = window.innerHeight;
     const maxTranslate = totalWidth - viewW + viewW * 0.16;
+
+    pin.style.height = `${maxTranslate + viewH}px`;
 
     const st = ScrollTrigger.create({
       trigger: pin,
       start: "top top",
-      end: `+=${pin.offsetHeight - viewW}`,
+      end: "bottom bottom",
       pin: stage,
       scrub: 1,
       onUpdate: (self) => {
@@ -125,6 +128,7 @@ const ProjectsSection = () => {
 
     return () => {
       st.kill();
+      pin.style.height = "";
     };
   }, []);
 

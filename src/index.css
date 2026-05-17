@@ -274,7 +274,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* PROJECTS */
 .projects { position: relative; padding-top: 80px; z-index: 3; }
-.projects-pin { height: 600vh; position: relative; z-index: 3; }
+.projects-pin { position: relative; z-index: 3; }
 .projects-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; }
 .projects-track { display: flex; gap: 36px; padding: 0 8vw; will-change: transform; }
 .project-card {

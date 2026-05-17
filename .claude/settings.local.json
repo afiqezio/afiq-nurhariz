@@ -20,7 +20,12 @@
       "Bash(powershell -Command \"\\(Get-Content 'Afiq Portfolio _Standalone_.html'\\) | Select-String -Pattern 'vec3|uniform|varying|shader|THREE' | Select-Object -First 20\")",
       "Bash(powershell -Command \"Get-ChildItem -Recurse -Include '*.md', '*.txt', '*design*', '*spec*', '*TODO*' -ErrorAction SilentlyContinue | Select-Object FullName\")",
       "Bash(powershell -Command \"Get-ChildItem -Path '.' -Include '*.md' -Depth 2 | Select-Object FullName\")",
-      "Bash(powershell -Command \"ls -Force | grep -E '\\\\.md|\\\\.txt|README'\")"
+      "Bash(powershell -Command \"ls -Force | grep -E '\\\\.md|\\\\.txt|README'\")",
+      "Bash(Get-ChildItem -Path \"D:\\\\Work\\\\portfolio\\\\afiq-nurhariz\" -Force)",
+      "Bash(Select-Object -Property Name, PSIsContainer)",
+      "PowerShell(tree *)",
+      "Bash(start /B npm run dev -- --port 5173)",
+      "Bash(curl -s http://localhost:5173/)"
     ]
   }
 }

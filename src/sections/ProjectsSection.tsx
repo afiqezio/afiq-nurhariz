@@ -79,24 +79,29 @@ const ProjectsSection = () => {
     const counter = counterRef.current;
     if (!pin || !stage || !track) return;
 
-    const viewW = window.innerWidth;
-    const viewH = window.innerHeight;
-    const isMobile = viewW <= 768;
-    const cardW = isMobile ? viewW * 0.86 : 480;
-    const cardWidth = cardW + 36; // card width + gap
-    const totalWidth = cardWidth * projectData.length;
-    const paddingX = viewW * 0.08;
-    // Scroll until the last card's right edge sits at (viewW - paddingX)
-    const maxTranslate = 2 * paddingX + totalWidth - 36 - viewW;
+    const getMaxTranslate = () => {
+      const viewW = window.innerWidth;
+      const isMobile = viewW <= 768;
+      const cardW = isMobile ? viewW * 0.86 : 480;
+      const gap = 36;
+      const paddingX = viewW * 0.08;
+      const N = projectData.length;
+      const trackWidth = 2 * paddingX + N * cardW + (N - 1) * gap;
+      return Math.max(0, trackWidth - viewW);
+    };
 
-    pin.style.height = `${maxTranslate + viewH}px`;
+    let maxTranslate = getMaxTranslate();
 
     const st = ScrollTrigger.create({
       trigger: pin,
       start: "top top",
-      end: "bottom bottom",
+      end: () => "+=" + getMaxTranslate(),
       pin: stage,
       scrub: 1,
+      invalidateOnRefresh: true,
+      onRefresh: () => {
+        maxTranslate = getMaxTranslate();
+      },
       onUpdate: (self) => {
         const progress = self.progress;
         const tx = -progress * maxTranslate;
@@ -113,6 +118,10 @@ const ProjectsSection = () => {
         }
       },
     });
+
+    const onResize = () => ScrollTrigger.refresh();
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
 
     // Tilt effect
     const cards = track.querySelectorAll<HTMLElement>(".project-card");
@@ -132,7 +141,8 @@ const ProjectsSection = () => {
 
     return () => {
       st.kill();
-      pin.style.height = "";
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
     };
   }, []);
 

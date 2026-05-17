@@ -173,6 +173,97 @@ const View = () => {
     return () => { triggers.forEach((t) => t.kill()); };
   }, [currentProjectData]);
 
+  useEffect(() => {
+    if (!currentProjectData) return;
+    const triggers: ScrollTrigger[] = [];
+
+    const addFadeUp = (el: Element, delay = 0) => {
+      gsap.set(el, { opacity: 0, y: 30 });
+      const st = ScrollTrigger.create({
+        trigger: el,
+        start: "top 88%",
+        once: true,
+        onEnter: () => {
+          gsap.to(el, { opacity: 1, y: 0, duration: 0.75, ease: "power3.out", delay });
+        },
+      });
+      triggers.push(st);
+    };
+
+    const addFadeUpGroup = (els: Element[], stagger = 0.09) => {
+      if (!els.length) return;
+      gsap.set(els, { opacity: 0, y: 30 });
+      const st = ScrollTrigger.create({
+        trigger: els[0],
+        start: "top 88%",
+        once: true,
+        onEnter: () => {
+          gsap.to(els, { opacity: 1, y: 0, duration: 0.75, ease: "power3.out", stagger });
+        },
+      });
+      triggers.push(st);
+    };
+
+    // Section numbers slide in from left
+    document.querySelectorAll(".pp-section-num").forEach((el) => {
+      gsap.set(el, { opacity: 0, x: -14 });
+      const st = ScrollTrigger.create({
+        trigger: el,
+        start: "top 88%",
+        once: true,
+        onEnter: () => {
+          gsap.to(el, { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" });
+        },
+      });
+      triggers.push(st);
+    });
+
+    // Prose blocks
+    document.querySelectorAll(".pp-prose").forEach((el) => addFadeUp(el));
+
+    // Pullquote slides in from left
+    document.querySelectorAll(".pp-pullquote").forEach((el) => {
+      gsap.set(el, { opacity: 0, x: -28 });
+      const st = ScrollTrigger.create({
+        trigger: el,
+        start: "top 88%",
+        once: true,
+        onEnter: () => {
+          gsap.to(el, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" });
+        },
+      });
+      triggers.push(st);
+    });
+
+    // Challenge cards
+    addFadeUpGroup(Array.from(document.querySelectorAll(".pp-challenge")), 0.1);
+
+    // Feature dots
+    addFadeUpGroup(Array.from(document.querySelectorAll(".pp-feature")), 0.07);
+
+    // Gallery shots (individual triggers so out-of-view shots animate on scroll)
+    document.querySelectorAll(".pp-shot").forEach((el) => {
+      gsap.set(el, { opacity: 0, y: 22 });
+      const st = ScrollTrigger.create({
+        trigger: el,
+        start: "top 92%",
+        once: true,
+        onEnter: () => {
+          gsap.to(el, { opacity: 1, y: 0, duration: 0.65, ease: "power3.out" });
+        },
+      });
+      triggers.push(st);
+    });
+
+    // Result cards
+    addFadeUpGroup(Array.from(document.querySelectorAll(".pp-result")), 0.12);
+
+    // Steps
+    addFadeUpGroup(Array.from(document.querySelectorAll(".pp-steps li")), 0.08);
+
+    return () => { triggers.forEach((t) => t.kill()); };
+  }, [currentProjectData]);
+
   const handleTocClick = (id: string) => {
     const el = document.getElementById(id);
     if (!el) return;

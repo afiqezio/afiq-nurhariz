@@ -107,6 +107,93 @@ const Index = () => {
     );
     revealEls.forEach((el) => obs.observe(el));
 
+    // --- Section entrance animations ---
+
+    const addFadeUp = (el: Element, delay = 0) => {
+      gsap.set(el, { opacity: 0, y: 30 });
+      const st = ScrollTrigger.create({
+        trigger: el,
+        start: "top 88%",
+        once: true,
+        onEnter: () => {
+          gsap.to(el, { opacity: 1, y: 0, duration: 0.75, ease: "power3.out", delay });
+        },
+      });
+      triggers.push(st);
+    };
+
+    const addFadeUpGroup = (els: Element[], stagger = 0.09) => {
+      if (!els.length) return;
+      gsap.set(els, { opacity: 0, y: 30 });
+      const st = ScrollTrigger.create({
+        trigger: els[0],
+        start: "top 88%",
+        once: true,
+        onEnter: () => {
+          gsap.to(els, { opacity: 1, y: 0, duration: 0.75, ease: "power3.out", stagger });
+        },
+      });
+      triggers.push(st);
+    };
+
+    const addSlideX = (el: Element, x = -20, delay = 0) => {
+      gsap.set(el, { opacity: 0, x });
+      const st = ScrollTrigger.create({
+        trigger: el,
+        start: "top 88%",
+        once: true,
+        onEnter: () => {
+          gsap.to(el, { opacity: 1, x: 0, duration: 0.7, ease: "power3.out", delay });
+        },
+      });
+      triggers.push(st);
+    };
+
+    // About — image frame scales in, caption + body + quote + stats fade up
+    const imageFrame = document.querySelector(".about-image-frame");
+    if (imageFrame) {
+      gsap.set(imageFrame, { opacity: 0, scale: 0.96 });
+      const st = ScrollTrigger.create({
+        trigger: imageFrame,
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+          gsap.to(imageFrame, { opacity: 1, scale: 1, duration: 0.9, ease: "power3.out" });
+        },
+      });
+      triggers.push(st);
+    }
+    const imageCaption = document.querySelector(".about-image-caption");
+    if (imageCaption) addFadeUp(imageCaption, 0.1);
+
+    document.querySelectorAll(".about-body").forEach((el) => addFadeUp(el));
+
+    const aboutQuote = document.querySelector(".about-quote");
+    if (aboutQuote) addSlideX(aboutQuote, -24);
+
+    addFadeUpGroup(Array.from(document.querySelectorAll(".about-stats > div")), 0.12);
+
+    // Skills — canvas area fades up, category buttons stagger in, helper line fades
+    const skillsCanvasWrap = document.querySelector(".skills-grid > div:first-child");
+    if (skillsCanvasWrap) addFadeUp(skillsCanvasWrap);
+
+    addFadeUpGroup(Array.from(document.querySelectorAll(".skills-cat")), 0.05);
+
+    const skillsHelper = document.querySelector(".skills-helper");
+    if (skillsHelper) addFadeUp(skillsHelper, 0.15);
+
+    // Contact — eyebrow slides in, blurb + CTA fade up, channel rows stagger in
+    const contactEyebrow = document.querySelector(".contact-eyebrow");
+    if (contactEyebrow) addSlideX(contactEyebrow, -14);
+
+    const contactBlurb = document.querySelector(".contact-blurb");
+    if (contactBlurb) addFadeUp(contactBlurb);
+
+    const contactCta = document.querySelector(".contact-cta");
+    if (contactCta) addFadeUp(contactCta, 0.1);
+
+    addFadeUpGroup(Array.from(document.querySelectorAll(".channel")), 0.1);
+
     return () => {
       triggers.forEach((t) => t.kill());
       obs.disconnect();

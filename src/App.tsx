@@ -5,6 +5,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 // Lazy load pages for code splitting
 const Index = lazy(() => import("./pages/Index"));
@@ -15,7 +16,7 @@ const queryClient = new QueryClient();
 // Loading fallback
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-pulse text-muted-foreground">Loading...</div>
+    <Loader2 className="h-8 w-8 animate-spin text-white" />
   </div>
 );
 

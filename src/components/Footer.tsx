@@ -1,39 +1,30 @@
-import { contactLinks } from "@/constants/data";
+import { useEffect, useState } from "react";
+
+const getKLTime = () =>
+  new Intl.DateTimeFormat("en-MY", {
+    timeZone: "Asia/Kuala_Lumpur",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(new Date());
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const [time, setTime] = useState(getKLTime);
+
+  useEffect(() => {
+    const id = setInterval(() => setTime(getKLTime()), 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
-    <footer className="relative px-4 sm:px-6 py-10 sm:py-12">
-      {/* Gradient top border */}
-      <div className="absolute top-0 left-0 right-0 gradient-divider" />
-
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-        {/* Brand */}
-        <div className="flex flex-col items-center md:items-start gap-1">
-          <span className="font-display font-bold tracking-tighter text-base">
-            <span className="text-slate-300">AFIQ</span>
-            <span className="text-primary-400">NURHARIZ</span>
-          </span>
-          <p className="text-slate-500 text-xs">
-            &copy; {currentYear} &mdash; Built with React, Tailwind &amp; TypeScript.
-          </p>
+    <footer className="footer">
+      <div className="container footer-row">
+        <div>&copy; 2026 Afiq Nurhariz — All systems nominal</div>
+        <div className="footer-time">
+          <span className="dot" />
+          Kuala Lumpur · <span>{time} MYT</span>
         </div>
-
-        {/* Social links */}
-        <div className="flex gap-5 flex-wrap justify-center">
-          {contactLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-500 hover:text-slate-300 transition-colors text-sm font-medium min-h-[44px] flex items-center"
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
+        <div>Designed &amp; built with curiosity</div>
       </div>
     </footer>
   );

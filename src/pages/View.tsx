@@ -1,339 +1,496 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ImageModal from "@/components/ImageModal";
-import { projectData, ProjectData } from "@/data/projectData";
+import CustomCursor from "@/components/CustomCursor";
+import ThreeScene from "@/components/ThreeScene";
+import Footer from "@/components/Footer";
+import { projectData } from "@/data/projectData";
 import { Project } from "@/types";
-import { CleanNav } from "@/components/reactbits";
-import { navItems } from "@/constants/data";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const projectOrder = [
+  "Mamak Food Calories Estimation Based on Image Classification",
+  "Mobile Time Attendance With Locations",
+  "Hair Saloon Booking Mobile Application",
+  "Customer Churn Prediction and Analysis Project",
+  "Database Management and Optimization Projects",
+  "Wedding Invitation Platform",
+] as const;
+
+const projectMeta: Record<string, { year: string; type: string; role: string; idShort: string }> = {
+  "Mamak Food Calories Estimation Based on Image Classification": { year: "2024", type: "AI · Computer Vision", role: "Solo · Research & Engineering", idShort: "mamak" },
+  "Mobile Time Attendance With Locations": { year: "2023", type: "Mobile · Enterprise", role: "Mobile · Backend integration", idShort: "tams" },
+  "Hair Saloon Booking Mobile Application": { year: "2023", type: "Mobile · Bookings", role: "Mobile · Backend · UX", idShort: "saloon" },
+  "Customer Churn Prediction and Analysis Project": { year: "2023", type: "Data Science · ML", role: "Solo · Research", idShort: "churn" },
+  "Database Management and Optimization Projects": { year: "2023", type: "Data Engineering", role: "Data Engineer · DBA", idShort: "db" },
+  "Wedding Invitation Platform": { year: "2024", type: "Web · Product", role: "Solo · Product & Engineering", idShort: "wedding" },
+};
+
+const SECTION_IDS = ["overview", "problem", "approach", "gallery", "solution", "results"] as const;
+
+const splitForReveal = (root: HTMLElement) => {
+  const wrapTextNode = (textNode: Node): DocumentFragment => {
+    const text = textNode.textContent ?? "";
+    const frag = document.createDocumentFragment();
+    if (!text.trim()) {
+      frag.appendChild(document.createTextNode(text));
+      return frag;
+    }
+    const tokens = text.split(/(\s+)/);
+    tokens.forEach((tok) => {
+      if (!tok) return;
+      if (/^\s+$/.test(tok)) {
+        frag.appendChild(document.createTextNode(tok));
+        return;
+      }
+      const mask = document.createElement("span");
+      mask.className = "split-mask";
+      const w = document.createElement("span");
+      w.className = "w";
+      w.textContent = tok;
+      mask.appendChild(w);
+      frag.appendChild(mask);
+    });
+    return frag;
+  };
+
+  const walk = (node: Node) => {
+    Array.from(node.childNodes).forEach((child) => {
+      if (child.nodeType === Node.TEXT_NODE) {
+        const frag = wrapTextNode(child);
+        node.insertBefore(frag, child);
+        node.removeChild(child);
+      } else if (child.nodeType === Node.ELEMENT_NODE && (child as Element).tagName !== "BR") {
+        walk(child);
+      }
+    });
+  };
+
+  walk(root);
+};
 
 const View = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const project = location.state as Project & ProjectData;
+  const project = location.state as Project | null;
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [activeSection, setActiveSection] = useState<string>("overview");
+  const heroTitleRef = useRef<HTMLHeadingElement>(null);
+  const sectionTitleRefs = useRef<(HTMLHeadingElement | null)[]>([]);
+
+  const currentProjectData = project ? projectData[project.title as keyof typeof projectData] : undefined;
+
+  const nextProject = useMemo(() => {
+    if (!project) return null;
+    const idx = projectOrder.indexOf(project.title as typeof projectOrder[number]);
+    const nextIdx = (idx + 1) % projectOrder.length;
+    const nextTitle = projectOrder[nextIdx];
+    const nextData = projectData[nextTitle as keyof typeof projectData];
+    if (!nextData) return null;
+    return {
+      idx: nextIdx,
+      title: nextTitle,
+      tech: nextData.caseStudy?.techStack ?? [],
+      overview: nextData.overview,
+      imageUrl: nextData.images[0]?.url ?? "",
+      idShort: projectMeta[nextTitle]?.idShort ?? "",
+    };
+  }, [project]);
+
+  const numLabel = useMemo(() => {
+    if (!project) return "—";
+    const idx = projectOrder.indexOf(project.title as typeof projectOrder[number]);
+    if (idx < 0) return "—";
+    return `${String(idx + 1).padStart(2, "0")} / ${String(projectOrder.length).padStart(2, "0")}`;
+  }, [project]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [project?.title]);
 
-  if (!project) {
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroEl = document.querySelector(".pp-hero") as HTMLElement | null;
+      const nextEl = document.querySelector(".pp-next") as HTMLElement | null;
+      if (!heroEl || !nextEl) return;
+      const start = heroEl.offsetTop;
+      const total = nextEl.offsetTop - start;
+      if (total <= 0) return;
+      const p = Math.max(0, Math.min(1, (window.scrollY - start + window.innerHeight * 0.4) / total));
+      document.documentElement.style.setProperty("--read-progress", String(p));
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      document.documentElement.style.setProperty("--read-progress", "0");
+    };
+  }, [project?.title]);
+
+  useEffect(() => {
+    if (!currentProjectData) return;
+
+    const observers: IntersectionObserver[] = [];
+    SECTION_IDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id);
+        },
+        { rootMargin: "-30% 0px -55% 0px" }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, [currentProjectData]);
+
+  useEffect(() => {
+    if (!currentProjectData) return;
+    const titles: HTMLElement[] = [];
+    if (heroTitleRef.current) titles.push(heroTitleRef.current);
+    sectionTitleRefs.current.forEach((el) => { if (el) titles.push(el); });
+
+    const triggers: ScrollTrigger[] = [];
+    titles.forEach((el) => {
+      splitForReveal(el);
+      const words = el.querySelectorAll(".w");
+      gsap.set(words, { yPercent: 110 });
+      const st = ScrollTrigger.create({
+        trigger: el,
+        start: "top 88%",
+        once: true,
+        onEnter: () => {
+          gsap.to(words, { yPercent: 0, duration: 1.05, ease: "expo.out", stagger: 0.04 });
+        },
+      });
+      triggers.push(st);
+    });
+    return () => { triggers.forEach((t) => t.kill()); };
+  }, [currentProjectData]);
+
+  const handleTocClick = (id: string) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    window.scrollTo({ top: el.offsetTop - 80, behavior: "smooth" });
+  };
+
+  const handleNextProject = () => {
+    if (!nextProject) return;
+    const nextState: Project = {
+      id: nextProject.idShort,
+      title: nextProject.title,
+      description: nextProject.overview,
+      tech: nextProject.tech,
+      link: "#",
+      imageUrl: nextProject.imageUrl,
+    };
+    navigate("/view", { state: nextState });
+  };
+
+  if (!project || !currentProjectData) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-50">
-        <CleanNav items={navItems} />
-        <div className="min-h-screen flex items-center justify-center px-6">
-          <div className="glass p-8 rounded-3xl border border-slate-800">
-            <p className="text-slate-400">Project not found.</p>
-          </div>
-        </div>
+      <div className="pp-body">
+        <CustomCursor />
+        <canvas id="scene-canvas" />
+        <ThreeScene />
+        <div className="bg-grain" />
+        <div className="bg-vignette" />
+        <header className="pp-header">
+          <button type="button" className="pp-back" onClick={() => navigate(-1)}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to work
+          </button>
+          <div className="pp-header-mid">Case study</div>
+          <div className="pp-progress" aria-hidden="true" />
+        </header>
+        <main style={{ position: "relative", zIndex: 3 }}>
+          <section className="pp-hero">
+            <div className="container">
+              <div className="pp-hero-meta"><span>Case study not found</span></div>
+              <h1 className="pp-hero-title">No project here.</h1>
+              <p className="pp-hero-blurb">Head back to the portfolio to pick a different case study.</p>
+            </div>
+          </section>
+        </main>
+        <Footer />
       </div>
     );
   }
 
-  const currentProjectData = projectData[project.title];
-
-  if (!currentProjectData) {
-    return (
-      <div className="min-h-screen bg-slate-950 text-slate-50">
-        <CleanNav items={navItems} />
-        <div className="min-h-screen flex items-center justify-center px-6">
-          <div className="glass p-8 rounded-3xl border border-slate-800">
-            <p className="text-slate-400">Project details not found.</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Get project image URL - use imageUrl from project if available, otherwise fallback to first project detail image
-  const projectImage = project.imageUrl || currentProjectData.images[0]?.url || '';
   const caseStudy = currentProjectData.caseStudy;
+  const meta = projectMeta[project.title];
+  const techStack = caseStudy?.techStack ?? project.tech;
+  const posterImage = currentProjectData.images[0]?.url ?? project.imageUrl ?? "";
+  const posterCaption = currentProjectData.images[0]?.caption ?? project.title;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 pb-24">
-      {/* Top Header */}
-      <div className="sticky top-0 z-50 glass border-b border-white/5 px-6 py-3.5">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors group"
-            aria-label="Go back to projects"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            <span className="font-medium text-sm">Back</span>
-          </button>
-          <div className="text-[10px] font-mono text-slate-500 tracking-[0.25em] uppercase">
-            Case Study &mdash; {project.id}
-          </div>
-        </div>
-      </div>
+    <div className="pp-body">
+      <CustomCursor />
+      <canvas id="scene-canvas" />
+      <ThreeScene />
+      <div className="bg-grain" />
+      <div className="bg-vignette" />
 
-      {/* Hero Section */}
-      <div className="relative w-full h-[55vh] overflow-hidden">
-        <img
-          src={projectImage}
-          alt={project.title}
-          className="w-full h-full object-cover opacity-50"
-          loading="eager"
-          decoding="async"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-slate-950/10" />
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex gap-2 mb-5 flex-wrap">
-              {project.tech.slice(0, 3).map((tag) => (
-                <span key={tag} className="px-3 py-1 bg-slate-900/80 text-slate-300 text-[10px] font-bold tracking-widest uppercase rounded-full backdrop-blur-sm border border-slate-700/60">
-                  {tag}
-                </span>
-              ))}
+      <header className="pp-header">
+        <button type="button" className="pp-back" onClick={() => navigate(-1)}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back to work
+        </button>
+        <div className="pp-header-mid">
+          Case study <b>· {numLabel} ·</b> {project.title}
+        </div>
+        <div className="pp-progress" aria-hidden="true" />
+      </header>
+
+      <main style={{ position: "relative", zIndex: 3 }}>
+        <section className="pp-hero">
+          <div className="container">
+            <div className="pp-hero-meta">
+              <span>Case study</span>
+              <span className="dot" />
+              <span>{meta?.type ?? "Project"}</span>
+              <span className="dot" />
+              <span>{meta?.year ?? "—"}</span>
             </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-black tracking-tight mb-4 text-white leading-[1.02]">
-              {project.title}
-            </h1>
-            <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed font-light">
-              {project.description}
-            </p>
-          </div>
-        </div>
-      </div>
+            <h1 className="pp-hero-title" ref={heroTitleRef}>{project.title}</h1>
+            <p className="pp-hero-blurb">{project.description}</p>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 mt-16 grid grid-cols-1 lg:grid-cols-3 gap-12 pb-24">
-        {/* Main Narrative */}
-        <div className="lg:col-span-2 space-y-16">
-          {/* Problem Section */}
-          {caseStudy && (
-            <section>
-              <p className="eyebrow text-primary-400 mb-3">01 &mdash; The Problem</p>
-              <p className="text-xl text-slate-300 leading-relaxed font-light">
-                {caseStudy.problem}
-              </p>
-            </section>
-          )}
-
-          {/* Project Gallery */}
-          <section className="space-y-6">
-            <p className="eyebrow text-slate-500">Project Gallery</p>
-            {currentProjectData.images.length > 0 && (
-              <>
-                {currentProjectData.images.length >= 2 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {currentProjectData.images.slice(0, 2).map((image, index) => (
-                      <div 
-                        key={index}
-                        className="rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 aspect-video group relative cursor-pointer"
-                        onClick={() => setSelectedImageIndex(index)}
-                      >
-                        <img 
-                          src={image.url} 
-                          alt={image.alt} 
-                          className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" 
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                          <span className="text-xs font-mono text-white">{image.caption}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {currentProjectData.images.length > 2 && (
-                  <div className="w-full rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 aspect-[21/9] group relative cursor-pointer">
-                    <img 
-                      src={currentProjectData.images[2].url} 
-                      alt={currentProjectData.images[2].alt} 
-                      className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" 
-                      onClick={() => setSelectedImageIndex(2)}
-                    />
-                    <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-slate-950 to-transparent">
-                      <p className="text-sm text-slate-300">{currentProjectData.images[2].caption}</p>
-                    </div>
-                  </div>
-                )}
-                {currentProjectData.images.length > 3 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {currentProjectData.images.slice(3).map((image, index) => (
-                      <div 
-                        key={index + 3}
-                        className="rounded-2xl overflow-hidden border border-slate-800 bg-slate-900 aspect-video group relative cursor-pointer"
-                        onClick={() => setSelectedImageIndex(index + 3)}
-                      >
-                        <img 
-                          src={image.url} 
-                          alt={image.alt} 
-                          className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" 
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
-                          <span className="text-xs font-mono text-white">{image.caption}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-          </section>
-
-          {/* Challenge Section */}
-          {caseStudy && (
-            <section>
-              <p className="eyebrow text-accent-ai mb-3">02 &mdash; The Challenge</p>
-              <p className="text-xl text-slate-300 leading-relaxed font-light">
-                {caseStudy.challenge}
-              </p>
-            </section>
-          )}
-
-          {/* Solution Section */}
-          {caseStudy && (
-            <section className="p-8 md:p-10 rounded-2xl bg-slate-900 border border-slate-800 relative overflow-hidden group card-highlight">
-              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:rotate-12 transition-transform duration-500">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-32 w-32 text-accent-mobile" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                </svg>
+            <div className="pp-hero-strip">
+              <div className="pp-strip-cell">
+                <span className="pp-strip-label">Role</span>
+                <span className="pp-strip-val">{meta?.role ?? "Solo · Engineering"}</span>
               </div>
-              <p className="eyebrow text-accent-mobile mb-5">03 &mdash; The Solution</p>
-              <p className="text-lg text-slate-400 leading-relaxed">
-                {caseStudy.solution}
-              </p>
-            </section>
-          )}
-
-          {/* Additional Details */}
-          {!caseStudy && (
-            <>
-              <section>
-                <p className="eyebrow text-primary-400 mb-3">Project Overview</p>
-                <p className="text-xl text-slate-300 leading-relaxed font-light">
-                  {currentProjectData.overview}
-                </p>
-              </section>
-
-              {currentProjectData.features.length > 0 && (
-                <section>
-                  <p className="eyebrow text-primary-400 mb-4">Key Features</p>
-                  <ul className="space-y-3">
-                    {currentProjectData.features.map((feature, index) => (
-                      <li key={index} className="text-base text-slate-300 leading-relaxed flex items-start gap-3">
-                        <span className="text-primary-400 mt-1.5 text-xs">●</span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              )}
-
-              {currentProjectData.challenges.length > 0 && (
-                <section>
-                  <p className="eyebrow text-primary-400 mb-4">Challenges &amp; Solutions</p>
-                  <div className="space-y-6">
-                    {currentProjectData.challenges.map((challenge, index) => (
-                      <div key={index}>
-                        <h3 className="text-base font-semibold text-slate-200 mb-2">{challenge.title}</h3>
-                        <p className="text-base text-slate-400 leading-relaxed">{challenge.description}</p>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-            </>
-          )}
-        </div>
-
-        {/* Sidebar Details - matches example (glass, plain span for tech) */}
-        <div className="space-y-12">
-          {/* Tech Stack */}
-          <div className="glass p-7 rounded-2xl border border-slate-800 card-highlight">
-            <p className="eyebrow text-slate-500 mb-5">Stack Architecture</p>
-            <div className="flex flex-wrap gap-2">
-              {(caseStudy?.techStack ?? project.tech).map((tech) => (
-                <span
-                  key={tech}
-                  className="px-3 py-1.5 bg-slate-800 rounded-lg text-xs font-mono text-slate-300 border border-slate-700"
-                >
-                  {tech}
+              <div className="pp-strip-cell">
+                <span className="pp-strip-label">Duration</span>
+                <span className="pp-strip-val">{currentProjectData.duration ?? "—"}</span>
+              </div>
+              <div className="pp-strip-cell">
+                <span className="pp-strip-label">Type</span>
+                <span className="pp-strip-val">{meta?.type ?? "Case study"}</span>
+              </div>
+              <div className="pp-strip-cell">
+                <span className="pp-strip-label">Stack</span>
+                <span className="pp-strip-chips">
+                  {techStack.slice(0, 4).map((t) => <span key={t}>{t}</span>)}
                 </span>
-              ))}
+              </div>
             </div>
           </div>
+        </section>
 
-          {/* Key Results */}
-          {caseStudy && caseStudy.results.length > 0 && (
-            <div className="glass p-7 rounded-2xl border border-slate-800 card-highlight">
-              <p className="eyebrow text-slate-500 mb-5">Impact &amp; Results</p>
-              <ul className="space-y-6">
-                {caseStudy.results.map((result, i) => (
-                  <li key={i} className="flex gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-[10px] font-bold">
-                      {i + 1}
+        <section className="pp-main">
+          <div className="container">
+            <div className="pp-main-grid">
+              <aside className="pp-sidebar">
+                <div className="pp-sidebar-sticky">
+                  <div>
+                    <div className="pp-side-block-label">Sections</div>
+                    <nav className="pp-toc">
+                      {[
+                        { id: "overview", label: "Overview" },
+                        { id: "problem", label: "The problem" },
+                        { id: "approach", label: "Approach" },
+                        { id: "gallery", label: "Build gallery" },
+                        { id: "solution", label: "Solution" },
+                        { id: "results", label: "Results" },
+                      ].map((s, i) => (
+                        <button
+                          key={s.id}
+                          type="button"
+                          className={`pp-toc-item ${activeSection === s.id ? "active" : ""}`}
+                          onClick={() => handleTocClick(s.id)}
+                        >
+                          <span className="pp-toc-num">{String(i + 1).padStart(2, "0")}</span>
+                          {s.label}
+                        </button>
+                      ))}
+                    </nav>
+                  </div>
+
+                  <div>
+                    <div className="pp-side-block-label">Stack architecture</div>
+                    <div className="pp-side-tech">
+                      {techStack.map((t) => <span key={t}>{t}</span>)}
                     </div>
-                    <p className="text-sm text-slate-400 leading-relaxed">
-                      {result}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+                  </div>
 
-          {/* Features (if no case study) */}
-          {!caseStudy && currentProjectData.features.length > 0 && (
-            <div className="glass p-7 rounded-2xl border border-slate-800 card-highlight">
-              <p className="eyebrow text-slate-500 mb-5">Key Features</p>
-              <ul className="space-y-4">
-                {currentProjectData.features.map((feature, i) => (
-                  <li key={i} className="flex gap-4">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary-500/20 text-primary-400 flex items-center justify-center text-[10px] font-bold">
-                      {i + 1}
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                    {currentProjectData.documentUrl ? (
+                      <a className="pp-side-cta" href={currentProjectData.documentUrl} target="_blank" rel="noopener">
+                        Read full document
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                      </a>
+                    ) : (
+                      <a className="pp-side-cta" href="mailto:afiqnurhariz@gmail.com">
+                        Discuss this work
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                      </a>
+                    )}
+                    <button type="button" className="pp-side-ghost" onClick={() => handleTocClick("gallery")}>
+                      View case gallery
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                    </button>
+                  </div>
+                </div>
+              </aside>
+
+              <div className="pp-content">
+                <section className="pp-section" id="overview">
+                  <div className="pp-section-head">
+                    <span className="pp-section-num">01</span>
+                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[0] = el; }}>Overview</h2>
+                  </div>
+                  <div className="pp-prose">
+                    <p>{currentProjectData.overview}</p>
+                  </div>
+                  {caseStudy?.problem && (
+                    <blockquote className="pp-pullquote">{caseStudy.problem}</blockquote>
+                  )}
+                </section>
+
+                <section className="pp-section" id="problem">
+                  <div className="pp-section-head">
+                    <span className="pp-section-num">02</span>
+                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[1] = el; }}>The <em>problem</em></h2>
+                  </div>
+                  <div className="pp-prose">
+                    {caseStudy?.challenge && <p>{caseStudy.challenge}</p>}
+                  </div>
+                  {currentProjectData.challenges.length > 0 && (
+                    <div className="pp-challenges">
+                      {currentProjectData.challenges.map((c, i) => (
+                        <article key={i} className="pp-challenge">
+                          <div className="pp-challenge-label">Constraint · {String(i + 1).padStart(2, "0")}</div>
+                          <h3 className="pp-challenge-title">{c.title}</h3>
+                          <p className="pp-challenge-body">{c.description}</p>
+                        </article>
+                      ))}
                     </div>
-                    <p className="text-sm text-slate-400 leading-relaxed">
-                      {feature}
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+                  )}
+                </section>
 
-          {/* Duration */}
-          {currentProjectData.duration && (
-            <div className="glass p-7 rounded-2xl border border-slate-800 card-highlight">
-              <p className="eyebrow text-slate-500 mb-3">Project Duration</p>
-              <p className="text-base text-slate-300 font-semibold">{currentProjectData.duration}</p>
-            </div>
-          )}
+                <section className="pp-section" id="approach">
+                  <div className="pp-section-head">
+                    <span className="pp-section-num">03</span>
+                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[2] = el; }}>The approach</h2>
+                  </div>
+                  <div className="pp-prose">
+                    <p>The pieces that make this project work — a focused selection of techniques, components and integrations.</p>
+                  </div>
+                  {currentProjectData.features.length > 0 && (
+                    <div className="pp-features">
+                      {currentProjectData.features.map((f, i) => (
+                        <div key={i} className="pp-feature">
+                          <div className="pp-feature-dot" />
+                          <div className="pp-feature-text">{f}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </section>
 
-          {/* Call to Action */}
-          <div className="p-7 rounded-2xl bg-gradient-to-br from-primary-600 to-accent-ai flex flex-col items-center text-center relative overflow-hidden">
-            <div className="absolute inset-0 dot-pattern opacity-10 pointer-events-none" />
-            <h3 className="text-lg font-bold mb-2 relative">Ready to collaborate?</h3>
-            <p className="text-primary-100/80 text-sm mb-6 relative leading-relaxed">
-              Let&apos;s discuss how I can bring similar innovation to your project.
-            </p>
-            <a
-              href="mailto:afiqnurhariz@gmail.com"
-              className="w-full py-3 bg-white text-slate-950 font-bold rounded-xl hover:bg-slate-100 transition-colors flex items-center justify-center text-sm relative"
-              aria-label="Contact Afiq via email"
-            >
-              Contact Afiq
-            </a>
+                <section className="pp-section" id="gallery">
+                  <div className="pp-section-head">
+                    <span className="pp-section-num">04</span>
+                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[3] = el; }}>Build <em>gallery</em></h2>
+                  </div>
+                  <div className="pp-prose">
+                    <p>A walkthrough of the major artefacts produced during the build.</p>
+                  </div>
+                  {currentProjectData.images.length > 0 && (
+                    <div className="pp-gallery">
+                      {currentProjectData.images.map((img, i) => (
+                        <figure
+                          key={i}
+                          className={`pp-shot${i === 0 ? " feature" : ""}`}
+                          onClick={() => setSelectedImageIndex(i)}
+                        >
+                          <span className="pp-shot-num">{String(i + 1).padStart(2, "0")}</span>
+                          <img src={img.url} alt={img.alt} loading="lazy" />
+                          <figcaption className="pp-shot-caption">{img.caption}</figcaption>
+                        </figure>
+                      ))}
+                    </div>
+                  )}
+                </section>
+
+                <section className="pp-section" id="solution">
+                  <div className="pp-section-head">
+                    <span className="pp-section-num">05</span>
+                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[4] = el; }}>The solution</h2>
+                  </div>
+                  <div className="pp-prose">
+                    {caseStudy?.solution && <p>{caseStudy.solution}</p>}
+                  </div>
+                  {currentProjectData.features.length > 0 && (
+                    <ol className="pp-steps">
+                      {currentProjectData.features.map((step, i) => (
+                        <li key={i}>
+                          <span className="pp-step-num">{String(i + 1).padStart(2, "0")}</span>
+                          <span>{step}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                </section>
+
+                <section className="pp-section" id="results">
+                  <div className="pp-section-head">
+                    <span className="pp-section-num">06</span>
+                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[5] = el; }}>Results</h2>
+                  </div>
+                  <div className="pp-prose">
+                    <p>The outcomes that mattered — what the project moved, and what stayed measurable after delivery.</p>
+                  </div>
+                  {caseStudy && caseStudy.results.length > 0 && (
+                    <div className="pp-results">
+                      {caseStudy.results.map((r, i) => (
+                        <div key={i} className="pp-result">
+                          <div className="pp-result-num">{String(i + 1).padStart(2, "0")}</div>
+                          <div className="pp-result-body">{r}</div>
+                          <div className="pp-result-tag">Outcome</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {currentProjectData.improvements.length > 0 && (
+                    <div className="pp-prose" style={{ marginTop: 36 }}>
+                      <p><strong>Next iterations:</strong> {currentProjectData.improvements.join("; ")}.</p>
+                    </div>
+                  )}
+                </section>
+              </div>
+            </div>
           </div>
+        </section>
 
-          {/* Documentation */}
-          {currentProjectData.documentUrl && (
-            <button
-              type="button"
-              className="w-full py-3.5 rounded-xl border border-slate-700 bg-slate-900/60 text-slate-300 font-semibold hover:bg-slate-800 hover:border-slate-600 hover:text-white transition-all text-sm"
-              onClick={() => window.open(currentProjectData.documentUrl, "_blank")}
-            >
-              View Project Docs
-            </button>
-          )}
-        </div>
-      </div>
+        {nextProject && (
+          <section className="pp-next">
+            <div className="container">
+              <div className="pp-next-eyebrow">— Next case study</div>
+              <button type="button" className="pp-next-link" onClick={handleNextProject}>
+                <div className="pp-next-info">
+                  <span className="pp-next-tag">
+                    {String(nextProject.idx + 1).padStart(2, "0")} / 06 · {nextProject.tech.slice(0, 3).join(" · ")}
+                  </span>
+                  <span className="pp-next-title">{nextProject.title}</span>
+                </div>
+                <div className="pp-next-arrow">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                </div>
+              </button>
+            </div>
+          </section>
+        )}
+      </main>
 
-      {/* Image Modal */}
+      <Footer />
+
       <ImageModal
         isOpen={selectedImageIndex !== null}
         onClose={() => setSelectedImageIndex(null)}

@@ -4,7 +4,23 @@
       "Bash(Get-ChildItem -Path \"D:\\\\Work\\\\portfolio\\\\afiq-nurhariz\" -Recurse)",
       "Bash(Select-Object FullName)",
       "Bash(npx tsc *)",
-      "Bash(npx vite *)"
+      "Bash(npx vite *)",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(python3 *)",
+      "Bash(tar -tf design_bundle.tar)",
+      "Bash(tar -xf design_bundle.tar)",
+      "Bash(npm run *)",
+      "Bash(curl -sL \"https://api.anthropic.com/v1/design/h/9RNa_AR7T8c4Lko1ipeP4Q\" -o /tmp/design-index.html --max-filesize 50000000)",
+      "Read(//tmp/**)",
+      "Bash(curl -sL -H \"Accept-Encoding: identity\" \"https://api.anthropic.com/v1/design/h/9RNa_AR7T8c4Lko1ipeP4Q\" -o /tmp/design-index.html)",
+      "Bash(mv /tmp/design-index.html /tmp/design-index.html.gz)",
+      "Bash(gunzip /tmp/design-index.html.gz)",
+      "Bash(mkdir -p /tmp/design-pkg)",
+      "Bash(tar -xf /tmp/design-index.html -C /tmp/design-pkg)",
+      "Bash(powershell -Command \"\\(Get-Content 'Afiq Portfolio _Standalone_.html'\\) | Select-String -Pattern 'vec3|uniform|varying|shader|THREE' | Select-Object -First 20\")",
+      "Bash(powershell -Command \"Get-ChildItem -Recurse -Include '*.md', '*.txt', '*design*', '*spec*', '*TODO*' -ErrorAction SilentlyContinue | Select-Object FullName\")",
+      "Bash(powershell -Command \"Get-ChildItem -Path '.' -Include '*.md' -Depth 2 | Select-Object FullName\")",
+      "Bash(powershell -Command \"ls -Force | grep -E '\\\\.md|\\\\.txt|README'\")"
     ]
   }
 }

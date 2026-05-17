@@ -1,154 +1,199 @@
-import { motion } from "framer-motion";
-import { projects } from "@/constants/data";
-import { Project } from "@/types";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-interface ProjectsSectionProps {
-  onViewProject: (project: Project) => void;
-}
+gsap.registerPlugin(ScrollTrigger);
 
-const cardTransition = {
-  type: "spring" as const,
-  stiffness: 280,
-  damping: 22,
-};
+const projectData = [
+  {
+    id: "mamak",
+    num: "01",
+    title: "Mamak Food Calories Estimation Based on Image Classification",
+    desc: "One photo can simplify the time-consuming task of manually calculating food calories.",
+    tech: ["Python", "YoloV5", "CNN"],
+    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?q=80&w=1200&auto=format",
+  },
+  {
+    id: "tams",
+    num: "02",
+    title: "Mobile Time Attendance With Locations",
+    desc: "Mobile app integrated with TAMS for remote employee attendance tracking.",
+    tech: ["Flutter", ".NET", "MSSQL"],
+    image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=1200&auto=format",
+  },
+  {
+    id: "saloon",
+    num: "03",
+    title: "Hair Saloon Booking Mobile Application",
+    desc: "A clean mobile booking flow for a hair saloon with admin management.",
+    tech: ["Flutter", "PHP", "MySQL"],
+    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1200&auto=format",
+  },
+  {
+    id: "churn",
+    num: "04",
+    title: "Customer Churn Prediction and Analysis Project",
+    desc: "Predicting customer attrition with logistic regression, decision trees, and XGBoost.",
+    tech: ["Python", "Pandas", "XGBoost"],
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format",
+  },
+  {
+    id: "db",
+    num: "05",
+    title: "Database Management and Optimization Projects",
+    desc: "Development and tuning of SQL scripts and migrations for large-scale data systems.",
+    tech: ["MySQL", "SQL", "Tuning"],
+    image: "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?q=80&w=1200&auto=format",
+  },
+  {
+    id: "wedding",
+    num: "06",
+    title: "Wedding Invitation Platform",
+    desc: "A platform for crafting and managing animated digital wedding invitations.",
+    tech: ["React", "Tailwind", "Firebase"],
+    image: "https://images.pexels.com/photos/18535623/pexels-photo-18535623.jpeg?auto=compress&w=1200",
+  },
+];
 
-const ProjectsSection = ({ onViewProject }: ProjectsSectionProps) => {
+const ArrowSvg = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+    <path d="M5 12h14M13 5l7 7-7 7" />
+  </svg>
+);
+
+const ProjectsSection = () => {
+  const navigate = useNavigate();
+  const pinRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+  const counterRef = useRef<HTMLSpanElement>(null);
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  useEffect(() => {
+    const pin = pinRef.current;
+    const stage = stageRef.current;
+    const track = trackRef.current;
+    const bar = progressBarRef.current;
+    const counter = counterRef.current;
+    if (!pin || !stage || !track) return;
+
+    const cardWidth = 480 + 36;
+    const totalWidth = cardWidth * projectData.length;
+    const viewW = window.innerWidth;
+    const maxTranslate = totalWidth - viewW + viewW * 0.16;
+
+    const st = ScrollTrigger.create({
+      trigger: pin,
+      start: "top top",
+      end: `+=${pin.offsetHeight - viewW}`,
+      pin: stage,
+      scrub: 1,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const tx = -progress * maxTranslate;
+        gsap.set(track, { x: tx });
+
+        const idx = Math.round(progress * (projectData.length - 1));
+        setActiveIdx(idx);
+
+        if (bar) {
+          bar.style.setProperty("--proj-progress", String(progress));
+        }
+        if (counter) {
+          counter.textContent = `${String(idx + 1).padStart(2, "0")} / ${String(projectData.length).padStart(2, "0")}`;
+        }
+      },
+    });
+
+    // Tilt effect
+    const cards = track.querySelectorAll<HTMLElement>(".project-card");
+    cards.forEach((card) => {
+      const onMove = (e: MouseEvent) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
+        const y = -((e.clientY - rect.top) / rect.height - 0.5) * 10;
+        gsap.to(card, { rotateY: x, rotateX: y, duration: 0.4, ease: "power2.out", transformPerspective: 800 });
+      };
+      const onLeave = () => {
+        gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.5, ease: "power3.out" });
+      };
+      card.addEventListener("mousemove", onMove);
+      card.addEventListener("mouseleave", onLeave);
+    });
+
+    return () => {
+      st.kill();
+    };
+  }, []);
+
+  const handleCardClick = (project: typeof projectData[0]) => {
+    navigate("/view", {
+      state: {
+        id: project.id,
+        title: project.title,
+        description: project.desc,
+        tech: project.tech,
+        imageUrl: project.image,
+        link: "#",
+      },
+    });
+  };
+
   return (
-    <section id="projects" className="py-20 sm:py-28 px-4 sm:px-6 relative">
-      {/* Subtle top divider */}
-      <div className="absolute top-0 left-0 right-0 gradient-divider" />
-
-      <div className="max-w-7xl mx-auto">
-        {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-12 sm:mb-16"
-        >
-          <p className="eyebrow text-accent-mobile mb-3">Selected work</p>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold leading-[1.1]">
-              Featured <span className="text-accent-mobile">Projects</span>
-            </h2>
-            <p className="text-slate-400 text-sm sm:text-base max-w-md leading-relaxed">
-              Selected works that showcase my ability to build across web, mobile, and AI architectures.
-            </p>
+    <section id="projects" className="projects">
+      <div className="container">
+        <div className="section-head">
+          <div>
+            <div className="section-num reveal" style={{ marginBottom: 14 }}>— 02 / Selected work</div>
+            <h2 className="section-title">Featured <em>projects</em></h2>
           </div>
-        </motion.div>
-
-        {/* Project grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-          {projects.map((project, idx) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ delay: idx * 0.06, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              whileHover="hover"
-              className="group relative bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-2xl overflow-hidden cursor-pointer transition-colors duration-300"
-              onClick={() => onViewProject(project)}
-            >
-              {/* Project image */}
-              <div className="aspect-[4/3] overflow-hidden relative">
-                <motion.img
-                  variants={{ hover: { scale: 1.06 } }}
-                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                  src={project.imageUrl}
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                />
-                {/* Gradient overlay — darker on hover */}
-                <motion.div
-                  variants={{ hover: { opacity: 1 } }}
-                  initial={{ opacity: 0.7 }}
-                  className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent"
-                />
-                {/* Project index number */}
-                <div className="absolute top-4 left-4 font-mono text-xs font-bold text-slate-500 tracking-widest">
-                  {String(idx + 1).padStart(2, "0")}
-                </div>
-              </div>
-
-              {/* Card content */}
-              <div className="absolute inset-0 p-5 sm:p-6 flex flex-col justify-end">
-                <motion.div
-                  variants={{ hover: { y: 0, opacity: 1 } }}
-                  initial={{ y: 6, opacity: 0.95 }}
-                  transition={cardTransition}
-                >
-                  {/* Tech tags */}
-                  <div className="flex gap-1.5 mb-3 flex-wrap">
-                    {project.tech.slice(0, 3).map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-0.5 bg-slate-800/90 backdrop-blur rounded-md text-[10px] font-bold tracking-wider uppercase text-slate-400 border border-slate-700/60"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-lg sm:text-xl font-bold mb-1 text-white group-hover:text-primary-300 transition-colors duration-200 leading-tight">
-                    {project.title}
-                  </h3>
-
-                  {/* Description + CTA — revealed on hover */}
-                  <motion.div
-                    variants={{
-                      hover: { height: "auto", opacity: 1, marginTop: 10 },
-                      initial: { height: 0, opacity: 0, marginTop: 0 },
-                    }}
-                    initial="initial"
-                    className="overflow-hidden"
-                  >
-                    <p className="text-slate-400 text-xs sm:text-sm mb-4 line-clamp-2 leading-relaxed">
-                      {project.description}
-                    </p>
-                    <div className="flex items-center gap-1.5 text-primary-400 font-bold text-[11px] uppercase tracking-widest">
-                      View Case Study
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </motion.div>
-                </motion.div>
-              </div>
-
-              {/* Arrow badge — top right on hover */}
-              <motion.div
-                variants={{
-                  hover: { opacity: 1, scale: 1, rotate: 0 },
-                  initial: { opacity: 0, scale: 0.6, rotate: -45 },
-                }}
-                className="absolute top-4 right-4 p-2 rounded-full bg-primary-500 text-white shadow-lg shadow-primary-500/30"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </motion.div>
-            </motion.div>
-          ))}
+          <p className="section-blurb reveal">
+            Selected works across web, mobile, and AI architectures. Scroll to traverse —
+            each card is a case study.
+          </p>
         </div>
       </div>
 
-      {/* Bottom divider */}
-      <div className="absolute bottom-0 left-0 right-0 gradient-divider" />
+      <div className="projects-pin" ref={pinRef}>
+        <div className="projects-stage" ref={stageRef}>
+          <div className="projects-track" ref={trackRef}>
+            {projectData.map((project, i) => (
+              <div
+                key={project.id}
+                className="project-card"
+                onClick={() => handleCardClick(project)}
+              >
+                <div className="project-card-image">
+                  <img src={project.image} alt={project.title} loading="lazy" />
+                </div>
+                <span className="project-card-num">{project.num}</span>
+                <div className="project-card-arrow">
+                  <ArrowSvg />
+                </div>
+                <div className="project-card-foot">
+                  <div className="project-card-tech">
+                    {project.tech.map((t) => (
+                      <span key={t}>{t}</span>
+                    ))}
+                  </div>
+                  <div className="project-card-title">{project.title}</div>
+                  <div className="project-card-desc">{project.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="projects-progress" ref={progressBarRef}>
+            <div className="projects-progress-bar" />
+            <div className="projects-progress-meta">
+              <span ref={counterRef}>01 / 06</span>
+              <span>Scroll to traverse</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

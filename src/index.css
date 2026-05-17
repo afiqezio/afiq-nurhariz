@@ -211,10 +211,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   background: oklch(0.11 0.005 60 / 0.5); backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px); position: relative; z-index: 3;
 }
-.marquee-track { display: inline-flex; animation: marqueeMove 30s linear infinite; gap: 56px; }
+.marquee-track { display: inline-flex; animation: marqueeMove 30s linear infinite; }
 .marquee-item {
   font-family: var(--sans); font-size: 38px; font-weight: 500; letter-spacing: -0.02em;
   display: inline-flex; align-items: center; gap: 56px; color: var(--fg);
+  padding-right: 56px;
 }
 .marquee-item em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--accent); }
 .marquee-item .dot { width: 8px; height: 8px; background: var(--accent); }

@@ -34,7 +34,7 @@ const HeroSection = ({ ready = false }: HeroSectionProps) => {
         <div className="hero-grid">
           <div>
             <div className="hero-meta">
-              <span className="eyebrow">Portfolio · 2026 · Kuala Lumpur</span>
+              <span className="eyebrow">Portfolio · 2026 · Shah Alam</span>
             </div>
 
             <h1 className="hero-title">
@@ -79,14 +79,6 @@ const HeroSection = ({ ready = false }: HeroSectionProps) => {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="hero-corner">
-        <div>[ DEV_ID: AFIQ_001 ]</div>
-        <div className="hero-corner-row">
-          CORE · NEURAL_ENGINE <span className="dot" />
-        </div>
-        <div>[ STATUS: ACTIVE ]</div>
       </div>
 
       <div className="scroll-cue">

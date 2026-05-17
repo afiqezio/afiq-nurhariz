@@ -22,7 +22,7 @@ const Footer = () => {
         <div>&copy; 2026 Afiq Nurhariz — All systems nominal</div>
         <div className="footer-time">
           <span className="dot" />
-          Kuala Lumpur · <span>{time} MYT</span>
+          Shah Alam · <span>{time} MYT</span>
         </div>
         <div>Designed &amp; built with curiosity</div>
       </div>

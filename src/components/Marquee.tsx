@@ -32,12 +32,10 @@ const Marquee = ({ thin = false }: MarqueeProps) => {
   return (
     <div className={`marquee${thin ? " marquee-thin" : ""}`} aria-hidden="true">
       <div className="marquee-track">
-        <span className="marquee-item">
-          <MarqueeContent thin={thin} />
-        </span>
-        <span className="marquee-item">
-          <MarqueeContent thin={thin} />
-        </span>
+        <span className="marquee-item"><MarqueeContent thin={thin} /></span>
+        <span className="marquee-item"><MarqueeContent thin={thin} /></span>
+        <span className="marquee-item"><MarqueeContent thin={thin} /></span>
+        <span className="marquee-item"><MarqueeContent thin={thin} /></span>
       </div>
     </div>
   );

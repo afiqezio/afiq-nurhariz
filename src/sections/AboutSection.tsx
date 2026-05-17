@@ -50,7 +50,7 @@ const AboutSection = () => {
             <figcaption className="about-image-caption">
               <span>Afiq Nurhariz</span>
               <span className="dot" />
-              <span>Kuala Lumpur</span>
+              <span>Shah Alam</span>
               <span className="dot" />
               <span>2026</span>
             </figcaption>

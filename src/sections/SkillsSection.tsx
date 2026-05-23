@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import SkillsCanvas from "@/components/SkillsCanvas";
+import StackOverview from "@/components/StackOverview";
 
 const CATEGORIES = ["All", "Frontend", "Backend", "Mobile", "AI/ML", "Database", "DevOps"];
 
@@ -30,30 +30,14 @@ const SKILLS_DATA = [
   { name: "scikit-learn", category: "AI/ML", level: 0.78 },
 ];
 
-const SkillsHelperIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-  </svg>
-);
-
 const SkillsSection = () => {
   const [activeCategory, setActiveCategory] = useState("All");
-  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
   const filtered =
     activeCategory === "All"
       ? SKILLS_DATA
       : SKILLS_DATA.filter((s) => s.category === activeCategory);
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      const name = (e as CustomEvent).detail?.name as string | null;
-      setHoveredSkill(name);
-    };
-    document.addEventListener("skill-hover", handler);
-    return () => document.removeEventListener("skill-hover", handler);
-  }, []);
 
   useEffect(() => {
     const rows = listRef.current?.querySelectorAll<HTMLElement>(".skill-row");
@@ -86,10 +70,6 @@ const SkillsSection = () => {
     return () => observers.forEach((o) => o.disconnect());
   }, []);
 
-  const handleRowHover = (name: string | null) => {
-    if (window.__highlightSkill) window.__highlightSkill(name);
-  };
-
   return (
     <section id="skills" className="skills">
       <div className="container">
@@ -103,20 +83,17 @@ const SkillsSection = () => {
             </h2>
           </div>
           <p className="section-blurb reveal">
-            A constellation of technologies I use to bring ideas to life across platforms.
-            Drag to rotate · hover to inspect.
+            A variety of technologies I use to bring ideas to life across platforms.
+            Hover a category to focus · click a row to highlight.
           </p>
         </div>
 
         <div className="skills-grid">
-          <div>
-            <SkillsCanvas skills={SKILLS_DATA} />
-            <p className="skills-helper">
-              <SkillsHelperIcon />
-              <span className="skills-helper-desktop">Drag the constellation · click a node to highlight</span>
-              <span className="skills-helper-mobile">Drag to rotate · tap a node to highlight</span>
-            </p>
-          </div>
+          <StackOverview
+            skills={SKILLS_DATA}
+            activeCategory={activeCategory}
+            onSelectCategory={(cat) => setActiveCategory(cat)}
+          />
 
           <div className="skills-panel">
             <div className="skills-cats">
@@ -133,24 +110,19 @@ const SkillsSection = () => {
             </div>
 
             <div className="skills-list" ref={listRef} id="skills-list">
-              {filtered.map((skill) => {
-                const isActive = hoveredSkill === skill.name;
-                return (
-                  <div
-                    key={skill.name}
-                    className={`skill-row${isActive ? " active" : ""}`}
-                    style={{ "--lvl": skill.level } as React.CSSProperties}
-                    data-name={skill.name}
-                    data-cat={skill.category}
-                    onMouseEnter={() => handleRowHover(skill.name)}
-                    onMouseLeave={() => handleRowHover(null)}
-                  >
-                    <span className="skill-row-name">{skill.name}</span>
-                    <span className="skill-row-cat">{skill.category}</span>
-                    <span className="skill-row-bar" />
-                  </div>
-                );
-              })}
+              {filtered.map((skill) => (
+                <div
+                  key={skill.name}
+                  className="skill-row"
+                  style={{ "--lvl": skill.level } as React.CSSProperties}
+                  data-name={skill.name}
+                  data-cat={skill.category}
+                >
+                  <span className="skill-row-name">{skill.name}</span>
+                  <span className="skill-row-cat">{skill.category}</span>
+                  <span className="skill-row-bar" />
+                </div>
+              ))}
             </div>
           </div>
         </div>

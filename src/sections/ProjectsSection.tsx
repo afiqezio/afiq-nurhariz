@@ -67,79 +67,151 @@ const ProjectsSection = () => {
   const pinRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const progressBarRef = useRef<HTMLDivElement>(null);
+  const introRef = useRef<HTMLElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
-  const [activeIdx, setActiveIdx] = useState(0);
+  const [, setActiveIdx] = useState(0);
 
   useEffect(() => {
     const pin = pinRef.current;
     const stage = stageRef.current;
     const track = trackRef.current;
-    const bar = progressBarRef.current;
     const counter = counterRef.current;
+    const progress = progressRef.current;
     if (!pin || !stage || !track) return;
 
+    const cards = Array.from(track.querySelectorAll<HTMLElement>(".project-card"));
+    const cardImages = cards.map(c => c.querySelector<HTMLElement>(".project-card-image"));
+
     const getMaxTranslate = () => {
-      const viewW = window.innerWidth;
-      const isMobile = viewW <= 768;
-      const cardW = isMobile ? viewW * 0.86 : 480;
-      const gap = 36;
-      const paddingX = viewW * 0.08;
-      const N = projectData.length;
-      const trackWidth = 2 * paddingX + N * cardW + (N - 1) * gap;
-      return Math.max(0, trackWidth - viewW);
+      const stageW = stage.getBoundingClientRect().width;
+      const isMobile = window.innerWidth <= 900;
+      const intro = introRef.current;
+      const introW = isMobile || !intro ? 0 : intro.getBoundingClientRect().width;
+      const padRight = parseFloat(getComputedStyle(track).paddingRight) || 0;
+      const desiredMargin = isMobile ? 20 : 32;
+      const base = Math.max(0, track.scrollWidth - padRight - (stageW - introW) + desiredMargin);
+      // Extra distance so the last card's CENTER reaches viewport center, not
+      // just its right edge. Equals (stageW/2 - cardWidth/2 - margin) on
+      // desktop (~468px @ 1440px stage).
+      const cardW = cards[0]?.getBoundingClientRect().width ?? 0;
+      const extra = isMobile ? 0 : Math.max(0, stageW / 2 - cardW / 2 - desiredMargin);
+      return base + extra;
     };
 
     let maxTranslate = getMaxTranslate();
 
+    // Per-card animated state for the rAF lerp loop
+    type CardState = {
+      tScale: number; tRotY: number; tTransY: number; tTransZ: number; tBlur: number; tBright: number;
+      scale: number; rotY: number; transY: number; transZ: number; blur: number; bright: number;
+      centered: boolean;
+    };
+    const states: CardState[] = cards.map(() => ({
+      tScale: 1, tRotY: 0, tTransY: 0, tTransZ: 0, tBlur: 0, tBright: 1,
+      scale: 1, rotY: 0, transY: 0, transZ: 0, blur: 0, bright: 1,
+      centered: false,
+    }));
+
+    const computeTargets = (p: number) => {
+      const tx = -p * maxTranslate;
+      track.style.transform = `translate3d(${tx}px, 0, 0)`;
+
+      // Focal point = viewport center. No bias — first card naturally sits
+      // here at p=0 because the intro column pushes the track rightward.
+      const focal = window.innerWidth / 2;
+      let bestIdx = 0;
+      let bestDist = Infinity;
+      cards.forEach((card, i) => {
+        const r = card.getBoundingClientRect();
+        const cardCenter = r.left + r.width / 2;
+        const d = cardCenter - focal;
+        const ad = Math.abs(d);
+        if (ad < bestDist) { bestDist = ad; bestIdx = i; }
+        const dn = Math.min(1, ad / (window.innerWidth * 0.55));
+        const s = states[i];
+        s.tScale = 1 - dn * 0.10;
+        s.tRotY = (d / (window.innerWidth / 2)) * -5;
+        s.tTransY = dn * 12;
+        s.tTransZ = -dn * 200;
+        s.tBlur = dn * 3.2;
+        s.tBright = 1 - dn * 0.22;
+      });
+
+      states.forEach((s, i) => {
+        const wasCentered = s.centered;
+        s.centered = i === bestIdx && bestDist < window.innerWidth * 0.18;
+        if (s.centered !== wasCentered) cards[i].classList.toggle("is-centered", s.centered);
+      });
+
+      const idx = bestIdx;
+      setActiveIdx(idx);
+      if (progress) progress.style.setProperty("--proj-progress", String(p));
+      if (counter) counter.textContent = `${String(idx + 1).padStart(2, "0")} / ${String(projectData.length).padStart(2, "0")}`;
+    };
+
     const st = ScrollTrigger.create({
       trigger: pin,
       start: "top top",
-      end: () => "+=" + getMaxTranslate(),
+      end: () => "+=" + Math.max(getMaxTranslate() * 1.15, window.innerHeight * 0.5),
       pin: stage,
-      scrub: 1,
+      scrub: 2.0,
       invalidateOnRefresh: true,
-      onRefresh: () => {
-        maxTranslate = getMaxTranslate();
-      },
-      onUpdate: (self) => {
-        const progress = self.progress;
-        const tx = -progress * maxTranslate;
-        gsap.set(track, { x: tx });
-
-        const idx = Math.round(progress * (projectData.length - 1));
-        setActiveIdx(idx);
-
-        if (bar) {
-          bar.style.setProperty("--proj-progress", String(progress));
-        }
-        if (counter) {
-          counter.textContent = `${String(idx + 1).padStart(2, "0")} / ${String(projectData.length).padStart(2, "0")}`;
-        }
-      },
+      onRefresh: () => { maxTranslate = getMaxTranslate(); },
+      onUpdate: (self) => { computeTargets(self.progress); },
     });
 
-    const onResize = () => ScrollTrigger.refresh();
+    // rAF lerp loop — eases each card toward its target so motion stays
+    // silky regardless of scroll cadence. Cards stay fully opaque & clickable
+    // throughout; the depth/blur effect provides the cinematic feel.
+    let rafId = 0;
+    const tick = () => {
+      const k = 0.14;
+      cards.forEach((card, i) => {
+        const s = states[i];
+        s.scale  += (s.tScale  - s.scale)  * k;
+        s.rotY   += (s.tRotY   - s.rotY)   * k;
+        s.transY += (s.tTransY - s.transY) * k;
+        s.transZ += (s.tTransZ - s.transZ) * k;
+        s.blur   += (s.tBlur   - s.blur)   * k;
+        s.bright += (s.tBright - s.bright) * k;
+
+        card.style.transform = `translate3d(0, ${s.transY.toFixed(2)}px, ${s.transZ.toFixed(2)}px) rotateY(${s.rotY.toFixed(2)}deg) scale(${s.scale.toFixed(3)})`;
+        card.style.opacity = s.bright.toFixed(3);
+        const ci = cardImages[i];
+        if (ci) ci.style.filter = `blur(${s.blur.toFixed(2)}px)`;
+      });
+      rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+
+    // Prime targets at current scroll
+    computeTargets(st.progress);
+
+    const onResize = () => {
+      maxTranslate = getMaxTranslate();
+      ScrollTrigger.refresh();
+    };
     window.addEventListener("resize", onResize);
     window.addEventListener("orientationchange", onResize);
 
-    // Tilt effect
-    const cards = track.querySelectorAll<HTMLElement>(".project-card");
+    // Subtle image parallax on hover (composes with scroll-driven card transform)
     cards.forEach((card) => {
+      const img = card.querySelector<HTMLImageElement>(".project-card-image img");
+      if (!img) return;
       const onMove = (e: MouseEvent) => {
         const rect = card.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 12;
-        const y = -((e.clientY - rect.top) / rect.height - 0.5) * 10;
-        gsap.to(card, { rotateY: x, rotateX: y, duration: 0.4, ease: "power2.out", transformPerspective: 800 });
+        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 16;
+        const y = ((e.clientY - rect.top) / rect.height - 0.5) * 16;
+        img.style.transform = `scale(1.14) translate(${x}px, ${y}px)`;
       };
-      const onLeave = () => {
-        gsap.to(card, { rotateY: 0, rotateX: 0, duration: 0.5, ease: "power3.out" });
-      };
+      const onLeave = () => { img.style.transform = ""; };
       card.addEventListener("mousemove", onMove);
       card.addEventListener("mouseleave", onLeave);
     });
 
     return () => {
+      cancelAnimationFrame(rafId);
       st.kill();
       window.removeEventListener("resize", onResize);
       window.removeEventListener("orientationchange", onResize);
@@ -161,23 +233,29 @@ const ProjectsSection = () => {
 
   return (
     <section id="projects" className="projects">
-      <div className="container">
-        <div className="section-head">
-          <div>
-            <div className="section-num reveal" style={{ marginBottom: 14 }}>— 02 / Selected work</div>
-            <h2 className="section-title">Featured <em>projects</em></h2>
-          </div>
-          <p className="section-blurb reveal">
-            Selected works across web, mobile, and AI architectures. Scroll to traverse —
-            each card is a case study.
-          </p>
-        </div>
-      </div>
-
       <div className="projects-pin" ref={pinRef}>
         <div className="projects-stage" ref={stageRef}>
+          <aside className="projects-intro" ref={introRef}>
+            <div className="projects-intro-num reveal">— 02 / Selected work</div>
+            <h2 className="section-title projects-title">
+              Featured<br />
+              <em>projects</em>
+            </h2>
+            <p className="projects-intro-blurb reveal">
+              Selected works across web, mobile, and AI architectures. Scroll to traverse —
+              each card is a case study.
+            </p>
+            <div className="projects-progress" ref={progressRef}>
+              <div className="projects-progress-bar" />
+              <div className="projects-progress-meta">
+                <span ref={counterRef}>01 / 06</span>
+                <span>Scroll to traverse</span>
+              </div>
+            </div>
+          </aside>
+
           <div className="projects-track" ref={trackRef}>
-            {projectData.map((project, i) => (
+            {projectData.map((project) => (
               <div
                 key={project.id}
                 className="project-card"
@@ -201,14 +279,6 @@ const ProjectsSection = () => {
                 </div>
               </div>
             ))}
-          </div>
-
-          <div className="projects-progress" ref={progressBarRef}>
-            <div className="projects-progress-bar" />
-            <div className="projects-progress-meta">
-              <span ref={counterRef}>01 / 06</span>
-              <span>Scroll to traverse</span>
-            </div>
           </div>
         </div>
       </div>

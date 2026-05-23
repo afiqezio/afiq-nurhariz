@@ -5,6 +5,7 @@ const VERT_BLOB = `
 uniform float uTime;
 uniform float uScroll;
 uniform vec2 uMouse;
+uniform float uVelocity;
 varying vec3 vPos;
 varying vec3 vNormal;
 varying float vDistort;
@@ -62,9 +63,10 @@ void main(){
   float t = uTime * 0.18;
   float scrollPush = uScroll * 0.6;
   float mouseLift = (uMouse.x + uMouse.y) * 0.15;
+  float velKick = uVelocity * 0.9;
   float n = snoise(p * 0.85 + vec3(t, t * 0.7, t * 0.4));
   float n2 = snoise(p * 1.6 + vec3(-t * 0.5, t, t * 0.3));
-  float distort = n * 0.55 + n2 * 0.22 + scrollPush * sin(t + p.y) * 0.18 + mouseLift * 0.1;
+  float distort = n * 0.55 + n2 * 0.22 + scrollPush * sin(t + p.y) * 0.18 + mouseLift * 0.1 + velKick * 0.25;
   vDistort = distort;
   p += normal * distort;
   vPos = p;
@@ -154,6 +156,7 @@ const ThreeScene = () => {
       uTime: { value: 0 },
       uScroll: { value: 0 },
       uMouse: { value: new THREE.Vector2(0, 0) },
+      uVelocity: { value: 0 },
     };
 
     // Blob — additive for glow
@@ -183,6 +186,20 @@ const ThreeScene = () => {
     });
     const wire = new THREE.Mesh(wireGeo, wireMat);
     scene.add(wire);
+
+    // Secondary smaller blob — orbits opposite for richer depth
+    const blob2Geo = new THREE.IcosahedronGeometry(0.85, 24);
+    const blob2Mat = new THREE.ShaderMaterial({
+      vertexShader: VERT_BLOB,
+      fragmentShader: FRAG_BLOB,
+      uniforms,
+      transparent: true,
+      side: THREE.FrontSide,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const blob2 = new THREE.Mesh(blob2Geo, blob2Mat);
+    scene.add(blob2);
 
     // Particles — purple, smaller, denser
     const particleCount = 1200;
@@ -217,12 +234,17 @@ const ThreeScene = () => {
 
     // Scroll / mouse state
     let scrollProgress = 0;
+    let lastScrollY = 0;
+    let velocity = 0;
     let mouseX = 0;
     let mouseY = 0;
 
     const onScroll = () => {
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       scrollProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      const dy = window.scrollY - lastScrollY;
+      velocity = velocity * 0.6 + dy * 0.4;
+      lastScrollY = window.scrollY;
     };
 
     const onMouse = (e: MouseEvent) => {
@@ -251,18 +273,32 @@ const ThreeScene = () => {
       uniforms.uScroll.value += (scrollProgress - uniforms.uScroll.value) * 0.05;
       uniforms.uMouse.value.x += (mouseX - uniforms.uMouse.value.x) * 0.05;
       uniforms.uMouse.value.y += (mouseY - uniforms.uMouse.value.y) * 0.05;
+      const targetVel = Math.max(-1, Math.min(1, velocity / 60));
+      uniforms.uVelocity.value += (targetVel - uniforms.uVelocity.value) * 0.1;
+      velocity *= 0.9;
 
       const s = uniforms.uScroll.value;
       blob.position.x = Math.sin(s * Math.PI) * 2.5;
       blob.position.y = s * -1.5;
       wire.position.copy(blob.position);
 
+      // Secondary blob orbits opposite, smaller orbit
+      const orbit = elapsed * 0.25 + s * Math.PI * 1.4;
+      blob2.position.x = -Math.sin(orbit) * 3.0 + Math.cos(s * Math.PI) * 0.8;
+      blob2.position.y = Math.cos(orbit) * 1.4 - s * 0.8;
+      blob2.position.z = -1.5 + Math.sin(orbit * 0.5) * 1.0;
+      blob2.rotation.y = -elapsed * 0.12 + mouseX * 0.4;
+      blob2.rotation.x = elapsed * 0.07 - mouseY * 0.3;
+
       blob.rotation.y = elapsed * 0.08 + mouseX * 0.3;
       blob.rotation.x = elapsed * 0.05 + mouseY * 0.2;
       wire.rotation.copy(blob.rotation);
 
-      particles.rotation.y = elapsed * 0.02;
-      particles.rotation.x = elapsed * 0.01;
+      // Particles — velocity drives Y drift, mouse adds parallax
+      particles.rotation.y = elapsed * 0.02 + mouseX * 0.15;
+      particles.rotation.x = elapsed * 0.01 + mouseY * 0.1;
+      particles.position.y = -uniforms.uVelocity.value * 0.4;
+      particles.position.x = mouseX * 0.3;
 
       renderer.render(scene, camera);
     };
@@ -279,6 +315,8 @@ const ThreeScene = () => {
       blobMat.dispose();
       wireGeo.dispose();
       wireMat.dispose();
+      blob2Geo.dispose();
+      blob2Mat.dispose();
       particleGeo.dispose();
       particleMat.dispose();
     };

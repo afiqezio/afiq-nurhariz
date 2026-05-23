@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 
 interface HeroSectionProps {
@@ -8,20 +8,20 @@ interface HeroSectionProps {
 const HeroSection = ({ ready = false }: HeroSectionProps) => {
   const wordsRef = useRef<HTMLElement[]>([]);
 
+  useLayoutEffect(() => {
+    gsap.set(wordsRef.current.filter(Boolean), { y: "100%" });
+  }, []);
+
   useEffect(() => {
     if (!ready) return;
     const words = wordsRef.current.filter(Boolean);
-    gsap.fromTo(
-      words,
-      { y: "100%" },
-      {
-        y: "0%",
-        duration: 1.1,
-        ease: "power4.out",
-        stagger: 0.08,
-        delay: 0.1,
-      }
-    );
+    gsap.to(words, {
+      y: "0%",
+      duration: 1.1,
+      ease: "power4.out",
+      stagger: 0.08,
+      delay: 0.1,
+    });
   }, [ready]);
 
   const addWord = (el: HTMLSpanElement | null) => {
@@ -39,17 +39,15 @@ const HeroSection = ({ ready = false }: HeroSectionProps) => {
 
             <h1 className="hero-title">
               <span className="line">
-                <span className="word" ref={addWord}>Crafting</span>{" "}
-                <span className="word" ref={addWord}>the</span>
+                <span className="word-mask"><span className="word" ref={addWord}>Crafting</span></span>{" "}
+                <span className="word-mask"><span className="word" ref={addWord}>the</span></span>
               </span>
               <span className="line">
-                <span className="word" ref={addWord}>
-                  <em>future</em>
-                </span>{" "}
-                <span className="word" ref={addWord}>of</span>
+                <span className="word-mask"><span className="word" ref={addWord}><em>future</em></span></span>{" "}
+                <span className="word-mask"><span className="word" ref={addWord}>of</span></span>
               </span>
               <span className="line">
-                <span className="word" ref={addWord}>tech.</span>
+                <span className="word-mask"><span className="word" ref={addWord}>tech.</span></span>
               </span>
             </h1>
 

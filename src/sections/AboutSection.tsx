@@ -56,7 +56,7 @@ const AboutSection = () => {
             </figcaption>
           </div>
 
-          <div>
+          <div className="about-content">
             <div className="section-num" style={{ position: "static", marginBottom: 18 }}>
               — 01 / About
             </div>

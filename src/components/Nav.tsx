@@ -65,7 +65,7 @@ const Nav = () => {
   return (
     <nav className="nav">
       <a href="#top" className="nav-logo" onClick={(e) => handleAnchorClick(e, "#top")}>
-        <span className="nav-logo-dot" />
+        <img src="/assets/logo-no-bg.png" alt="" className="nav-logo-icon" />
         <span>afiq/nurhariz</span>
       </a>
 

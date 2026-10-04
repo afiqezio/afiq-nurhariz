@@ -138,13 +138,19 @@ void main(){
 }
 `;
 
-const ThreeScene = () => {
+interface ThreeSceneProps {
+  // Upper bound for the render resolution. The scene is a soft glow, so it
+  // doesn't need full retina resolution — fill-rate is its main cost.
+  maxDpr?: number;
+}
+
+const ThreeScene = ({ maxDpr = 1.5 }: ThreeSceneProps) => {
   useEffect(() => {
     const canvas = document.getElementById("scene-canvas") as HTMLCanvasElement | null;
     if (!canvas) return;
 
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxDpr));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0);
 
@@ -239,8 +245,16 @@ const ThreeScene = () => {
     let mouseX = 0;
     let mouseY = 0;
 
+    // Page height is cached so the scroll handler never forces a layout
+    let maxScroll = 0;
+    const measureScroll = () => {
+      maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    };
+    measureScroll();
+    const pageObserver = new ResizeObserver(measureScroll);
+    pageObserver.observe(document.body);
+
     const onScroll = () => {
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       scrollProgress = maxScroll > 0 ? window.scrollY / maxScroll : 0;
       const dy = window.scrollY - lastScrollY;
       velocity = velocity * 0.6 + dy * 0.4;
@@ -258,7 +272,9 @@ const ThreeScene = () => {
     const onResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, maxDpr));
       renderer.setSize(window.innerWidth, window.innerHeight);
+      measureScroll();
     };
     window.addEventListener("resize", onResize);
 
@@ -310,6 +326,7 @@ const ThreeScene = () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("mousemove", onMouse);
       window.removeEventListener("resize", onResize);
+      pageObserver.disconnect();
       renderer.dispose();
       blobGeo.dispose();
       blobMat.dispose();
@@ -320,7 +337,7 @@ const ThreeScene = () => {
       particleGeo.dispose();
       particleMat.dispose();
     };
-  }, []);
+  }, [maxDpr]);
 
   return null;
 };

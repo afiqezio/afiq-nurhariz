@@ -31,10 +31,8 @@ export default defineConfig(({ mode }) => ({
           // Separate vendor chunks
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'three-vendor': ['three'],
-          'ui-vendor': [
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-tooltip',
-          ],
+          'ui-vendor': ['@radix-ui/react-dialog'],
+          'gsap-vendor': ['gsap', 'gsap/ScrollTrigger'],
         },
       },
     },

@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -97,9 +95,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* CURSOR */
 .cursor {
-  position: fixed; width: 10px; height: 10px; border-radius: 50%;
+  position: fixed; top: 0; left: 0; width: 10px; height: 10px; border-radius: 50%;
   background: var(--accent); pointer-events: none; z-index: 999;
-  transform: translate(-50%, -50%); mix-blend-mode: difference;
+  transform: translate3d(-100px, -100px, 0) translate(-50%, -50%); mix-blend-mode: difference;
+  will-change: transform;
   transition: width 0.25s ease, height 0.25s ease, background 0.25s ease;
 }
 .cursor.hover { width: 50px; height: 50px; background: var(--fg); }
@@ -410,7 +409,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .project-card-num { position: absolute; top: 20px; left: 20px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; color: oklch(1 0 0 / 0.7); z-index: 2; }
 .project-card-arrow {
   position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: 50%;
-  background: oklch(0.13 0.008 60 / 0.7); backdrop-filter: blur(10px);
+  background: oklch(0.13 0.008 60 / 0.82);
   border: 1px solid var(--line); display: grid; place-items: center; z-index: 2;
   transition: background 0.3s, border-color 0.3s;
 }
@@ -422,7 +421,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .project-card-tech span {
   font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase;
   padding: 5px 10px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.08);
-  border: 1px solid oklch(1 0 0 / 0.12); color: var(--fg); backdrop-filter: blur(6px);
+  border: 1px solid oklch(1 0 0 / 0.12); color: var(--fg);
 }
 .project-card-title { font-family: var(--sans); font-size: 22px; line-height: 1.18; letter-spacing: -0.02em; font-weight: 500; color: var(--fg); max-width: 90%; }
 .project-card-desc { font-family: var(--sans); font-size: 13px; line-height: 1.5; color: var(--fg-dim); margin-top: 10px; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s ease, opacity 0.4s ease, margin 0.3s; }

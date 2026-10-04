@@ -1,15 +1,17 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { lazy, Suspense, useState, useEffect, useRef, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ImageModal from "@/components/ImageModal";
 import CustomCursor from "@/components/CustomCursor";
-import ThreeScene from "@/components/ThreeScene";
 import Footer from "@/components/Footer";
 import { projectData } from "@/data/projectData";
 import { Project } from "@/types";
+import { scrollToY } from "@/lib/smoothScroll";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const ThreeScene = lazy(() => import("@/components/ThreeScene"));
 
 const projectOrder = [
   "Mamak Food Calories Estimation Based on Image Classification",
@@ -108,25 +110,39 @@ const View = () => {
   }, [project]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    scrollToY(0, { immediate: true });
   }, [project?.title]);
 
   useEffect(() => {
+    const heroEl = document.querySelector<HTMLElement>(".pp-hero");
+    const nextEl = document.querySelector<HTMLElement>(".pp-next");
+    const bar = document.querySelector<HTMLElement>(".pp-progress");
+    if (!heroEl || !nextEl || !bar) return;
+
+    // Measure on resize only; the scroll handler just does arithmetic and
+    // writes the variable on the bar itself (not :root, which would restyle
+    // the whole document every frame).
+    let start = 0;
+    let total = 0;
+    let viewportH = window.innerHeight;
     const handleScroll = () => {
-      const heroEl = document.querySelector(".pp-hero") as HTMLElement | null;
-      const nextEl = document.querySelector(".pp-next") as HTMLElement | null;
-      if (!heroEl || !nextEl) return;
-      const start = heroEl.offsetTop;
-      const total = nextEl.offsetTop - start;
       if (total <= 0) return;
-      const p = Math.max(0, Math.min(1, (window.scrollY - start + window.innerHeight * 0.4) / total));
-      document.documentElement.style.setProperty("--read-progress", String(p));
+      const p = Math.max(0, Math.min(1, (window.scrollY - start + viewportH * 0.4) / total));
+      bar.style.setProperty("--read-progress", p.toFixed(4));
     };
-    handleScroll();
+    const measure = () => {
+      start = heroEl.offsetTop;
+      total = nextEl.offsetTop - start;
+      viewportH = window.innerHeight;
+      handleScroll();
+    };
+    measure();
+    const pageObserver = new ResizeObserver(measure);
+    pageObserver.observe(document.body);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
-      document.documentElement.style.setProperty("--read-progress", "0");
+      pageObserver.disconnect();
     };
   }, [project?.title]);
 
@@ -267,7 +283,7 @@ const View = () => {
   const handleTocClick = (id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
-    window.scrollTo({ top: el.offsetTop - 80, behavior: "smooth" });
+    scrollToY(el.getBoundingClientRect().top + window.scrollY - 80);
   };
 
   const handleNextProject = () => {
@@ -288,7 +304,9 @@ const View = () => {
       <div className="pp-body">
         <CustomCursor />
         <canvas id="scene-canvas" />
-        <ThreeScene />
+        <Suspense fallback={null}>
+          <ThreeScene maxDpr={1} />
+        </Suspense>
         <div className="bg-grain" />
         <div className="bg-vignette" />
         <header className="pp-header">
@@ -323,7 +341,9 @@ const View = () => {
     <div className="pp-body">
       <CustomCursor />
       <canvas id="scene-canvas" />
-      <ThreeScene />
+      <Suspense fallback={null}>
+        <ThreeScene maxDpr={1} />
+      </Suspense>
       <div className="bg-grain" />
       <div className="bg-vignette" />
 
@@ -498,7 +518,7 @@ const View = () => {
                           onClick={() => setSelectedImageIndex(i)}
                         >
                           <span className="pp-shot-num">{String(i + 1).padStart(2, "0")}</span>
-                          <img src={img.url} alt={img.alt} loading="lazy" />
+                          <img src={img.url} alt={img.alt} loading="lazy" decoding="async" />
                           <figcaption className="pp-shot-caption">{img.caption}</figcaption>
                         </figure>
                       ))}

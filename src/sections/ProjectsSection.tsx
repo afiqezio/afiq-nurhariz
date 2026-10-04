@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -70,7 +70,6 @@ const ProjectsSection = () => {
   const introRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
-  const [, setActiveIdx] = useState(0);
 
   useEffect(() => {
     const pin = pinRef.current;
@@ -94,44 +93,126 @@ const ProjectsSection = () => {
       // Extra distance so the last card's CENTER reaches viewport center, not
       // just its right edge. Equals (stageW/2 - cardWidth/2 - margin) on
       // desktop (~468px @ 1440px stage).
-      const cardW = cards[0]?.getBoundingClientRect().width ?? 0;
+      const cardW = cards[0]?.offsetWidth ?? 0;
       const extra = isMobile ? 0 : Math.max(0, stageW / 2 - cardW / 2 - desiredMargin);
       return base + extra;
     };
 
-    let maxTranslate = getMaxTranslate();
+    // Layout cache — measured on refresh/resize so the scrub callback and the
+    // frame loop never read layout (no forced reflow while scrolling).
+    let maxTranslate = 0;
+    let viewportW = window.innerWidth;
+    let tx = 0;
+    let cardCenters: number[] = [];
+    const measure = () => {
+      viewportW = window.innerWidth;
+      maxTranslate = getMaxTranslate();
+      // Card centre at translate 0 = the track's untranslated left edge + the
+      // card's layout offset inside the track (unaffected by card transforms).
+      const trackLeft = track.getBoundingClientRect().left - tx;
+      cardCenters = cards.map((c) => {
+        const left = c.offsetParent === track ? c.offsetLeft : c.offsetLeft - track.offsetLeft;
+        return trackLeft + left + c.offsetWidth / 2;
+      });
+    };
 
     // Per-card animated state for the rAF lerp loop
     type CardState = {
       tScale: number; tRotY: number; tTransY: number; tTransZ: number; tBlur: number; tBright: number;
       scale: number; rotY: number; transY: number; transZ: number; blur: number; bright: number;
       centered: boolean;
+      transformStr: string; opacityStr: string; filterStr: string;
     };
     const states: CardState[] = cards.map(() => ({
       tScale: 1, tRotY: 0, tTransY: 0, tTransZ: 0, tBlur: 0, tBright: 1,
       scale: 1, rotY: 0, transY: 0, transZ: 0, blur: 0, bright: 1,
       centered: false,
+      transformStr: "", opacityStr: "", filterStr: "",
     }));
 
+    // rAF lerp loop — eases each card toward its target so motion stays
+    // silky regardless of scroll cadence. Cards stay fully opaque & clickable
+    // throughout; the depth/blur effect provides the cinematic feel.
+    // The loop sleeps once every card has settled and is woken by scroll.
+    let rafId = 0;
+    let lastTime = 0;
+    const tick = (now: number) => {
+      // Frame-rate independent easing (0.14 per frame at 60Hz)
+      const dt = lastTime ? Math.min(now - lastTime, 100) : 16.67;
+      lastTime = now;
+      const k = 1 - Math.pow(1 - 0.14, dt / 16.67);
+      let moving = false;
+
+      cards.forEach((card, i) => {
+        const s = states[i];
+        const settled =
+          Math.abs(s.tScale - s.scale) < 0.0005 &&
+          Math.abs(s.tRotY - s.rotY) < 0.01 &&
+          Math.abs(s.tTransY - s.transY) < 0.02 &&
+          Math.abs(s.tTransZ - s.transZ) < 0.1 &&
+          Math.abs(s.tBlur - s.blur) < 0.01 &&
+          Math.abs(s.tBright - s.bright) < 0.001;
+
+        if (settled) {
+          s.scale = s.tScale; s.rotY = s.tRotY; s.transY = s.tTransY;
+          s.transZ = s.tTransZ; s.blur = s.tBlur; s.bright = s.tBright;
+        } else {
+          moving = true;
+          s.scale  += (s.tScale  - s.scale)  * k;
+          s.rotY   += (s.tRotY   - s.rotY)   * k;
+          s.transY += (s.tTransY - s.transY) * k;
+          s.transZ += (s.tTransZ - s.transZ) * k;
+          s.blur   += (s.tBlur   - s.blur)   * k;
+          s.bright += (s.tBright - s.bright) * k;
+        }
+
+        // Only touch the DOM when the rounded value actually changed
+        const transformStr = `translate3d(0, ${s.transY.toFixed(2)}px, ${s.transZ.toFixed(2)}px) rotateY(${s.rotY.toFixed(2)}deg) scale(${s.scale.toFixed(3)})`;
+        if (transformStr !== s.transformStr) {
+          s.transformStr = transformStr;
+          card.style.transform = transformStr;
+        }
+        const opacityStr = s.bright.toFixed(3);
+        if (opacityStr !== s.opacityStr) {
+          s.opacityStr = opacityStr;
+          card.style.opacity = opacityStr;
+        }
+        const ci = cardImages[i];
+        const filterStr = s.blur < 0.05 ? "none" : `blur(${s.blur.toFixed(1)}px)`;
+        if (ci && filterStr !== s.filterStr) {
+          s.filterStr = filterStr;
+          ci.style.filter = filterStr;
+        }
+      });
+
+      if (moving) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        rafId = 0;
+        lastTime = 0;
+      }
+    };
+    const wake = () => {
+      if (!rafId) rafId = requestAnimationFrame(tick);
+    };
+
+    let activeIdx = -1;
     const computeTargets = (p: number) => {
-      const tx = -p * maxTranslate;
-      track.style.transform = `translate3d(${tx}px, 0, 0)`;
+      tx = -p * maxTranslate;
+      track.style.transform = `translate3d(${tx.toFixed(2)}px, 0, 0)`;
 
       // Focal point = viewport center. No bias — first card naturally sits
       // here at p=0 because the intro column pushes the track rightward.
-      const focal = window.innerWidth / 2;
+      const focal = viewportW / 2;
       let bestIdx = 0;
       let bestDist = Infinity;
-      cards.forEach((card, i) => {
-        const r = card.getBoundingClientRect();
-        const cardCenter = r.left + r.width / 2;
-        const d = cardCenter - focal;
+      states.forEach((s, i) => {
+        const d = cardCenters[i] + tx - focal;
         const ad = Math.abs(d);
         if (ad < bestDist) { bestDist = ad; bestIdx = i; }
-        const dn = Math.min(1, ad / (window.innerWidth * 0.55));
-        const s = states[i];
+        const dn = Math.min(1, ad / (viewportW * 0.55));
         s.tScale = 1 - dn * 0.10;
-        s.tRotY = (d / (window.innerWidth / 2)) * -5;
+        s.tRotY = (d / (viewportW / 2)) * -5;
         s.tTransY = dn * 12;
         s.tTransZ = -dn * 200;
         s.tBlur = dn * 3.2;
@@ -140,15 +221,19 @@ const ProjectsSection = () => {
 
       states.forEach((s, i) => {
         const wasCentered = s.centered;
-        s.centered = i === bestIdx && bestDist < window.innerWidth * 0.18;
+        s.centered = i === bestIdx && bestDist < viewportW * 0.18;
         if (s.centered !== wasCentered) cards[i].classList.toggle("is-centered", s.centered);
       });
 
-      const idx = bestIdx;
-      setActiveIdx(idx);
-      if (progress) progress.style.setProperty("--proj-progress", String(p));
-      if (counter) counter.textContent = `${String(idx + 1).padStart(2, "0")} / ${String(projectData.length).padStart(2, "0")}`;
+      if (progress) progress.style.setProperty("--proj-progress", p.toFixed(4));
+      if (counter && bestIdx !== activeIdx) {
+        activeIdx = bestIdx;
+        counter.textContent = `${String(bestIdx + 1).padStart(2, "0")} / ${String(projectData.length).padStart(2, "0")}`;
+      }
+      wake();
     };
+
+    measure();
 
     const st = ScrollTrigger.create({
       trigger: pin,
@@ -157,40 +242,21 @@ const ProjectsSection = () => {
       pin: stage,
       scrub: 2.0,
       invalidateOnRefresh: true,
-      onRefresh: () => { maxTranslate = getMaxTranslate(); },
+      onRefresh: (self) => {
+        measure();
+        computeTargets(self.progress);
+      },
       onUpdate: (self) => { computeTargets(self.progress); },
     });
-
-    // rAF lerp loop — eases each card toward its target so motion stays
-    // silky regardless of scroll cadence. Cards stay fully opaque & clickable
-    // throughout; the depth/blur effect provides the cinematic feel.
-    let rafId = 0;
-    const tick = () => {
-      const k = 0.14;
-      cards.forEach((card, i) => {
-        const s = states[i];
-        s.scale  += (s.tScale  - s.scale)  * k;
-        s.rotY   += (s.tRotY   - s.rotY)   * k;
-        s.transY += (s.tTransY - s.transY) * k;
-        s.transZ += (s.tTransZ - s.transZ) * k;
-        s.blur   += (s.tBlur   - s.blur)   * k;
-        s.bright += (s.tBright - s.bright) * k;
-
-        card.style.transform = `translate3d(0, ${s.transY.toFixed(2)}px, ${s.transZ.toFixed(2)}px) rotateY(${s.rotY.toFixed(2)}deg) scale(${s.scale.toFixed(3)})`;
-        card.style.opacity = s.bright.toFixed(3);
-        const ci = cardImages[i];
-        if (ci) ci.style.filter = `blur(${s.blur.toFixed(2)}px)`;
-      });
-      rafId = requestAnimationFrame(tick);
-    };
-    rafId = requestAnimationFrame(tick);
 
     // Prime targets at current scroll
     computeTargets(st.progress);
 
+    // Debounced — a refresh re-measures every trigger on the page
+    let resizeTimer = 0;
     const onResize = () => {
-      maxTranslate = getMaxTranslate();
-      ScrollTrigger.refresh();
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
     };
     window.addEventListener("resize", onResize);
     window.addEventListener("orientationchange", onResize);
@@ -212,6 +278,7 @@ const ProjectsSection = () => {
 
     return () => {
       cancelAnimationFrame(rafId);
+      window.clearTimeout(resizeTimer);
       st.kill();
       window.removeEventListener("resize", onResize);
       window.removeEventListener("orientationchange", onResize);
@@ -262,7 +329,7 @@ const ProjectsSection = () => {
                 onClick={() => handleCardClick(project)}
               >
                 <div className="project-card-image">
-                  <img src={project.image} alt={project.title} loading="lazy" />
+                  <img src={project.image} alt={project.title} loading="lazy" decoding="async" />
                 </div>
                 <span className="project-card-num">{project.num}</span>
                 <div className="project-card-arrow">

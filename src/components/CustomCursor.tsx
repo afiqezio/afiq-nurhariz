@@ -2,44 +2,48 @@ import { useEffect, useRef } from "react";
 
 const CustomCursor = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
-  const pos = useRef({ x: -100, y: -100 });
-  const current = useRef({ x: -100, y: -100 });
-  const rafRef = useRef<number>(0);
 
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      pos.current = { x: e.clientX, y: e.clientY };
-    };
+    const cursor = cursorRef.current;
+    // Hidden on touch devices — don't run a frame loop for it
+    if (!cursor || window.matchMedia("(pointer: coarse)").matches) return;
 
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    const pos = { x: -100, y: -100 };
+    const current = { x: -100, y: -100 };
+    let rafId = 0;
 
+    // Runs only while the dot is catching up with the pointer
     const loop = () => {
-      current.current.x = lerp(current.current.x, pos.current.x, 0.18);
-      current.current.y = lerp(current.current.y, pos.current.y, 0.18);
-      if (cursorRef.current) {
-        cursorRef.current.style.left = `${current.current.x}px`;
-        cursorRef.current.style.top = `${current.current.y}px`;
+      current.x += (pos.x - current.x) * 0.18;
+      current.y += (pos.y - current.y) * 0.18;
+      const settled = Math.abs(pos.x - current.x) < 0.1 && Math.abs(pos.y - current.y) < 0.1;
+      if (settled) {
+        current.x = pos.x;
+        current.y = pos.y;
       }
-      rafRef.current = requestAnimationFrame(loop);
+      cursor.style.transform = `translate3d(${current.x.toFixed(2)}px, ${current.y.toFixed(2)}px, 0) translate(-50%, -50%)`;
+      rafId = settled ? 0 : requestAnimationFrame(loop);
     };
 
-    rafRef.current = requestAnimationFrame(loop);
+    const onMove = (e: MouseEvent) => {
+      pos.x = e.clientX;
+      pos.y = e.clientY;
+      if (!rafId) rafId = requestAnimationFrame(loop);
+    };
 
     const onOver = (e: MouseEvent) => {
       const target = e.target as Element;
       const interactive = target.closest("a, button, [data-cursor-hover], input, textarea, select, label");
-      if (cursorRef.current) {
-        cursorRef.current.classList.toggle("hover", !!interactive);
-      }
+      cursor.classList.toggle("hover", !!interactive);
     };
 
-    window.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseover", onOver);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("mouseover", onOver, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseover", onOver);
-      cancelAnimationFrame(rafRef.current);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 

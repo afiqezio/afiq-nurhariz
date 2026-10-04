@@ -3,6 +3,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { useState, useRef, MouseEvent } from "react";
 import { ZoomIn, ZoomOut, RotateCcw, ChevronLeft, ChevronRight } from "lucide-react";
+import { setScrollLocked } from "@/lib/smoothScroll";
 
 interface ImageModalProps {
   isOpen: boolean;
@@ -84,6 +85,13 @@ const ImageModal = ({ isOpen, onClose, images, currentIndex }: ImageModalProps) 
   React.useEffect(() => {
     setActiveIndex(currentIndex);
   }, [currentIndex]);
+
+  // Keep the page behind the modal from scrolling
+  React.useEffect(() => {
+    if (!isOpen) return;
+    setScrollLocked(true);
+    return () => setScrollLocked(false);
+  }, [isOpen]);
 
   // Add keyboard event listeners
   React.useEffect(() => {

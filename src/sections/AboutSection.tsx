@@ -45,7 +45,14 @@ const AboutSection = () => {
               <span className="corner tr" />
               <span className="corner bl" />
               <span className="corner br" />
-              <img src="/assets/afiq-sitting.png" alt="Afiq Nurhariz" />
+              <img
+                src="/assets/afiq-sitting.webp"
+                alt="Afiq Nurhariz"
+                width={848}
+                height={1264}
+                loading="lazy"
+                decoding="async"
+              />
             </figure>
             <figcaption className="about-image-caption">
               <span>Afiq Nurhariz</span>

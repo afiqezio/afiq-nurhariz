@@ -1,17 +1,12 @@
-import { lazy, Suspense } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { lazy, Suspense, useEffect } from "react";
+import { LazyMotion, domAnimation, m, AnimatePresence } from "framer-motion";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+import { initSmoothScroll } from "@/lib/smoothScroll";
 
 // Lazy load pages for code splitting
 const Index = lazy(() => import("./pages/Index"));
 const View = lazy(() => import("./pages/View"));
-
-const queryClient = new QueryClient();
 
 // Loading fallback
 const PageLoader = () => (
@@ -25,7 +20,7 @@ const AnimatedRoutes = () => {
   const location = useLocation();
   return (
     <AnimatePresence mode="wait">
-      <motion.div
+      <m.div
         key={location.pathname}
         initial={{ opacity: 0, y: location.pathname === "/view" ? 24 : -24 }}
         animate={{ opacity: 1, y: 0 }}
@@ -33,27 +28,27 @@ const AnimatedRoutes = () => {
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         className="min-h-screen"
       >
-        <Routes>
+        <Routes location={location}>
           <Route path="/" element={<Index />} />
           <Route path="/view" element={<View />} />
         </Routes>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 };
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
+const App = () => {
+  useEffect(() => initSmoothScroll(), []);
+
+  return (
+    <LazyMotion features={domAnimation}>
       <BrowserRouter basename="/">
         <Suspense fallback={<PageLoader />}>
           <AnimatedRoutes />
         </Suspense>
       </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+    </LazyMotion>
+  );
+};
 
 export default App;

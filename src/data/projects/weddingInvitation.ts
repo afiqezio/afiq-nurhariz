@@ -3,17 +3,17 @@ import { ProjectDetails } from "../projectTypes";
 export const weddingInvitationProject: ProjectDetails = {
   images: [
     {
-      url: "assets/projects/Wedding/landing.png",
+      url: "assets/projects/Wedding/landing.webp",
       alt: "Wedding Invitation Landing Page",
       caption: "Animated wedding invitation landing page"
     },
     {
-      url: "assets/projects/Wedding/rsvp.png",
+      url: "assets/projects/Wedding/rsvp.webp",
       alt: "RSVP Feature",
       caption: "Guest RSVP and attendance confirmation"
     },
     {
-      url: "assets/projects/Wedding/location.png",
+      url: "assets/projects/Wedding/location.webp",
       alt: "Wedding Location",
       caption: "Wedding location"
     }

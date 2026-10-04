@@ -1,11 +1,10 @@
-import { useState, useCallback, useEffect } from "react";
+import { lazy, Suspense, useState, useCallback, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
 import CustomCursor from "@/components/CustomCursor";
-import ThreeScene from "@/components/ThreeScene";
 import Marquee from "@/components/Marquee";
 import HeroSection from "@/sections/HeroSection";
 import AboutSection from "@/sections/AboutSection";
@@ -15,6 +14,9 @@ import SkillsSection from "@/sections/SkillsSection";
 import ContactSection from "@/sections/ContactSection";
 
 gsap.registerPlugin(ScrollTrigger);
+
+// three.js is the heaviest dependency — load it after the page shell paints
+const ThreeScene = lazy(() => import("@/components/ThreeScene"));
 
 const splitForReveal = (root: HTMLElement) => {
   if (root.dataset.splitDone === "1") return;
@@ -194,6 +196,10 @@ const Index = () => {
 
     addFadeUpGroup(Array.from(document.querySelectorAll(".channel")), 0.1);
 
+    // Splitting the headings changes their height, which moves everything
+    // below them — re-measure so the projects pin starts exactly at its top.
+    ScrollTrigger.refresh();
+
     return () => {
       triggers.forEach((t) => t.kill());
       obs.disconnect();
@@ -207,7 +213,9 @@ const Index = () => {
 
       {/* Three.js canvas (fixed, behind everything) */}
       <canvas id="scene-canvas" />
-      <ThreeScene />
+      <Suspense fallback={null}>
+        <ThreeScene />
+      </Suspense>
 
       {/* Grain + vignette overlays */}
       <div className="bg-grain" />

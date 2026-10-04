@@ -1,4 +1,5 @@
 import { MouseEvent, useEffect, useState } from "react";
+import { scrollToY } from "@/lib/smoothScroll";
 
 const navLinks = [
   { label: "About", href: "#about" },
@@ -8,21 +9,6 @@ const navLinks = [
 ];
 
 const sectionIds = ["about", "projects", "skills", "contact"];
-
-const smoothScrollTo = (targetY: number, duration = 900) => {
-  const startY = window.scrollY;
-  const distance = targetY - startY;
-  if (Math.abs(distance) < 2) return;
-  const startTime = performance.now();
-  const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-  const step = (now: number) => {
-    const elapsed = now - startTime;
-    const t = Math.min(1, elapsed / duration);
-    window.scrollTo(0, startY + distance * ease(t));
-    if (t < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
-};
 
 const Nav = () => {
   const [active, setActive] = useState("");
@@ -58,7 +44,7 @@ const Nav = () => {
     const target = id === "top" ? document.body : document.getElementById(id);
     if (!target) return;
     const y = id === "top" ? 0 : target.getBoundingClientRect().top + window.scrollY - 24;
-    smoothScrollTo(y);
+    scrollToY(y);
     if (history.replaceState) history.replaceState(null, "", href);
   };
 

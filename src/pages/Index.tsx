@@ -78,7 +78,7 @@ const Index = () => {
     targets.forEach((el) => {
       splitForReveal(el);
       const words = el.querySelectorAll<HTMLElement>(".w");
-      gsap.set(words, { yPercent: 110 });
+      gsap.set(words, { yPercent: 160 });
       const st = ScrollTrigger.create({
         trigger: el,
         start: "top 85%",
@@ -196,11 +196,81 @@ const Index = () => {
 
     addFadeUpGroup(Array.from(document.querySelectorAll(".channel")), 0.1);
 
+    // --- Parallax: multi-layer depth, scrubbed against the smoothed scroll ---
+    const parallax = gsap.context(() => {
+      // Decorative only — skipped entirely for reduced motion
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const isDesktop = window.innerWidth > 900;
+
+      // Hero — title drifts up slowly, sub faster, stats fastest
+      const heroScrub = { trigger: ".hero", start: "top top", end: "bottom top", scrub: true };
+      gsap.to(".hero-title", { yPercent: -16, ease: "none", scrollTrigger: heroScrub });
+      gsap.to(".hero-sub", { yPercent: -30, ease: "none", scrollTrigger: heroScrub });
+      gsap.to(".hero-stats", { yPercent: -45, ease: "none", scrollTrigger: heroScrub });
+      gsap.to(".hero-meta", { yPercent: -22, opacity: 0, ease: "none", scrollTrigger: heroScrub });
+      gsap.to(".scroll-cue", {
+        opacity: 0, y: 20, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "30% top", scrub: true },
+      });
+
+      // About — the portrait rises slowly inside its frame (it is oversized
+      // 116% with -8% margin, so ±5% never reveals empty space)
+      gsap.fromTo(".about-image-frame img", { yPercent: 5 }, {
+        yPercent: -5, ease: "none",
+        scrollTrigger: { trigger: ".about", start: "top bottom", end: "bottom top", scrub: true },
+      });
+      // ...and the frame drifts as a unit, composing into layered depth
+      if (isDesktop) {
+        gsap.fromTo(".about-image-frame", { y: 50 }, {
+          y: -40, ease: "none",
+          scrollTrigger: { trigger: ".about", start: "top bottom", end: "bottom top", scrub: 1 },
+        });
+      }
+
+      // Generic hook — positive = upward over the element's scroll lifetime
+      gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((el) => {
+        const amt = parseFloat(el.dataset.parallax ?? "") || 40;
+        gsap.fromTo(el, { y: amt }, {
+          y: -amt, ease: "none",
+          scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
+        });
+      });
+
+      // The three.js background drifts very slowly for deep parallax
+      gsap.to("#scene-canvas", {
+        yPercent: 6, ease: "none",
+        scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 1 },
+      });
+
+      // Footer rises gently into place
+      gsap.fromTo(".footer-row", { y: 28 }, {
+        y: 0, ease: "none",
+        scrollTrigger: { trigger: ".footer", start: "top bottom", end: "bottom bottom", scrub: 1 },
+      });
+
+      // Marquees lean with scroll velocity, then settle — a subtle momentum cue
+      if (isDesktop) {
+        const setters = gsap.utils
+          .toArray<HTMLElement>(".marquee")
+          .map((wrap) => gsap.quickTo(wrap, "skewX", { duration: 0.6, ease: "power3" }));
+        const settle = gsap.delayedCall(0.15, () => setters.forEach((set) => set(0))).pause();
+        ScrollTrigger.create({
+          trigger: document.body, start: "top top", end: "bottom bottom",
+          onUpdate: (self) => {
+            const skew = gsap.utils.clamp(-4, 4, self.getVelocity() / 600);
+            setters.forEach((set) => set(skew));
+            settle.restart(true);
+          },
+        });
+      }
+    });
+
     // Splitting the headings changes their height, which moves everything
     // below them — re-measure so the projects pin starts exactly at its top.
     ScrollTrigger.refresh();
 
     return () => {
+      parallax.revert();
       triggers.forEach((t) => t.kill());
       obs.disconnect();
     };

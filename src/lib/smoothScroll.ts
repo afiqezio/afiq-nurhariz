@@ -10,18 +10,29 @@ let lenis: Lenis | null = null;
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const easeInOutCubic = (t: number) =>
-  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+// Cinematic settle
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
 
 // Inertial wheel scrolling, driven by GSAP's ticker so Lenis and ScrollTrigger
 // update in the same frame. Touch devices keep their native scrolling.
 export const initSmoothScroll = () => {
   if (lenis || prefersReducedMotion()) return () => {};
 
-  const instance = new Lenis({ lerp: 0.1, autoRaf: false });
+  const instance = new Lenis({
+    autoRaf: false,
+    duration: 1.15, // inertia length — higher = more "gliding"
+    lerp: 0.09, // per-frame easing toward target
+    smoothWheel: true,
+    wheelMultiplier: 1,
+    touchMultiplier: 1.4,
+    easing: easeOutCubic,
+  });
   lenis = instance;
 
   instance.on("scroll", ScrollTrigger.update);
+  // Pin spacers change the page height — keep Lenis' scroll limit in step
+  const onRefresh = () => instance.resize();
+  ScrollTrigger.addEventListener("refresh", onRefresh);
   const raf = (time: number) => instance.raf(time * 1000);
   gsap.ticker.add(raf);
   gsap.ticker.lagSmoothing(0);
@@ -47,6 +58,7 @@ export const initSmoothScroll = () => {
   return () => {
     pageObserver.disconnect();
     window.clearTimeout(refreshTimer);
+    ScrollTrigger.removeEventListener("refresh", onRefresh);
     gsap.ticker.remove(raf);
     gsap.ticker.lagSmoothing(500, 33);
     instance.destroy();
@@ -56,7 +68,7 @@ export const initSmoothScroll = () => {
 
 export const scrollToY = (y: number, { immediate = false } = {}) => {
   if (lenis) {
-    lenis.scrollTo(y, { immediate, duration: 0.9, easing: easeInOutCubic, force: true });
+    lenis.scrollTo(y, { immediate, duration: 1.2, easing: easeOutCubic, force: true });
     return;
   }
   window.scrollTo({ top: y, behavior: immediate || prefersReducedMotion() ? "auto" : "smooth" });

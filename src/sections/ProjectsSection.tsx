@@ -80,7 +80,6 @@ const ProjectsSection = () => {
     if (!pin || !stage || !track) return;
 
     const cards = Array.from(track.querySelectorAll<HTMLElement>(".project-card"));
-    const cardImages = cards.map(c => c.querySelector<HTMLElement>(".project-card-image"));
 
     const getMaxTranslate = () => {
       const stageW = stage.getBoundingClientRect().width;
@@ -116,23 +115,26 @@ const ProjectsSection = () => {
       });
     };
 
-    // Per-card animated state for the rAF lerp loop
+    // Per-card state for the cinematic effects. t* = target, the rest = eased
+    // current value. `entry` runs 0 → 1 once, when the section first appears.
     type CardState = {
-      tScale: number; tRotY: number; tTransY: number; tTransZ: number; tBlur: number; tBright: number;
-      scale: number; rotY: number; transY: number; transZ: number; blur: number; bright: number;
+      entry: number;
+      tScale: number; tOpacity: number; tRotY: number; tY: number; tZ: number; tBlur: number; tBright: number;
+      scale: number; opacity: number; rotY: number; y: number; z: number; blur: number; bright: number;
       centered: boolean;
       transformStr: string; opacityStr: string; filterStr: string;
     };
     const states: CardState[] = cards.map(() => ({
-      tScale: 1, tRotY: 0, tTransY: 0, tTransZ: 0, tBlur: 0, tBright: 1,
-      scale: 1, rotY: 0, transY: 0, transZ: 0, blur: 0, bright: 1,
+      entry: 0,
+      tScale: 1, tOpacity: 1, tRotY: 0, tY: 0, tZ: 0, tBlur: 0, tBright: 1,
+      scale: 1, opacity: 1, rotY: 0, y: 0, z: 0, blur: 0, bright: 1,
       centered: false,
       transformStr: "", opacityStr: "", filterStr: "",
     }));
 
     // rAF lerp loop — eases each card toward its target so motion stays
-    // silky regardless of scroll cadence. Cards stay fully opaque & clickable
-    // throughout; the depth/blur effect provides the cinematic feel.
+    // silky regardless of scroll cadence, and composes the one-off entrance
+    // with the scroll-driven depth transform.
     // The loop sleeps once every card has settled and is woken by scroll.
     let rafId = 0;
     let lastTime = 0;
@@ -147,41 +149,52 @@ const ProjectsSection = () => {
         const s = states[i];
         const settled =
           Math.abs(s.tScale - s.scale) < 0.0005 &&
+          Math.abs(s.tOpacity - s.opacity) < 0.001 &&
           Math.abs(s.tRotY - s.rotY) < 0.01 &&
-          Math.abs(s.tTransY - s.transY) < 0.02 &&
-          Math.abs(s.tTransZ - s.transZ) < 0.1 &&
+          Math.abs(s.tY - s.y) < 0.02 &&
+          Math.abs(s.tZ - s.z) < 0.1 &&
           Math.abs(s.tBlur - s.blur) < 0.01 &&
           Math.abs(s.tBright - s.bright) < 0.001;
 
         if (settled) {
-          s.scale = s.tScale; s.rotY = s.tRotY; s.transY = s.tTransY;
-          s.transZ = s.tTransZ; s.blur = s.tBlur; s.bright = s.tBright;
+          s.scale = s.tScale; s.opacity = s.tOpacity; s.rotY = s.tRotY; s.y = s.tY;
+          s.z = s.tZ; s.blur = s.tBlur; s.bright = s.tBright;
         } else {
           moving = true;
-          s.scale  += (s.tScale  - s.scale)  * k;
-          s.rotY   += (s.tRotY   - s.rotY)   * k;
-          s.transY += (s.tTransY - s.transY) * k;
-          s.transZ += (s.tTransZ - s.transZ) * k;
-          s.blur   += (s.tBlur   - s.blur)   * k;
-          s.bright += (s.tBright - s.bright) * k;
+          s.scale   += (s.tScale   - s.scale)   * k;
+          s.opacity += (s.tOpacity - s.opacity) * k;
+          s.rotY    += (s.tRotY    - s.rotY)    * k;
+          s.y       += (s.tY       - s.y)       * k;
+          s.z       += (s.tZ       - s.z)       * k;
+          s.blur    += (s.tBlur    - s.blur)    * k;
+          s.bright  += (s.tBright  - s.bright)  * k;
         }
 
+        // Entrance: cards arrive from depth (z -260, y 80, scale 0.86, opacity 0)
+        const e = s.entry;
+        const ty = s.y + (1 - e) * 80;
+        const tz = s.z + (1 - e) * -260;
+        const sc = s.scale * (0.86 + e * 0.14);
+
         // Only touch the DOM when the rounded value actually changed
-        const transformStr = `translate3d(0, ${s.transY.toFixed(2)}px, ${s.transZ.toFixed(2)}px) rotateY(${s.rotY.toFixed(2)}deg) scale(${s.scale.toFixed(3)})`;
+        const transformStr = `translate3d(0, ${ty.toFixed(2)}px, ${tz.toFixed(2)}px) rotateY(${s.rotY.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
         if (transformStr !== s.transformStr) {
           s.transformStr = transformStr;
           card.style.transform = transformStr;
         }
-        const opacityStr = s.bright.toFixed(3);
+        const opacityStr = (s.opacity * e).toFixed(3);
         if (opacityStr !== s.opacityStr) {
           s.opacityStr = opacityStr;
           card.style.opacity = opacityStr;
         }
-        const ci = cardImages[i];
-        const filterStr = s.blur < 0.05 ? "none" : `blur(${s.blur.toFixed(1)}px)`;
-        if (ci && filterStr !== s.filterStr) {
+        // Depth of field + a slight brightness dip on off-centre cards
+        const filterStr =
+          s.blur < 0.05 && s.bright > 0.995
+            ? "none"
+            : `blur(${s.blur.toFixed(1)}px) brightness(${s.bright.toFixed(3)})`;
+        if (filterStr !== s.filterStr) {
           s.filterStr = filterStr;
-          ci.style.filter = filterStr;
+          card.style.filter = filterStr;
         }
       });
 
@@ -201,34 +214,38 @@ const ProjectsSection = () => {
       tx = -p * maxTranslate;
       track.style.transform = `translate3d(${tx.toFixed(2)}px, 0, 0)`;
 
-      // Focal point = viewport center. No bias — first card naturally sits
-      // here at p=0 because the intro column pushes the track rightward.
-      const focal = viewportW / 2;
-      let bestIdx = 0;
-      let bestDist = Infinity;
+      // Focal point = viewport center
+      const half = viewportW / 2;
       states.forEach((s, i) => {
-        const d = cardCenters[i] + tx - focal;
+        // Signed distance from center, normalized by half the viewport
+        const d = Math.max(-1.6, Math.min(1.6, (cardCenters[i] + tx - half) / half));
         const ad = Math.abs(d);
-        if (ad < bestDist) { bestDist = ad; bestIdx = i; }
-        const dn = Math.min(1, ad / (viewportW * 0.55));
-        s.tScale = 1 - dn * 0.10;
-        s.tRotY = (d / (viewportW / 2)) * -5;
-        s.tTransY = dn * 12;
-        s.tTransZ = -dn * 200;
-        s.tBlur = dn * 3.2;
-        s.tBright = 1 - dn * 0.22;
+        // Depth: pushed back, with a small forward bump for the centered card
+        s.tZ = -ad * 180 + (1 - ad) * 30;
+        // Subtle rotation toward camera
+        s.tRotY = d * -7;
+        // Far cards sit slightly lower
+        s.tY = ad * 22;
+        // Centered card slightly larger
+        s.tScale = 1 - ad * 0.06 + Math.max(0, 1 - ad * 1.5) * 0.03;
+        // Opacity falloff at the edges
+        s.tOpacity = Math.max(0.35, 1 - ad * 0.45);
+        // Depth of field — blur far cards
+        s.tBlur = Math.min(4, ad * ad * 4.5);
+        s.tBright = 1 - ad * 0.18;
+        // Spotlight for the centered card
+        const centered = ad < 0.28;
+        if (centered !== s.centered) {
+          s.centered = centered;
+          cards[i].classList.toggle("is-centered", centered);
+        }
       });
 
-      states.forEach((s, i) => {
-        const wasCentered = s.centered;
-        s.centered = i === bestIdx && bestDist < viewportW * 0.18;
-        if (s.centered !== wasCentered) cards[i].classList.toggle("is-centered", s.centered);
-      });
-
+      const idx = Math.round(p * (projectData.length - 1));
       if (progress) progress.style.setProperty("--proj-progress", p.toFixed(4));
-      if (counter && bestIdx !== activeIdx) {
-        activeIdx = bestIdx;
-        counter.textContent = `${String(bestIdx + 1).padStart(2, "0")} / ${String(projectData.length).padStart(2, "0")}`;
+      if (counter && idx !== activeIdx) {
+        activeIdx = idx;
+        counter.textContent = `${String(idx + 1).padStart(2, "0")} / ${String(projectData.length).padStart(2, "0")}`;
       }
       wake();
     };
@@ -238,7 +255,7 @@ const ProjectsSection = () => {
     const st = ScrollTrigger.create({
       trigger: pin,
       start: "top top",
-      end: () => "+=" + Math.max(getMaxTranslate() * 1.15, window.innerHeight * 0.5),
+      end: () => "+=" + Math.max(getMaxTranslate() * 1.15, window.innerHeight * 0.6),
       pin: stage,
       scrub: 2.0,
       invalidateOnRefresh: true,
@@ -251,6 +268,25 @@ const ProjectsSection = () => {
 
     // Prime targets at current scroll
     computeTargets(st.progress);
+
+    // Cinematic entrance — when the section first comes into view, stagger the
+    // cards in from depth. Animates `entry` 0 → 1, which the loop composes
+    // with the scroll-driven transform.
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) states.forEach((s) => { s.entry = 1; });
+    const entryTweens: gsap.core.Tween[] = [];
+    const entrySt = ScrollTrigger.create({
+      trigger: pin,
+      start: "top 85%",
+      once: true,
+      onEnter: () => {
+        states.forEach((s, i) => {
+          entryTweens.push(
+            gsap.to(s, { entry: 1, duration: 1.25, ease: "expo.out", delay: i * 0.09, onUpdate: wake })
+          );
+        });
+      },
+    });
 
     // Debounced — a refresh re-measures every trigger on the page
     let resizeTimer = 0;
@@ -269,7 +305,7 @@ const ProjectsSection = () => {
         const rect = card.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width - 0.5) * 16;
         const y = ((e.clientY - rect.top) / rect.height - 0.5) * 16;
-        img.style.transform = `scale(1.14) translate(${x}px, ${y}px)`;
+        img.style.transform = `scale(1.12) translate(${x}px, ${y}px)`;
       };
       const onLeave = () => { img.style.transform = ""; };
       card.addEventListener("mousemove", onMove);
@@ -279,6 +315,8 @@ const ProjectsSection = () => {
     return () => {
       cancelAnimationFrame(rafId);
       window.clearTimeout(resizeTimer);
+      entryTweens.forEach((t) => t.kill());
+      entrySt.kill();
       st.kill();
       window.removeEventListener("resize", onResize);
       window.removeEventListener("orientationchange", onResize);
@@ -302,7 +340,7 @@ const ProjectsSection = () => {
     <section id="projects" className="projects">
       <div className="projects-pin" ref={pinRef}>
         <div className="projects-stage" ref={stageRef}>
-          <aside className="projects-intro" ref={introRef}>
+          <aside className="projects-intro container" ref={introRef}>
             <div className="projects-intro-num reveal">— 02 / Selected work</div>
             <h2 className="section-title projects-title">
               Featured<br />

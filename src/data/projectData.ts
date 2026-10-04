@@ -4,6 +4,7 @@ import { saloonProject } from "./projects/saloonProject";
 import { churnProject } from "./projects/churnProject";
 import { dataEngineerProject } from "./projects/dataEngineerProject";
 import { weddingInvitationProject } from "./projects/weddingInvitation";
+import { hermesProject } from "./projects/hermesProject";
 import { ProjectData } from "./projectTypes";
 
 export type { ProjectData };
@@ -14,5 +15,6 @@ export const projectData = {
   "Hair Saloon Booking Mobile Application": saloonProject,
   "Customer Churn Prediction and Analysis Project": churnProject,
   "Database Management and Optimization Projects": dataEngineerProject,
-  "Wedding Invitation Platform": weddingInvitationProject
+  "Wedding Invitation Platform": weddingInvitationProject,
+  "Hermes Agent: Telegram-Driven AI Software Factory": hermesProject
 };

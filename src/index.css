@@ -804,6 +804,9 @@ em .split-mask,
   filter: saturate(0.82) brightness(0.94) contrast(1.04);
   transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s ease;
 }
+/* Diagrams are shown whole rather than cropped to the tile */
+.pp-shot:has(img[src$=".svg"]) { background: #08060f; }
+.pp-shot img[src$=".svg"] { object-fit: contain; }
 .pp-shot::after {
   content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
   background: radial-gradient(ellipse at 50% 35%, transparent 30%, oklch(0.13 0.008 60 / 0.45) 100%),

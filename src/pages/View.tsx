@@ -20,6 +20,7 @@ const projectOrder = [
   "Customer Churn Prediction and Analysis Project",
   "Database Management and Optimization Projects",
   "Wedding Invitation Platform",
+  "Hermes Agent: Telegram-Driven AI Software Factory",
 ] as const;
 
 const projectMeta: Record<string, { year: string; type: string; role: string; idShort: string }> = {
@@ -29,6 +30,7 @@ const projectMeta: Record<string, { year: string; type: string; role: string; id
   "Customer Churn Prediction and Analysis Project": { year: "2023", type: "Data Science · ML", role: "Solo · Research", idShort: "churn" },
   "Database Management and Optimization Projects": { year: "2023", type: "Data Engineering", role: "Data Engineer · DBA", idShort: "db" },
   "Wedding Invitation Platform": { year: "2024", type: "Web · Product", role: "Solo · Product & Engineering", idShort: "wedding" },
+  "Hermes Agent: Telegram-Driven AI Software Factory": { year: "2026", type: "AI · Agent Infrastructure", role: "Solo · Architecture & Operations", idShort: "hermes" },
 };
 
 const SECTION_IDS = ["overview", "problem", "approach", "gallery", "solution", "results"] as const;
@@ -583,7 +585,7 @@ const View = () => {
               <button type="button" className="pp-next-link" onClick={handleNextProject}>
                 <div className="pp-next-info">
                   <span className="pp-next-tag">
-                    {String(nextProject.idx + 1).padStart(2, "0")} / 06 · {nextProject.tech.slice(0, 3).join(" · ")}
+                    {String(nextProject.idx + 1).padStart(2, "0")} / {String(projectOrder.length).padStart(2, "0")} · {nextProject.tech.slice(0, 3).join(" · ")}
                   </span>
                   <span className="pp-next-title">{nextProject.title}</span>
                 </div>

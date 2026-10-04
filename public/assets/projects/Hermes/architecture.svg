@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="45%" r="65%">
+      <stop offset="0" stop-color="#2a1a52"/>
+      <stop offset="0.45" stop-color="#120c24"/>
+      <stop offset="0.75" stop-color="#08060f"/>
+      <stop offset="1" stop-color="#08060f"/>
+    </radialGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#8f7ad6"/>
+    </marker>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+
+  <text x="100" y="118" fill="#8d879c" font-size="20" letter-spacing="5" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">THE SHAPE OF IT</text>
+  <text x="100" y="186" fill="#f2efe9" font-size="54" font-weight="600" letter-spacing="-1.5">Two seams: one talks, one builds</text>
+
+  <!-- You -->
+  <rect x="100" y="300" width="220" height="130" rx="20" fill="#16112a" stroke="#3a2f63" stroke-width="1.5"/>
+  <text x="130" y="356" fill="#f2efe9" font-size="28" font-weight="600">You</text>
+  <text x="130" y="392" fill="#b3adc4" font-size="18">Telegram, on a phone</text>
+
+  <!-- Seam 1 -->
+  <rect x="420" y="260" width="500" height="210" rx="22" fill="#241a45" stroke="#b08cff" stroke-width="2"/>
+  <text x="452" y="306" fill="#b08cff" font-size="16" letter-spacing="3" font-family="ui-monospace, Menlo, Consolas, monospace">SEAM 1 · ORCHESTRATION</text>
+  <text x="452" y="356" fill="#f2efe9" font-size="30" font-weight="600">Hermes Agent loop</text>
+  <text x="452" y="394" fill="#b3adc4" font-size="19">Chat, intake, approvals, checking the result</text>
+  <text x="452" y="430" fill="#b3adc4" font-size="19">Cheap model, paid per token. Cannot write code.</text>
+
+  <!-- Seam 2 -->
+  <rect x="420" y="560" width="500" height="210" rx="22" fill="#16112a" stroke="#f4a87a" stroke-width="2"/>
+  <text x="452" y="606" fill="#f4a87a" font-size="16" letter-spacing="3" font-family="ui-monospace, Menlo, Consolas, monospace">SEAM 2 · ENGINEERING</text>
+  <text x="452" y="656" fill="#f2efe9" font-size="30" font-weight="600">Claude Code, headless</text>
+  <text x="452" y="694" fill="#b3adc4" font-size="19">Plans, builds and fixes as a subprocess</text>
+  <text x="452" y="730" fill="#b3adc4" font-size="19">Strongest model, paid by subscription</text>
+
+  <!-- Apps -->
+  <rect x="1040" y="560" width="460" height="210" rx="22" fill="#16112a" stroke="#3a2f63" stroke-width="1.5"/>
+  <text x="1072" y="606" fill="#8d879c" font-size="16" letter-spacing="3" font-family="ui-monospace, Menlo, Consolas, monospace">OUTPUT</text>
+  <text x="1072" y="656" fill="#f2efe9" font-size="30" font-weight="600">Containerised apps</text>
+  <text x="1072" y="694" fill="#b3adc4" font-size="19">One repo, compose file and healthcheck each</text>
+  <text x="1072" y="730" fill="#b3adc4" font-size="19">Keep serving if the orchestrator stops</text>
+
+  <!-- Watchdog -->
+  <rect x="1040" y="260" width="460" height="210" rx="22" fill="#16112a" stroke="#3a2f63" stroke-width="1.5"/>
+  <text x="1072" y="306" fill="#8d879c" font-size="16" letter-spacing="3" font-family="ui-monospace, Menlo, Consolas, monospace">NO LLM</text>
+  <text x="1072" y="356" fill="#f2efe9" font-size="30" font-weight="600">Health watchdog</text>
+  <text x="1072" y="394" fill="#b3adc4" font-size="19">Every 5 minutes, silent when healthy</text>
+  <text x="1072" y="430" fill="#b3adc4" font-size="19">One alert per outage, one on recovery</text>
+
+  <g stroke="#8f7ad6" stroke-width="2" fill="none" marker-end="url(#arrow)">
+    <path d="M324 365H414" marker-start="url(#arrow)"/>
+    <path d="M670 474V554"/>
+    <path d="M924 665H1034"/>
+    <path d="M1270 554V476"/>
+    <path d="M1034 365H926"/>
+  </g>
+  <g fill="#8d879c" font-size="17" font-family="ui-monospace, Menlo, Consolas, monospace">
+    <text x="690" y="522">terminal tool</text>
+    <text x="1290" y="522">container labels</text>
+    <text x="946" y="344">alerts</text>
+    <text x="938" y="644">deploys</text>
+  </g>
+
+  <text x="100" y="880" fill="#b3adc4" font-size="21">Each side can be swapped without touching the other.</text>
+</svg>

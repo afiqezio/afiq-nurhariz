@@ -54,6 +54,14 @@ const projectData = [
     tech: ["React", "Tailwind", "Firebase"],
     image: "https://images.pexels.com/photos/18535623/pexels-photo-18535623.jpeg?auto=compress&w=1200",
   },
+  {
+    id: "hermes",
+    num: "07",
+    title: "Hermes Agent: Telegram-Driven AI Software Factory",
+    desc: "Message a bot, approve the plan, and an AI agent builds, checks and deploys the app.",
+    tech: ["Hermes Agent", "Claude Code", "Docker"],
+    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1200&auto=format",
+  },
 ];
 
 const ArrowSvg = () => (
@@ -353,7 +361,7 @@ const ProjectsSection = () => {
             <div className="projects-progress" ref={progressRef}>
               <div className="projects-progress-bar" />
               <div className="projects-progress-meta">
-                <span ref={counterRef}>01 / 06</span>
+                <span ref={counterRef}>01 / {String(projectData.length).padStart(2, "0")}</span>
                 <span>Scroll to traverse</span>
               </div>
             </div>

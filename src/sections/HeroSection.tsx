@@ -109,7 +109,7 @@ const HeroSection = ({ ready = false }: HeroSectionProps) => {
 
           <div className="hero-stats">
             <div className="hero-stat">
-              <div className="hero-stat-val">01</div>
+              <div className="hero-stat-val">02</div>
               <div className="hero-stat-label">Years Exp.</div>
             </div>
             <div className="hero-stat">

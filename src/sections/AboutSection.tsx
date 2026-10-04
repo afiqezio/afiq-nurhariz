@@ -95,7 +95,7 @@ const AboutSection = () => {
             <div className="about-stats" ref={statsRef}>
               <div>
                 <div className="about-stat-val">
-                  <span data-counter="1" data-suffix="+">
+                  <span data-counter="2" data-suffix="+">
                     0
                   </span>
                 </div>

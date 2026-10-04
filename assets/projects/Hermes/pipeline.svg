@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="42%" r="65%">
+      <stop offset="0" stop-color="#2a1a52"/>
+      <stop offset="0.45" stop-color="#120c24"/>
+      <stop offset="0.75" stop-color="#08060f"/>
+      <stop offset="1" stop-color="#08060f"/>
+    </radialGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#8f7ad6"/>
+    </marker>
+    <marker id="arrowWarn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#f4a87a"/>
+    </marker>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+
+  <text x="100" y="118" fill="#8d879c" font-size="20" letter-spacing="5" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace">A REQUEST, START TO FINISH</text>
+  <text x="100" y="186" fill="#f2efe9" font-size="54" font-weight="600" letter-spacing="-1.5">From a Telegram message to a running app</text>
+
+  <!-- Row 1 -->
+  <g font-size="26" font-weight="600" fill="#f2efe9">
+    <g>
+      <rect x="100" y="270" width="240" height="170" rx="20" fill="#16112a" stroke="#3a2f63" stroke-width="1.5"/>
+      <text x="124" y="312" fill="#8d879c" font-size="16" letter-spacing="3" font-weight="400" font-family="ui-monospace, Menlo, Consolas, monospace">01</text>
+      <text x="124" y="362">Ask</text>
+      <text x="124" y="398" fill="#b3adc4" font-size="18" font-weight="400">A message to the bot</text>
+    </g>
+    <g>
+      <rect x="390" y="270" width="240" height="170" rx="20" fill="#16112a" stroke="#3a2f63" stroke-width="1.5"/>
+      <text x="414" y="312" fill="#8d879c" font-size="16" letter-spacing="3" font-weight="400" font-family="ui-monospace, Menlo, Consolas, monospace">02</text>
+      <text x="414" y="362">Plan</text>
+      <text x="414" y="398" fill="#b3adc4" font-size="18" font-weight="400">Read-only, cannot write</text>
+    </g>
+    <g>
+      <rect x="680" y="270" width="240" height="170" rx="20" fill="#241a45" stroke="#b08cff" stroke-width="2"/>
+      <text x="704" y="312" fill="#b08cff" font-size="16" letter-spacing="3" font-weight="400" font-family="ui-monospace, Menlo, Consolas, monospace">03 · HUMAN GATE</text>
+      <text x="704" y="362">Approve</text>
+      <text x="704" y="398" fill="#b3adc4" font-size="18" font-weight="400">Stops for a clear yes</text>
+    </g>
+    <g>
+      <rect x="970" y="270" width="240" height="170" rx="20" fill="#16112a" stroke="#3a2f63" stroke-width="1.5"/>
+      <text x="994" y="312" fill="#8d879c" font-size="16" letter-spacing="3" font-weight="400" font-family="ui-monospace, Menlo, Consolas, monospace">04</text>
+      <text x="994" y="362">Scaffold</text>
+      <text x="994" y="398" fill="#b3adc4" font-size="18" font-weight="400">From a golden template</text>
+    </g>
+    <g>
+      <rect x="1260" y="270" width="240" height="170" rx="20" fill="#16112a" stroke="#3a2f63" stroke-width="1.5"/>
+      <text x="1284" y="312" fill="#8d879c" font-size="16" letter-spacing="3" font-weight="400" font-family="ui-monospace, Menlo, Consolas, monospace">05</text>
+      <text x="1284" y="362">Build</text>
+      <text x="1284" y="398" fill="#b3adc4" font-size="18" font-weight="400">Claude Code, headless</text>
+    </g>
+  </g>
+  <g stroke="#8f7ad6" stroke-width="2" fill="none" marker-end="url(#arrow)">
+    <path d="M344 355H384"/>
+    <path d="M634 355H674"/>
+    <path d="M924 355H964"/>
+    <path d="M1214 355H1254"/>
+    <!-- wrap to row 2 -->
+    <path d="M1380 444V500Q1380 520 1360 520H240Q220 520 220 540V584"/>
+  </g>
+
+  <!-- Row 2 -->
+  <g font-size="26" font-weight="600" fill="#f2efe9">
+    <g>
+      <rect x="100" y="590" width="240" height="170" rx="20" fill="#241a45" stroke="#b08cff" stroke-width="2"/>
+      <text x="124" y="632" fill="#b08cff" font-size="16" letter-spacing="3" font-weight="400" font-family="ui-monospace, Menlo, Consolas, monospace">06 · MACHINE GATE</text>
+      <text x="124" y="682">Check</text>
+      <text x="124" y="718" fill="#b3adc4" font-size="18" font-weight="400">Exit code decides</text>
+    </g>
+    <g>
+      <rect x="390" y="590" width="240" height="170" rx="20" fill="#16112a" stroke="#3a2f63" stroke-width="1.5"/>
+      <text x="414" y="632" fill="#8d879c" font-size="16" letter-spacing="3" font-weight="400" font-family="ui-monospace, Menlo, Consolas, monospace">07</text>
+      <text x="414" y="682">Deploy</text>
+      <text x="414" y="718" fill="#b3adc4" font-size="18" font-weight="400">Container, wait healthy</text>
+    </g>
+    <g>
+      <rect x="680" y="590" width="240" height="170" rx="20" fill="#16112a" stroke="#3a2f63" stroke-width="1.5"/>
+      <text x="704" y="632" fill="#8d879c" font-size="16" letter-spacing="3" font-weight="400" font-family="ui-monospace, Menlo, Consolas, monospace">08</text>
+      <text x="704" y="682">Prove</text>
+      <text x="704" y="718" fill="#b3adc4" font-size="18" font-weight="400">One real user flow</text>
+    </g>
+    <g>
+      <rect x="970" y="590" width="240" height="170" rx="20" fill="#16112a" stroke="#3a2f63" stroke-width="1.5"/>
+      <text x="994" y="632" fill="#8d879c" font-size="16" letter-spacing="3" font-weight="400" font-family="ui-monospace, Menlo, Consolas, monospace">09</text>
+      <text x="994" y="682">Watch</text>
+      <text x="994" y="718" fill="#b3adc4" font-size="18" font-weight="400">Watchdog, every 5 min</text>
+    </g>
+  </g>
+  <g stroke="#8f7ad6" stroke-width="2" fill="none" marker-end="url(#arrow)">
+    <path d="M344 675H384"/>
+    <path d="M634 675H674"/>
+    <path d="M924 675H964"/>
+  </g>
+
+  <!-- Failure paths -->
+  <g stroke="#f4a87a" stroke-width="2" fill="none" stroke-dasharray="7 7" marker-end="url(#arrowWarn)">
+    <path d="M220 764V830"/>
+    <path d="M800 764V830"/>
+  </g>
+  <g font-size="19" fill="#f4a87a">
+    <text x="100" y="866">Fails: back to Claude with the output,</text>
+    <text x="100" y="894">twice at most, then park and say so</text>
+    <text x="680" y="866">Fails: roll back, quote the log</text>
+  </g>
+</svg>

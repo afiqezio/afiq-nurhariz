@@ -186,6 +186,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .hero-title .word-mask { display: inline-block; overflow: hidden; vertical-align: bottom; }
 .hero-title .word { display: inline-block; padding-bottom: 0.2em; }
+/* Italic serif glyphs lean past their box — widen the mask so the reveal
+   doesn't clip them, and pull the margins back so spacing is unchanged. */
+.hero-title .word-mask:has(em) {
+  padding: 0 0.14em 0 0.16em;
+  margin: 0 -0.14em 0 -0.16em;
+}
 .hero-title em { font-family: var(--serif); font-style: italic; font-weight: 400; color: var(--accent); letter-spacing: -0.02em; }
 .hero-sub {
   font-size: clamp(15px, 1.6vh, 17px); line-height: 1.55; color: var(--fg-dim);

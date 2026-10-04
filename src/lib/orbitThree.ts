@@ -1,0 +1,26 @@
+// Named re-exports so the lazily loaded skill orbit only pulls in the parts
+// of three.js it uses (a bare `import("three")` defeats tree-shaking).
+export {
+  AdditiveBlending,
+  BufferGeometry,
+  CanvasTexture,
+  Color,
+  Euler,
+  Float32BufferAttribute,
+  Group,
+  LinearFilter,
+  LineBasicMaterial,
+  LineSegments,
+  Mesh,
+  MeshBasicMaterial,
+  PerspectiveCamera,
+  Quaternion,
+  Raycaster,
+  Scene,
+  SphereGeometry,
+  Sprite,
+  SpriteMaterial,
+  Vector2,
+  Vector3,
+  WebGLRenderer,
+} from "three";

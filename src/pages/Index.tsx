@@ -175,14 +175,9 @@ const Index = () => {
 
     addFadeUpGroup(Array.from(document.querySelectorAll(".about-stats > div")), 0.12);
 
-    // Skills — canvas area fades up, category buttons stagger in, helper line fades
-    const skillsCanvasWrap = document.querySelector(".skills-grid > div:first-child");
-    if (skillsCanvasWrap) addFadeUp(skillsCanvasWrap);
-
-    addFadeUpGroup(Array.from(document.querySelectorAll(".skills-cat")), 0.05);
-
-    const skillsHelper = document.querySelector(".skills-helper");
-    if (skillsHelper) addFadeUp(skillsHelper, 0.15);
+    // Skills — the orbit fades up
+    const skillOrbit = document.querySelector(".orbit");
+    if (skillOrbit) addFadeUp(skillOrbit);
 
     // Contact — eyebrow slides in, blurb + CTA fade up, channel rows stagger in
     const contactEyebrow = document.querySelector(".contact-eyebrow");

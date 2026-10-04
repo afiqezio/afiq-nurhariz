@@ -26,8 +26,10 @@ const SKILLS_DATA = [
   { name: "YoloV5", category: "AI/ML", level: 0.75 },
   { name: "CNN", category: "AI/ML", level: 0.75 },
   { name: "Pandas", category: "AI/ML", level: 0.8 },
-  { name: "XGBoost", category: "AI/ML", level: 0.78 },
-  { name: "scikit-learn", category: "AI/ML", level: 0.78 },
+  { name: "Claude", category: "AI/ML", level: 0.85 },
+  { name: "MCP", category: "AI/ML", level: 0.8 },
+  { name: "RAG", category: "AI/ML", level: 0.8 },
+  { name: "Embedding Vector", category: "AI/ML", level: 0.78 },
 ];
 
 const SkillsSection = () => {

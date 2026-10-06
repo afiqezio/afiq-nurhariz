@@ -20,12 +20,12 @@ export const initSmoothScroll = () => {
 
   const instance = new Lenis({
     autoRaf: false,
-    duration: 1.15, // inertia length — higher = more "gliding"
-    lerp: 0.09, // per-frame easing toward target
+    // Lerp only — a `duration` here would take precedence and restart a full
+    // timed ease on every wheel tick, which makes the page feel heavy.
+    lerp: 0.14, // per-frame easing toward target — higher = snappier
     smoothWheel: true,
-    wheelMultiplier: 1,
+    wheelMultiplier: 1.1,
     touchMultiplier: 1.4,
-    easing: easeOutCubic,
   });
   lenis = instance;
 

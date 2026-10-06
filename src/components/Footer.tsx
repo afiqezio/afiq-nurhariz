@@ -21,7 +21,6 @@ const Footer = () => {
       <div className="container footer-row">
         <div>&copy; 2026 Afiq Nurhariz — All systems nominal</div>
         <div className="footer-time">
-          <span className="dot" />
           Shah Alam · <span>{time} MYT</span>
         </div>
         <div>Designed &amp; built with curiosity</div>

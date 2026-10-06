@@ -265,7 +265,8 @@ const ProjectsSection = () => {
       start: "top top",
       end: () => "+=" + Math.max(getMaxTranslate() * 1.15, window.innerHeight * 0.6),
       pin: stage,
-      scrub: 2.0,
+      // Light catch-up only — Lenis and the card lerp loop already smooth this
+      scrub: 0.5,
       invalidateOnRefresh: true,
       onRefresh: (self) => {
         measure();

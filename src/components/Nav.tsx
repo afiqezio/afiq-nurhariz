@@ -67,11 +67,6 @@ const Nav = () => {
           </a>
         ))}
       </div>
-
-      <a href="mailto:afiqnurhariz@gmail.com" className="nav-cta">
-        <span className="nav-cta-dot" />
-        Available
-      </a>
     </nav>
   );
 };

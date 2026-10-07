@@ -66,9 +66,12 @@ export const initSmoothScroll = () => {
   };
 };
 
-export const scrollToY = (y: number, { immediate = false } = {}) => {
+export const scrollToY = (
+  y: number,
+  { immediate = false, duration = 1.2, easing = easeOutCubic } = {},
+) => {
   if (lenis) {
-    lenis.scrollTo(y, { immediate, duration: 1.2, easing: easeOutCubic, force: true });
+    lenis.scrollTo(y, { immediate, duration, easing, force: true });
     return;
   }
   window.scrollTo({ top: y, behavior: immediate || prefersReducedMotion() ? "auto" : "smooth" });

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AllWorkLink from "@/components/AllWorkLink";
+import { scrollToY } from "@/lib/smoothScroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,12 +16,17 @@ const prefersReducedMotion = () =>
 // Full volume while the film fills the screen
 const VOLUME = 0.25;
 
+// Gentle start and settle for the automatic move to the content
+const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
 // Chromeless summary film — plays with sound; click the film to toggle it
 const ProjectFilm = ({ src }: ProjectFilmProps) => {
   const filmRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const ambientRef = useRef<HTMLVideoElement>(null);
   const heard = useRef(false);
+  // Any scroll away from the top cancels the automatic move to the content
+  const scrolled = useRef(false);
   const [reduceMotion] = useState(prefersReducedMotion);
   const [muted, setMuted] = useState(true);
   const [idle, setIdle] = useState(false);
@@ -92,17 +98,20 @@ const ProjectFilm = ({ src }: ProjectFilmProps) => {
       v.play().catch((err: DOMException) => {
         if (err.name !== "NotAllowedError") return;
         v.muted = true;
-        v.loop = true;
         heard.current = false;
         v.play().catch(() => {});
       });
     }
 
-    // After one listen with sound, fall back to the silent loop
+    // After one play-through, fall back to the silent loop
     v.addEventListener("ended", () => {
       v.loop = true;
       v.muted = true;
       v.play().catch(() => {});
+
+      // Watched to the end without scrolling — glide on to the case study
+      if (scrolled.current || reduce || document.hidden) return;
+      scrollToY(film.getBoundingClientRect().bottom + window.scrollY, { duration: 1.8, easing: easeInOutCubic });
     }, { signal });
 
     // Pause when scrolled out of view, resume when back
@@ -133,7 +142,13 @@ const ProjectFilm = ({ src }: ProjectFilmProps) => {
       // scrolls away, reaching silence as the film pauses off screen (85%), and
       // swells back on the way up. Squared so the fade sounds even to the ear.
       const video = videoRef.current;
+      // The film mounts before the page resets to the top, so the scroll
+      // position left over from the previous page must not count as the
+      // visitor scrolling — only movement after the film has sat at the top.
+      let atTop = false;
       const fadeSound = (self: ScrollTrigger) => {
+        if (self.progress === 0) atTop = true;
+        else if (atTop) scrolled.current = true;
         const level = gsap.utils.clamp(0, 1, 1 - (self.progress - 0.25) / 0.6);
         if (video) video.volume = VOLUME * level * level;
       };

@@ -23,6 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Claude
-.claude
+# Claude: local state stays out, shared rules, skills and settings are committed
+.claude/*
+!.claude/rules/
+!.claude/skills/
+!.claude/settings.json
 

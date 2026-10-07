@@ -1,0 +1,12 @@
+{
+  "attribution": {
+    "commit": ""
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npm run lint)",
+      "Bash(npm run build)",
+      "Bash(npx tsc -p tsconfig.app.json --noEmit)"
+    ]
+  }
+}

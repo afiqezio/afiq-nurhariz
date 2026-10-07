@@ -38,7 +38,8 @@
       "Bash(mkdir -p /tmp/design_bundle)",
       "Bash(tar -xzf /tmp/design_readme.html -C /tmp/design_bundle)",
       "Bash(tar -xzf /tmp/design.tar.gz -C /tmp/design)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(python -)"
     ]
   }
 }

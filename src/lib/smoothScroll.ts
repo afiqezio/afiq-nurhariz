@@ -30,8 +30,12 @@ export const initSmoothScroll = () => {
   lenis = instance;
 
   instance.on("scroll", ScrollTrigger.update);
+  let pageHeight = document.documentElement.scrollHeight;
   // Pin spacers change the page height — keep Lenis' scroll limit in step
-  const onRefresh = () => instance.resize();
+  const onRefresh = () => {
+    instance.resize();
+    pageHeight = document.documentElement.scrollHeight;
+  };
   ScrollTrigger.addEventListener("refresh", onRefresh);
   const raf = (time: number) => instance.raf(time * 1000);
   gsap.ticker.add(raf);
@@ -42,15 +46,15 @@ export const initSmoothScroll = () => {
 
   // Any later change in page height (late content, wrapping) would leave the
   // pinned section starting at a stale offset, so re-measure when it happens.
-  let pageHeight = document.documentElement.scrollHeight;
+  // Safe refresh — it waits for scrolling to stop, because a hard refresh
+  // resets the scroll position and cuts a touch scroll short. On mobile the
+  // height changes mid-scroll whenever the URL bar collapses (100dvh hero).
   let refreshTimer = 0;
   const pageObserver = new ResizeObserver(() => {
     window.clearTimeout(refreshTimer);
     refreshTimer = window.setTimeout(() => {
-      const height = document.documentElement.scrollHeight;
-      if (height === pageHeight) return;
-      ScrollTrigger.refresh();
-      pageHeight = document.documentElement.scrollHeight;
+      if (document.documentElement.scrollHeight === pageHeight) return;
+      ScrollTrigger.refresh(true);
     }, 200);
   });
   pageObserver.observe(document.body);

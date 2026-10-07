@@ -239,12 +239,10 @@ const ProjectsSection = () => {
       },
     });
 
-    // Debounced — a refresh re-measures every trigger on the page
-    let resizeTimer = 0;
-    const onResize = () => {
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
-    };
+    // Safe refresh — ScrollTrigger debounces it and holds it until scrolling
+    // stops. A hard refresh resets the scroll position, which cuts a touch
+    // scroll short when the mobile URL bar collapses and fires `resize`.
+    const onResize = () => ScrollTrigger.refresh(true);
     window.addEventListener("resize", onResize);
     window.addEventListener("orientationchange", onResize);
 
@@ -265,7 +263,6 @@ const ProjectsSection = () => {
 
     return () => {
       cancelAnimationFrame(rafId);
-      window.clearTimeout(resizeTimer);
       entryTweens.forEach((t) => t.kill());
       entrySt.kill();
       st.kill();

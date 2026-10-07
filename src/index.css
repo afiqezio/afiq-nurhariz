@@ -884,3 +884,70 @@ em .split-mask,
 .pp-next-link:hover .pp-next-arrow { background: var(--accent); border-color: var(--accent); color: var(--bg); }
 .pp-next-arrow svg { width: 24px; height: 24px; transition: transform 0.3s; }
 .pp-next-link:hover .pp-next-arrow svg { transform: rotate(-45deg); }
+
+/* SUMMARY FILM — full-screen cinematic hero */
+@property --bar { syntax: "<length>"; inherits: true; initial-value: 0vh; }
+.pp-film {
+  position: relative; height: 100vh; height: 100svh; min-height: 420px; width: 100%;
+  overflow: hidden; background: #05040a; z-index: 2; isolation: isolate; --bar: 0vh;
+}
+.pp-film-ambient {
+  position: absolute; inset: -8%; width: 116%; height: 116%; object-fit: cover;
+  filter: blur(48px) saturate(1.3) brightness(0.6); opacity: 0; pointer-events: none; will-change: transform;
+}
+.pp-film-frame { position: absolute; inset: 0; will-change: transform; }
+/* Hidden until the first frames play — ProjectFilm fades it up */
+.pp-film-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; cursor: pointer; opacity: 0; }
+.pp-film-dim { position: absolute; inset: 0; z-index: 1; background: #05040a; opacity: 0; pointer-events: none; }
+.pp-film-bars { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+.pp-film-bars::before, .pp-film-bars::after { content: ""; position: absolute; left: 0; right: 0; height: var(--bar); background: #000; }
+.pp-film-bars::before { top: 0; }
+.pp-film-bars::after { bottom: 0; }
+/* --ui runs 1 → 0 as the film scrolls away */
+.pp-film-back {
+  position: absolute; top: 22px; left: 22px; z-index: 3; width: 44px; height: 44px; border-radius: 50%;
+  display: grid; place-items: center; color: var(--fg); background: oklch(0.12 0.01 280 / 0.5);
+  border: 1px solid oklch(1 0 0 / 0.12); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  opacity: var(--ui, 1); transition: opacity 0.5s ease, background 0.25s, color 0.25s;
+}
+.pp-film-back:hover { background: var(--accent); color: var(--bg); }
+.pp-film-back svg { width: 16px; height: 16px; }
+.pp-film.is-idle .pp-film-back { opacity: 0; pointer-events: none; }
+.pp-film-cue {
+  position: absolute; right: 32px; bottom: 32px; z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-dim);
+  pointer-events: none; opacity: var(--ui, 1); transition: opacity 0.5s;
+}
+.pp-film-cue i {
+  width: 1px; height: 36px; background: linear-gradient(to bottom, var(--fg-dim), transparent);
+  animation: scrollLine 2s ease-in-out infinite; transform-origin: top;
+}
+.pp-film.is-idle .pp-film-cue { opacity: 0; }
+.pp-film-hint {
+  position: absolute; left: 32px; bottom: 32px; z-index: 3; display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-dim);
+  pointer-events: none; opacity: var(--ui, 1); transition: opacity 0.5s;
+}
+.pp-film-hint i { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+.pp-film:not(.is-muted) .pp-film-hint i { background: var(--fg-dim); box-shadow: none; }
+.pp-film.is-idle .pp-film-hint { opacity: 0; }
+.pp-film.is-missing .pp-film-hint { display: none; }
+@media (max-width: 768px) {
+  .pp-film-hint { left: 20px; bottom: 24px; }
+  .pp-film-cue { right: 20px; bottom: 24px; }
+}
+/* Header only appears once the film has scrolled away */
+.pp-body .pp-header { transform: translateY(-110%); transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.pp-body .pp-header.is-shown { transform: none; }
+/* Intro rises over the sinking film */
+.pp-hero--after {
+  z-index: 3; margin-top: -1px; padding: 96px 0 40px;
+  background: linear-gradient(180deg, #05040a 0%, oklch(0.05 0.01 280 / 0.92) 40%, transparent 100%);
+}
+.pp-hero--after .pp-hero-strip { margin-top: 44px; }
+.pp-film-shade {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 140px; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, transparent, oklch(0.04 0.01 280 / 0.85)); transition: opacity 0.5s ease;
+}
+.pp-film.is-idle .pp-film-shade { opacity: 0; }
+.pp-film.is-idle .pp-film-video { cursor: none; }

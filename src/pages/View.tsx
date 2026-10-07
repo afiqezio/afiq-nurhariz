@@ -3,9 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ImageModal from "@/components/ImageModal";
+import ProjectFilm from "@/components/ProjectFilm";
 import CustomCursor from "@/components/CustomCursor";
 import Footer from "@/components/Footer";
 import { projectData } from "@/data/projectData";
+import { projectList, toProjectState } from "@/data/projectList";
 import { Project } from "@/types";
 import { scrollToY } from "@/lib/smoothScroll";
 
@@ -82,6 +84,7 @@ const View = () => {
   const project = location.state as Project | null;
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [activeSection, setActiveSection] = useState<string>("overview");
+  const [headerShown, setHeaderShown] = useState(false);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const sectionTitleRefs = useRef<(HTMLHeadingElement | null)[]>([]);
 
@@ -93,14 +96,13 @@ const View = () => {
     const nextIdx = (idx + 1) % projectOrder.length;
     const nextTitle = projectOrder[nextIdx];
     const nextData = projectData[nextTitle as keyof typeof projectData];
-    if (!nextData) return null;
+    const nextItem = projectList.find((p) => p.title === nextTitle);
+    if (!nextData || !nextItem) return null;
     return {
       idx: nextIdx,
       title: nextTitle,
-      tech: nextData.caseStudy?.techStack ?? [],
-      overview: nextData.overview,
-      imageUrl: nextData.images[0]?.url ?? "",
-      idShort: projectMeta[nextTitle]?.idShort ?? "",
+      tech: nextData.caseStudy?.techStack ?? nextItem.tech,
+      item: nextItem,
     };
   }, [project]);
 
@@ -111,9 +113,31 @@ const View = () => {
     return `${String(idx + 1).padStart(2, "0")} / ${String(projectOrder.length).padStart(2, "0")}`;
   }, [project]);
 
+  // Summary films are numbered to match the case-study order
+  const filmSrc = useMemo(() => {
+    if (!project) return null;
+    const idx = projectOrder.indexOf(project.title as typeof projectOrder[number]);
+    if (idx < 0) return null;
+    return `assets/videos/${String(idx + 1).padStart(2, "0")}.mp4`;
+  }, [project]);
+
   useEffect(() => {
     scrollToY(0, { immediate: true });
+    setActiveSection("overview");
   }, [project?.title]);
+
+  // Header stays hidden while the film owns the screen
+  useEffect(() => {
+    if (!filmSrc) return;
+    setHeaderShown(false);
+    const st = ScrollTrigger.create({
+      trigger: ".pp-film",
+      start: "bottom 12%",
+      onEnter: () => setHeaderShown(true),
+      onLeaveBack: () => setHeaderShown(false),
+    });
+    return () => st.kill();
+  }, [filmSrc]);
 
   useEffect(() => {
     const heroEl = document.querySelector<HTMLElement>(".pp-hero");
@@ -290,15 +314,7 @@ const View = () => {
 
   const handleNextProject = () => {
     if (!nextProject) return;
-    const nextState: Project = {
-      id: nextProject.idShort,
-      title: nextProject.title,
-      description: nextProject.overview,
-      tech: nextProject.tech,
-      link: "#",
-      imageUrl: nextProject.imageUrl,
-    };
-    navigate("/view", { state: nextState });
+    navigate("/view", { state: toProjectState(nextProject.item) });
   };
 
   if (!project || !currentProjectData) {
@@ -311,7 +327,7 @@ const View = () => {
         </Suspense>
         <div className="bg-grain" />
         <div className="bg-vignette" />
-        <header className="pp-header">
+        <header className="pp-header is-shown">
           <button type="button" className="pp-back" onClick={() => navigate(-1)}>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             Back to work
@@ -336,7 +352,6 @@ const View = () => {
   const caseStudy = currentProjectData.caseStudy;
   const meta = projectMeta[project.title];
   const techStack = caseStudy?.techStack ?? project.tech;
-  const posterImage = currentProjectData.images[0]?.url ?? project.imageUrl ?? "";
   const posterCaption = currentProjectData.images[0]?.caption ?? project.title;
 
   return (
@@ -349,7 +364,7 @@ const View = () => {
       <div className="bg-grain" />
       <div className="bg-vignette" />
 
-      <header className="pp-header">
+      <header className={`pp-header${headerShown || !filmSrc ? " is-shown" : ""}`}>
         <button type="button" className="pp-back" onClick={() => navigate(-1)}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           Back to work
@@ -360,8 +375,18 @@ const View = () => {
         <div className="pp-progress" aria-hidden="true" />
       </header>
 
-      <main style={{ position: "relative", zIndex: 3 }}>
-        <section className="pp-hero">
+      {/* Keyed per project: the reveal effects rewrite this DOM (word masks,
+          inline styles), so the next case study must start from fresh nodes */}
+      <main key={project.title} style={{ position: "relative", zIndex: 3 }}>
+        {filmSrc && (
+          <ProjectFilm
+            key={filmSrc}
+            src={filmSrc}
+            onBack={() => navigate(-1)}
+          />
+        )}
+
+        <section className={`pp-hero${filmSrc ? " pp-hero--after" : ""}`}>
           <div className="container">
             <div className="pp-hero-meta">
               <span>Case study</span>

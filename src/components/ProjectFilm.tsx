@@ -12,6 +12,9 @@ interface ProjectFilmProps {
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+// Full volume while the film fills the screen
+const VOLUME = 0.25;
+
 // Chromeless summary film — plays with sound; click the film to toggle it
 const ProjectFilm = ({ src }: ProjectFilmProps) => {
   const filmRef = useRef<HTMLElement>(null);
@@ -36,7 +39,7 @@ const ProjectFilm = ({ src }: ProjectFilmProps) => {
     const controller = new AbortController();
     const { signal } = controller;
     const reduce = prefersReducedMotion();
-    v.volume = 0.25;
+    v.volume = VOLUME;
 
     // Film fades up once frames are actually on screen
     let revealed = false;
@@ -125,6 +128,19 @@ const ProjectFilm = ({ src }: ProjectFilmProps) => {
     const ctx = gsap.context(() => {
       // Cinematic opening — letterbox bars retract
       gsap.fromTo(film, { "--bar": "12vh" }, { "--bar": "0vh", duration: 1.6, ease: "expo.inOut", delay: 0.2 });
+
+      // Sound holds for the first quarter of the scroll, then fades as the film
+      // scrolls away, reaching silence as the film pauses off screen (85%), and
+      // swells back on the way up. Squared so the fade sounds even to the ear.
+      const video = videoRef.current;
+      const fadeSound = (self: ScrollTrigger) => {
+        const level = gsap.utils.clamp(0, 1, 1 - (self.progress - 0.25) / 0.6);
+        if (video) video.volume = VOLUME * level * level;
+      };
+      ScrollTrigger.create({
+        trigger: film, start: "top top", end: "bottom top",
+        onUpdate: fadeSound, onRefresh: fadeSound,
+      });
 
       if (prefersReducedMotion()) return;
 

@@ -1,6 +1,8 @@
 import { lazy, Suspense, useState, useCallback, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { scrollToY } from "@/lib/smoothScroll";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import Loader from "@/components/Loader";
@@ -63,6 +65,7 @@ const splitForReveal = (root: HTMLElement) => {
 
 const Index = () => {
   const [ready, setReady] = useState(false);
+  const scrollTo = (useLocation().state as { scrollTo?: string } | null)?.scrollTo;
 
   const handleLoaderDone = useCallback(() => {
     setReady(true);
@@ -264,12 +267,16 @@ const Index = () => {
     // below them — re-measure so the projects pin starts exactly at its top.
     ScrollTrigger.refresh();
 
+    // Arriving from a case-study link that targets a section ("All work")
+    const target = scrollTo ? document.getElementById(scrollTo) : null;
+    if (target) scrollToY(target.getBoundingClientRect().top + window.scrollY - 24, { immediate: true });
+
     return () => {
       parallax.revert();
       triggers.forEach((t) => t.kill());
       obs.disconnect();
     };
-  }, [ready]);
+  }, [ready, scrollTo]);
 
   return (
     <>

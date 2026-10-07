@@ -1,9 +1,10 @@
 import { lazy, Suspense, useState, useEffect, useRef, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ImageModal from "@/components/ImageModal";
 import ProjectFilm from "@/components/ProjectFilm";
+import AllWorkLink from "@/components/AllWorkLink";
 import CustomCursor from "@/components/CustomCursor";
 import Footer from "@/components/Footer";
 import { projectData } from "@/data/projectData";
@@ -284,11 +285,14 @@ const View = () => {
         <div className="bg-grain" />
         <div className="bg-vignette" />
         <header className="pp-header is-shown">
-          <button type="button" className="pp-back" onClick={() => navigate(-1)}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            Back to work
-          </button>
+          <Link className="nav-logo" to="/" aria-label="Home">
+            <img src="/assets/logo-no-bg.png" alt="" className="nav-logo-icon" />
+            <span>afiq/nurhariz</span>
+          </Link>
           <div className="pp-header-mid">Case study</div>
+          <nav className="nav-links pp-nav">
+            <AllWorkLink />
+          </nav>
           <div className="pp-progress" aria-hidden="true" />
         </header>
         <main style={{ position: "relative", zIndex: 3 }}>
@@ -321,13 +325,16 @@ const View = () => {
       <div className="bg-vignette" />
 
       <header className={`pp-header${headerShown || !filmSrc ? " is-shown" : ""}`}>
-        <button type="button" className="pp-back" onClick={() => navigate(-1)}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          Back to work
-        </button>
+        <Link className="nav-logo" to="/" aria-label="Home">
+          <img src="/assets/logo-no-bg.png" alt="" className="nav-logo-icon" />
+          <span>afiq/nurhariz</span>
+        </Link>
         <div className="pp-header-mid">
           Case study <b>· {numLabel} ·</b> {project.title}
         </div>
+        <nav className="nav-links pp-nav">
+          <AllWorkLink />
+        </nav>
         <div className="pp-progress" aria-hidden="true" />
       </header>
 
@@ -335,11 +342,7 @@ const View = () => {
           inline styles), so the next case study must start from fresh nodes */}
       <main key={project.title} ref={mainRef} style={{ position: "relative", zIndex: 3 }}>
         {filmSrc && (
-          <ProjectFilm
-            key={filmSrc}
-            src={filmSrc}
-            onBack={() => navigate(-1)}
-          />
+          <ProjectFilm key={filmSrc} src={filmSrc} />
         )}
 
         <section className={`pp-hero${filmSrc ? " pp-hero--after" : ""}`}>

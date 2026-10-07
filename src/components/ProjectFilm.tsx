@@ -1,19 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import AllWorkLink from "@/components/AllWorkLink";
 
 gsap.registerPlugin(ScrollTrigger);
 
 interface ProjectFilmProps {
   src: string;
-  onBack: () => void;
 }
 
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // Chromeless summary film — plays with sound; click the film to toggle it
-const ProjectFilm = ({ src, onBack }: ProjectFilmProps) => {
+const ProjectFilm = ({ src }: ProjectFilmProps) => {
   const filmRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const ambientRef = useRef<HTMLVideoElement>(null);
@@ -64,7 +64,7 @@ const ProjectFilm = ({ src, onBack }: ProjectFilmProps) => {
     };
     ["play", "pause", "seeked", "timeupdate"].forEach((e) => v.addEventListener(e, syncAmbient, { signal }));
 
-    // Back button, hint and cue fade out while the film plays untouched
+    // Nav, hint and cue fade out while the film plays untouched
     let idleTimer = 0;
     const wakeUi = () => {
       setIdle(false);
@@ -137,7 +137,7 @@ const ProjectFilm = ({ src, onBack }: ProjectFilmProps) => {
         opacity: 1, ease: "none",
         scrollTrigger: { trigger: film, start: "top top", end: "bottom top", scrub: true },
       });
-      // Back button, hint and cue fade through --ui (an inline opacity would
+      // Nav, hint and cue fade through --ui (an inline opacity would
       // override the idle fade)
       gsap.fromTo(film, { "--ui": 1 }, {
         "--ui": 0, ease: "none",
@@ -202,9 +202,11 @@ const ProjectFilm = ({ src, onBack }: ProjectFilmProps) => {
       <div className="pp-film-dim" aria-hidden="true" />
       <div className="pp-film-shade" aria-hidden="true" />
       <div className="pp-film-bars" aria-hidden="true" />
-      <button type="button" className="pp-film-back" onClick={onBack} aria-label="Back to work">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      </button>
+      <nav className="pp-film-nav">
+        <div className="nav-links">
+          <AllWorkLink />
+        </div>
+      </nav>
       <div className="pp-film-cue" aria-hidden="true"><span>Scroll</span><i /></div>
       <div className="pp-film-hint" aria-hidden="true"><i /><span>{muted ? "Click for sound" : "Click to mute"}</span></div>
     </section>

@@ -38,6 +38,7 @@ const projectMeta: Record<string, { year: string; type: string; role: string; id
 const SECTION_IDS = ["overview", "problem", "approach", "gallery", "solution", "results"] as const;
 
 const splitForReveal = (root: HTMLElement) => {
+  if (root.dataset.splitDone === "1") return;
   const wrapTextNode = (textNode: Node): DocumentFragment => {
     const text = textNode.textContent ?? "";
     const frag = document.createDocumentFragment();
@@ -76,6 +77,7 @@ const splitForReveal = (root: HTMLElement) => {
   };
 
   walk(root);
+  root.dataset.splitDone = "1";
 };
 
 const View = () => {
@@ -85,8 +87,7 @@ const View = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [activeSection, setActiveSection] = useState<string>("overview");
   const [headerShown, setHeaderShown] = useState(false);
-  const heroTitleRef = useRef<HTMLHeadingElement>(null);
-  const sectionTitleRefs = useRef<(HTMLHeadingElement | null)[]>([]);
+  const mainRef = useRef<HTMLElement>(null);
 
   const currentProjectData = project ? projectData[project.title as keyof typeof projectData] : undefined;
 
@@ -192,118 +193,73 @@ const View = () => {
   }, [currentProjectData]);
 
   useEffect(() => {
-    if (!currentProjectData) return;
-    const titles: HTMLElement[] = [];
-    if (heroTitleRef.current) titles.push(heroTitleRef.current);
-    sectionTitleRefs.current.forEach((el) => { if (el) titles.push(el); });
+    const main = mainRef.current;
+    if (!currentProjectData || !main) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const triggers: ScrollTrigger[] = [];
-    titles.forEach((el) => {
-      splitForReveal(el);
-      const words = el.querySelectorAll(".w");
-      gsap.set(words, { yPercent: 110 });
-      const st = ScrollTrigger.create({
-        trigger: el,
-        start: "top 88%",
-        once: true,
-        onEnter: () => {
-          gsap.to(words, { yPercent: 0, duration: 1.05, ease: "expo.out", stagger: 0.04 });
-        },
+    const ctx = gsap.context(() => {
+      // Titles rise word by word
+      gsap.utils.toArray<HTMLElement>(".pp-hero-title, .pp-section-title").forEach((el) => {
+        splitForReveal(el);
+        const words = el.querySelectorAll(".w");
+        gsap.set(words, { yPercent: 110 });
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 88%",
+          once: true,
+          onEnter: () => {
+            gsap.to(words, { yPercent: 0, duration: 1.05, ease: "expo.out", stagger: 0.04 });
+          },
+        });
       });
-      triggers.push(st);
-    });
-    return () => { triggers.forEach((t) => t.kill()); };
-  }, [currentProjectData]);
 
-  useEffect(() => {
-    if (!currentProjectData) return;
-    const triggers: ScrollTrigger[] = [];
-
-    const addFadeUp = (el: Element, delay = 0) => {
-      gsap.set(el, { opacity: 0, y: 30 });
-      const st = ScrollTrigger.create({
-        trigger: el,
-        start: "top 88%",
-        once: true,
-        onEnter: () => {
-          gsap.to(el, { opacity: 1, y: 0, duration: 0.75, ease: "power3.out", delay });
-        },
+      // Intro fades up as it rises over the film
+      const heroIn = { trigger: ".pp-hero", start: "top 85%", once: true };
+      gsap.from(".pp-hero-meta", { opacity: 0, y: 14, duration: 0.7, ease: "expo.out", scrollTrigger: heroIn });
+      gsap.from(".pp-hero-blurb", { opacity: 0, y: 20, duration: 0.9, delay: 0.25, ease: "expo.out", scrollTrigger: heroIn });
+      gsap.from(".pp-hero-strip .pp-strip-cell", {
+        opacity: 0, y: 16, duration: 0.6, ease: "expo.out", stagger: 0.06, delay: 0.45, scrollTrigger: heroIn,
       });
-      triggers.push(st);
-    };
 
-    const addFadeUpGroup = (els: Element[], stagger = 0.09) => {
-      if (!els.length) return;
-      gsap.set(els, { opacity: 0, y: 30 });
-      const st = ScrollTrigger.create({
-        trigger: els[0],
-        start: "top 88%",
-        once: true,
-        onEnter: () => {
-          gsap.to(els, { opacity: 1, y: 0, duration: 0.75, ease: "power3.out", stagger });
-        },
-      });
-      triggers.push(st);
-    };
+      if (!reduceMotion) {
+        // Layered depth — each layer drifts at its own speed (positive = rises
+        // faster than the scroll). Scrubs --py, which .pp-par maps to `translate`,
+        // so it never fights the reveal tweens on `transform`.
+        const drift = (el: Element, amt: number, trigger: Element = el) => {
+          el.classList.add("pp-par");
+          gsap.fromTo(el, { "--py": `${amt}px` }, {
+            "--py": `${-amt}px`, ease: "none",
+            scrollTrigger: { trigger, start: "top bottom", end: "bottom top", scrub: true },
+          });
+        };
+        const layers: [string, number][] = [
+          [".pp-hero--after .pp-hero-title", 40],
+          [".pp-hero--after .pp-hero-blurb", 70],
+          [".pp-pullquote", 36],
+          [".pp-next-title", 50],
+        ];
+        layers.forEach(([selector, amt]) => {
+          gsap.utils.toArray<HTMLElement>(selector).forEach((el) => drift(el, amt));
+        });
 
-    // Section numbers slide in from left
-    document.querySelectorAll(".pp-section-num").forEach((el) => {
-      gsap.set(el, { opacity: 0, x: -14 });
-      const st = ScrollTrigger.create({
-        trigger: el,
-        start: "top 88%",
-        once: true,
-        onEnter: () => {
-          gsap.to(el, { opacity: 1, x: 0, duration: 0.55, ease: "power3.out" });
-        },
-      });
-      triggers.push(st);
-    });
+        // Alternating challenge cards move at different speeds
+        gsap.utils.toArray<HTMLElement>(".pp-challenges").forEach((grid) => {
+          Array.from(grid.children).forEach((el, i) => drift(el, i % 2 ? 46 : 18, grid));
+        });
+      }
 
-    // Prose blocks
-    document.querySelectorAll(".pp-prose").forEach((el) => addFadeUp(el));
+      // Content reveal
+      gsap.utils
+        .toArray<HTMLElement>(".pp-prose p, .pp-pullquote, .pp-feature, .pp-challenge, .pp-result, .pp-shot, .pp-steps li")
+        .forEach((el) => {
+          gsap.from(el, {
+            y: 24, opacity: 0, duration: 0.8, ease: "expo.out",
+            scrollTrigger: { trigger: el, start: "top 85%", once: true },
+          });
+        });
+    }, main);
 
-    // Pullquote slides in from left
-    document.querySelectorAll(".pp-pullquote").forEach((el) => {
-      gsap.set(el, { opacity: 0, x: -28 });
-      const st = ScrollTrigger.create({
-        trigger: el,
-        start: "top 88%",
-        once: true,
-        onEnter: () => {
-          gsap.to(el, { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" });
-        },
-      });
-      triggers.push(st);
-    });
-
-    // Challenge cards
-    addFadeUpGroup(Array.from(document.querySelectorAll(".pp-challenge")), 0.1);
-
-    // Feature dots
-    addFadeUpGroup(Array.from(document.querySelectorAll(".pp-feature")), 0.07);
-
-    // Gallery shots (individual triggers so out-of-view shots animate on scroll)
-    document.querySelectorAll(".pp-shot").forEach((el) => {
-      gsap.set(el, { opacity: 0, y: 22 });
-      const st = ScrollTrigger.create({
-        trigger: el,
-        start: "top 92%",
-        once: true,
-        onEnter: () => {
-          gsap.to(el, { opacity: 1, y: 0, duration: 0.65, ease: "power3.out" });
-        },
-      });
-      triggers.push(st);
-    });
-
-    // Result cards
-    addFadeUpGroup(Array.from(document.querySelectorAll(".pp-result")), 0.12);
-
-    // Steps
-    addFadeUpGroup(Array.from(document.querySelectorAll(".pp-steps li")), 0.08);
-
-    return () => { triggers.forEach((t) => t.kill()); };
+    return () => ctx.revert();
   }, [currentProjectData]);
 
   const handleTocClick = (id: string) => {
@@ -377,7 +333,7 @@ const View = () => {
 
       {/* Keyed per project: the reveal effects rewrite this DOM (word masks,
           inline styles), so the next case study must start from fresh nodes */}
-      <main key={project.title} style={{ position: "relative", zIndex: 3 }}>
+      <main key={project.title} ref={mainRef} style={{ position: "relative", zIndex: 3 }}>
         {filmSrc && (
           <ProjectFilm
             key={filmSrc}
@@ -395,7 +351,7 @@ const View = () => {
               <span className="dot" />
               <span>{meta?.year ?? "—"}</span>
             </div>
-            <h1 className="pp-hero-title" ref={heroTitleRef}>{project.title}</h1>
+            <h1 className="pp-hero-title">{project.title}</h1>
             <p className="pp-hero-blurb">{project.description}</p>
 
             <div className="pp-hero-strip">
@@ -477,7 +433,7 @@ const View = () => {
                 <section className="pp-section" id="overview">
                   <div className="pp-section-head">
                     <span className="pp-section-num">01</span>
-                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[0] = el; }}>Overview</h2>
+                    <h2 className="pp-section-title">Overview</h2>
                   </div>
                   <div className="pp-prose">
                     <p>{currentProjectData.overview}</p>
@@ -490,7 +446,7 @@ const View = () => {
                 <section className="pp-section" id="problem">
                   <div className="pp-section-head">
                     <span className="pp-section-num">02</span>
-                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[1] = el; }}>The <em>problem</em></h2>
+                    <h2 className="pp-section-title">The <em>problem</em></h2>
                   </div>
                   <div className="pp-prose">
                     {caseStudy?.challenge && <p>{caseStudy.challenge}</p>}
@@ -511,7 +467,7 @@ const View = () => {
                 <section className="pp-section" id="approach">
                   <div className="pp-section-head">
                     <span className="pp-section-num">03</span>
-                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[2] = el; }}>The approach</h2>
+                    <h2 className="pp-section-title">The approach</h2>
                   </div>
                   <div className="pp-prose">
                     <p>The pieces that make this project work — a focused selection of techniques, components and integrations.</p>
@@ -531,7 +487,7 @@ const View = () => {
                 <section className="pp-section" id="gallery">
                   <div className="pp-section-head">
                     <span className="pp-section-num">04</span>
-                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[3] = el; }}>Build <em>gallery</em></h2>
+                    <h2 className="pp-section-title">Build <em>gallery</em></h2>
                   </div>
                   <div className="pp-prose">
                     <p>A walkthrough of the major artefacts produced during the build.</p>
@@ -556,7 +512,7 @@ const View = () => {
                 <section className="pp-section" id="solution">
                   <div className="pp-section-head">
                     <span className="pp-section-num">05</span>
-                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[4] = el; }}>The solution</h2>
+                    <h2 className="pp-section-title">The solution</h2>
                   </div>
                   <div className="pp-prose">
                     {caseStudy?.solution && <p>{caseStudy.solution}</p>}
@@ -576,7 +532,7 @@ const View = () => {
                 <section className="pp-section" id="results">
                   <div className="pp-section-head">
                     <span className="pp-section-num">06</span>
-                    <h2 className="pp-section-title" ref={(el) => { sectionTitleRefs.current[5] = el; }}>Results</h2>
+                    <h2 className="pp-section-title">Results</h2>
                   </div>
                   <div className="pp-prose">
                     <p>The outcomes that mattered — what the project moved, and what stayed measurable after delivery.</p>

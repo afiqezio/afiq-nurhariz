@@ -951,3 +951,6 @@ em .split-mask,
 }
 .pp-film.is-idle .pp-film-shade { opacity: 0; }
 .pp-film.is-idle .pp-film-video { cursor: none; }
+
+/* Layered depth — scroll drives --py, leaving `transform` free for reveals */
+.pp-par { translate: 0 var(--py, 0px); will-change: translate; }

@@ -1,6 +1,6 @@
 ---
 paths:
-  - "src/App.tsx"
+  - "src/root.tsx"
   - "src/pages/**"
   - "src/sections/**"
   - "src/components/**"

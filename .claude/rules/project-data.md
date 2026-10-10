@@ -25,5 +25,6 @@ paths:
 2. Create the case-study file in `src/data/projects/` and register it in `projectData.ts` under the same id.
 3. Update `numLabel` (for example `"07 / 07"`) in every project file, because each one hardcodes the total.
 4. Update the `next` chain so each project points to the following one and the last points back to the first.
-5. Put gallery images in `public/assets/projects/<Name>/` and reference them the way existing entries do (`assets/projects/<Name>/file.ext`).
+5. Put gallery images in `public/assets/projects/<Name>/` and reference them root-absolute, the way existing entries do (`/assets/projects/<Name>/file.ext`). A relative path breaks under `/work/<id>/`.
 6. Add the summary film as `public/assets/videos/NN.mp4`, where `NN` matches the project's `num`.
+7. Add `https://harizafiq.com/work/<id>/` to `public/sitemap.xml`. Pre-rendering picks the new route up from `projectList.ts` automatically.

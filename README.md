@@ -182,7 +182,7 @@ Defined in `tailwind.config.ts` and available as `animate-*` utilities:
 
 | Tool | Purpose |
 |------|---------|
-| `gh-pages` | Publishes `dist/` to GitHub Pages |
+| `gh-pages` | Publishes `build/client/` to GitHub Pages |
 | Custom domain | `harizafiq.com` via CNAME |
 
 ### Path Alias

@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-Personal portfolio site for Afiq Nurhariz, served at harizafiq.com from GitHub Pages. React 18 + TypeScript + Vite, animated with GSAP ScrollTrigger, Lenis, Framer Motion and three.js. It is a static site: no backend, no database, no API.
+Personal portfolio site for Afiq Nurhariz, served at harizafiq.com from GitHub Pages. React 18 + TypeScript on React Router 7 framework mode (Vite), animated with GSAP ScrollTrigger, Lenis, Framer Motion and three.js. It is a static site: no backend, no database, no API. Every route is pre-rendered to HTML at build time (`ssr: false` + `prerender`) so search engines and link previews get real content.
 
 Rules that only matter for part of the codebase live in `.claude/rules/` and load when matching files are touched:
 
@@ -13,14 +13,14 @@ Rules that only matter for part of the codebase live in `.claude/rules/` and loa
 ## Commands
 
 ```bash
-npm run dev        # Vite dev server on port 8080
-npm run build      # tsc -b && vite build (the type-check is part of the build)
+npm run dev        # react-router dev, port 8080
+npm run build      # tsc -b && react-router build (type-check, build, pre-render)
 npm run lint       # eslint .
-npm run preview    # serve the production build
-npm run deploy     # gh-pages -d dist --cname harizafiq.com
+npm run preview    # serve the production build from build/client
+npm run deploy     # gh-pages -d build/client --cname harizafiq.com
 ```
 
-- `deploy` publishes whatever is already in `dist/` and does not build. Use the `/deploy` skill, which builds and checks first.
+- `deploy` publishes whatever is already in `build/client/` and does not build. Use the `/deploy` skill, which builds and checks first.
 - There is no test runner and no test files.
 - To type-check without rewriting the tracked `*.tsbuildinfo` files: `npx tsc -p tsconfig.app.json --noEmit`.
 - TypeScript is non-strict (`strict`, `strictNullChecks` and `noImplicitAny` are all off), and ESLint has `no-unused-vars` disabled.
@@ -31,13 +31,14 @@ npm run deploy     # gh-pages -d dist --cname harizafiq.com
 
 ### Routes and navigation
 
-`src/App.tsx` defines two lazy routes inside an `AnimatePresence` page transition: `/` (`pages/Index.tsx`, the one-page portfolio) and `/view` (`pages/View.tsx`, a case study).
-
-`/view` has no URL parameter. A project card calls `navigate("/view", { state: toProjectState(item) })` and `View` reads `location.state`, so opening or refreshing `/view` directly renders the "No project here" fallback.
+- `src/routes.ts` declares the routes: `/` (`pages/Index.tsx`, the one-page portfolio) and `/work/:slug` (`pages/View.tsx`, a case study). The slug is the project's `id` in `projectList.ts`; links use `workPath(id)`, which ends in a slash because GitHub Pages serves `work/<id>/index.html` at `/work/<id>/`.
+- `src/root.tsx` is the document shell (head tags, fonts, site-wide JSON-LD) and wraps the outlet in the `AnimatePresence` page transition. `src/entry.client.tsx` hydrates without `<StrictMode>` because the text-splitting effects are not safe to run twice.
+- `react-router.config.ts` lists the pre-rendered paths from `projectList`. Each route's `meta` export sets its title, description, canonical URL and social-card tags through `src/lib/seo.ts`. Add new projects to `public/sitemap.xml` too.
+- Pre-rendering runs components in Node. Do not read `window`, `document` or `matchMedia` during render, only in effects, and render nothing time- or device-dependent into the HTML (the footer clock and `ProjectFilm`'s reduced-motion read use `useSyncExternalStore` with a server value for this reason).
 
 ### Scroll and animation
 
-- `src/lib/smoothScroll.ts` creates one Lenis instance, started in `App`. It runs on GSAP's ticker and feeds `ScrollTrigger.update`, so Lenis and ScrollTrigger advance in the same frame. It also refreshes ScrollTrigger when fonts load or the page height changes.
+- `src/lib/smoothScroll.ts` creates one Lenis instance, started in `root.tsx`. It runs on GSAP's ticker and feeds `ScrollTrigger.update`, so Lenis and ScrollTrigger advance in the same frame. It also refreshes ScrollTrigger when fonts load or the page height changes.
 - `pages/Index.tsx` owns the homepage's entrance and parallax animation in a single effect that waits for the `Loader` to finish. It finds its targets by class name, so the section components are mostly static markup.
 - Headings are revealed word by word: `splitForReveal` rewrites the heading's DOM into `.split-mask > .w` spans.
 - `sections/ProjectsSection.tsx` is a pinned horizontal stage. A scrubbed ScrollTrigger computes per-card targets and a `requestAnimationFrame` lerp loop writes the transforms, sleeping once the cards settle.
@@ -53,7 +54,7 @@ The live UI is styled with hand-written semantic classes in `src/index.css`, dri
 
 ### Project data
 
-- `src/data/projectList.ts` holds the homepage cards and `toProjectState`, which builds the router state for `/view`.
+- `src/data/projectList.ts` holds the homepage cards and `workPath`, which builds each case study's URL.
 - `src/data/projectData.ts` maps the same ids to case-study content. Each project is one file in `src/data/projects/`, typed by `ProjectDetails` in `src/data/projectTypes.ts`.
 - Each case study opens with a summary film (`components/ProjectFilm.tsx`) loaded from `public/assets/videos/NN.mp4`, numbered by project order.
 

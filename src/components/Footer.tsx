@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 const getKLTime = () =>
   new Intl.DateTimeFormat("en-MY", {
@@ -8,13 +8,15 @@ const getKLTime = () =>
     hour12: false,
   }).format(new Date());
 
-const Footer = () => {
-  const [time, setTime] = useState(getKLTime);
+const subscribeToClock = (onTick: () => void) => {
+  const id = setInterval(onTick, 30_000);
+  return () => clearInterval(id);
+};
 
-  useEffect(() => {
-    const id = setInterval(() => setTime(getKLTime()), 30_000);
-    return () => clearInterval(id);
-  }, []);
+const Footer = () => {
+  // Pages are pre-rendered at build time, so the clock is left empty in that
+  // HTML (and while hydrating) and filled in once running in the browser.
+  const time = useSyncExternalStore(subscribeToClock, getKLTime, () => "");
 
   return (
     <footer className="footer">

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AllWorkLink from "@/components/AllWorkLink";
@@ -12,6 +12,8 @@ interface ProjectFilmProps {
 
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const noSubscribe = () => () => {};
 
 // Full volume while the film fills the screen
 const VOLUME = 0.25;
@@ -27,7 +29,9 @@ const ProjectFilm = ({ src }: ProjectFilmProps) => {
   const heard = useRef(false);
   // Any scroll away from the top cancels the automatic move to the content
   const scrolled = useRef(false);
-  const [reduceMotion] = useState(prefersReducedMotion);
+  // Read once on mount. Pre-rendered HTML can't know the preference, so it
+  // ships without autoplay; the effect below starts playback either way.
+  const reduceMotion = useSyncExternalStore(noSubscribe, prefersReducedMotion, () => true);
   const [muted, setMuted] = useState(true);
   const [idle, setIdle] = useState(false);
   const [missing, setMissing] = useState(false);

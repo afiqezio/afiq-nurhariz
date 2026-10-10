@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { projectList, toProjectState, ProjectListItem } from "@/data/projectList";
+import { projectList, workPath } from "@/data/projectList";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,7 +13,6 @@ const ArrowSvg = () => (
 );
 
 const ProjectsSection = () => {
-  const navigate = useNavigate();
   const pinRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -271,10 +270,6 @@ const ProjectsSection = () => {
     };
   }, []);
 
-  const handleCardClick = (project: ProjectListItem) => {
-    navigate("/view", { state: toProjectState(project) });
-  };
-
   return (
     <section id="projects" className="projects">
       <div className="projects-pin" ref={pinRef}>
@@ -300,10 +295,10 @@ const ProjectsSection = () => {
 
           <div className="projects-track" ref={trackRef}>
             {projectList.map((project) => (
-              <div
+              <Link
                 key={project.id}
+                to={workPath(project.id)}
                 className="project-card"
-                onClick={() => handleCardClick(project)}
               >
                 <div className="project-card-image">
                   <img src={project.image} alt={project.title} loading="lazy" decoding="async" />
@@ -321,7 +316,7 @@ const ProjectsSection = () => {
                   <div className="project-card-title">{project.title}</div>
                   <div className="project-card-desc">{project.desc}</div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

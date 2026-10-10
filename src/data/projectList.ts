@@ -1,5 +1,3 @@
-import { Project } from "@/types";
-
 export const projectList = [
   {
     id: "mamak",
@@ -61,12 +59,6 @@ export const projectList = [
 
 export type ProjectListItem = typeof projectList[number];
 
-// Router state for /view — the cards and the "next case study" link must agree
-export const toProjectState = (item: ProjectListItem): Project => ({
-  id: item.id,
-  title: item.title,
-  description: item.desc,
-  tech: item.tech,
-  imageUrl: item.image,
-  link: "#",
-});
+// Case-study URL. `id` is the slug, so renaming one breaks existing links.
+// The trailing slash matches how GitHub Pages serves work/<id>/index.html.
+export const workPath = (id: string) => `/work/${id}/`;

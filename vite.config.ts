@@ -1,13 +1,11 @@
 
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
+import { reactRouter } from "@react-router/dev/vite";
 import path from "path";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  plugins: [
-    react(),
-  ].filter(Boolean),
+export default defineConfig(({ isSsrBuild }) => ({
+  plugins: [reactRouter()],
   server: {
     host: "::",
     port: 8080,
@@ -18,14 +16,20 @@ export default defineConfig(({ mode }) => ({
     },
   },
   base: '/',
+  // GSAP's Node entry is a UMD build whose default export breaks under ESM;
+  // bundling it makes the build-time pre-render use the ES module version.
+  ssr: {
+    noExternal: ['gsap'],
+  },
   build: {
     // Optimize build output
     target: 'esnext',
     minify: 'esbuild',
     cssMinify: true,
     sourcemap: false,
-    // Code splitting for better performance
-    rollupOptions: {
+    // Vendor chunks apply to the browser bundle only; the build-time
+    // pre-render bundle runs in Node and doesn't benefit from splitting.
+    rollupOptions: isSsrBuild ? undefined : {
       output: {
         manualChunks: {
           // Separate vendor chunks

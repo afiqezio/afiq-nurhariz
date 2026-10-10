@@ -1,6 +1,9 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 
+// Pages are pre-rendered in Node, where useLayoutEffect warns and does nothing
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
 interface HeroSectionProps {
   ready?: boolean;
 }
@@ -9,7 +12,7 @@ const HeroSection = ({ ready = false }: HeroSectionProps) => {
   const wordsRef = useRef<HTMLElement[]>([]);
   const heroRef = useRef<HTMLElement>(null);
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     gsap.set(wordsRef.current.filter(Boolean), { y: "100%" });
   }, []);
 

@@ -29,3 +29,7 @@ dist-ssr
 !.claude/skills/
 !.claude/settings.json
 
+
+# React Router
+/build
+/.react-router

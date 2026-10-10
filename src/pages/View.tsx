@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useEffect, useRef, useMemo } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ImageModal from "@/components/ImageModal";
@@ -8,8 +8,7 @@ import AllWorkLink from "@/components/AllWorkLink";
 import CustomCursor from "@/components/CustomCursor";
 import Footer from "@/components/Footer";
 import { projectData } from "@/data/projectData";
-import { projectList, toProjectState } from "@/data/projectList";
-import { Project } from "@/types";
+import { projectList, workPath } from "@/data/projectList";
 import { scrollToY } from "@/lib/smoothScroll";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -82,9 +81,12 @@ const splitForReveal = (root: HTMLElement) => {
 };
 
 const View = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const project = location.state as Project | null;
+  const { slug } = useParams();
+  const item = projectList.find((p) => p.id === slug);
+  const project = useMemo(
+    () => (item ? { title: item.title, description: item.desc, tech: item.tech, imageUrl: item.image } : null),
+    [item]
+  );
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
   const [activeSection, setActiveSection] = useState<string>("overview");
   const [headerShown, setHeaderShown] = useState(false);
@@ -267,11 +269,6 @@ const View = () => {
     const el = document.getElementById(id);
     if (!el) return;
     scrollToY(el.getBoundingClientRect().top + window.scrollY - 80);
-  };
-
-  const handleNextProject = () => {
-    if (!nextProject) return;
-    navigate("/view", { state: toProjectState(nextProject.item) });
   };
 
   if (!project || !currentProjectData) {
@@ -566,7 +563,7 @@ const View = () => {
           <section className="pp-next">
             <div className="container">
               <div className="pp-next-eyebrow">— Next case study</div>
-              <button type="button" className="pp-next-link" onClick={handleNextProject}>
+              <Link className="pp-next-link" to={workPath(nextProject.item.id)}>
                 <div className="pp-next-info">
                   <span className="pp-next-tag">
                     {String(nextProject.idx + 1).padStart(2, "0")} / {String(projectOrder.length).padStart(2, "0")} · {nextProject.tech.slice(0, 3).join(" · ")}
@@ -576,7 +573,7 @@ const View = () => {
                 <div className="pp-next-arrow">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
                 </div>
-              </button>
+              </Link>
             </div>
           </section>
         )}

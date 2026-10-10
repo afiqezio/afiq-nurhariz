@@ -3,17 +3,17 @@ import { ProjectDetails } from "../projectTypes";
 export const dataEngineerProject: ProjectDetails = {
   images: [
     {
-      url: "assets/projects/SQL/migrate.webp",
+      url: "/assets/projects/SQL/migrate.webp",
       alt: "Migration",
       caption: "Create migration and backup SQL"
     },
     {
-      url: "assets/projects/SQL/clickup.webp",
+      url: "/assets/projects/SQL/clickup.webp",
       alt: "Debug SQL and Clickup Usage",
       caption: "Debugging existing SQL query"
     },
     {
-      url: "assets/projects/SQL/deploy.webp",
+      url: "/assets/projects/SQL/deploy.webp",
       alt: "Deployment Process",
       caption: "Passing deployment queries"
     }

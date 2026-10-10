@@ -3,27 +3,27 @@ import { ProjectDetails } from "../projectTypes";
 export const mamakProject: ProjectDetails = {
   images: [
     {
-      url: "assets/projects/Mamak/poster.webp",
+      url: "/assets/projects/Mamak/poster.webp",
       alt: "Project Poster",
       caption: "Overview project poster"
     },
     {
-      url: "assets/projects/Mamak/lemak.webp",
+      url: "/assets/projects/Mamak/lemak.webp",
       alt: "Calorie Estimation Interface",
       caption: "Calorie estimation interface"
     },
     {
-      url: "assets/projects/Mamak/augment.webp",
+      url: "/assets/projects/Mamak/augment.webp",
       alt: "Food Image Preprocess",
       caption: "Image preprocess"
     },
     {
-      url: "assets/projects/Mamak/annotate.webp",
+      url: "/assets/projects/Mamak/annotate.webp",
       alt: "Food Database",
       caption: "Food image annotation"
     },
     {
-      url: "assets/projects/Mamak/architecture.webp",
+      url: "/assets/projects/Mamak/architecture.webp",
       alt: "Prototype Architecture",
       caption: "Prototype architecture"
     }

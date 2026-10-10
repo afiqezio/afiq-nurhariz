@@ -3,17 +3,17 @@ import { ProjectDetails } from "../projectTypes";
 export const churnProject: ProjectDetails = {
   images: [
     {
-      url: "assets/projects/Churn/pandas.webp",
+      url: "/assets/projects/Churn/pandas.webp",
       alt: "Pandas Library",
       caption: "Using Pandas library"
     },
     {
-      url: "assets/projects/Churn/heatmap.webp",
+      url: "/assets/projects/Churn/heatmap.webp",
       alt: "Heatmap",
       caption: "Heatmap to analyze patterns and trends"
     },
     {
-      url: "assets/projects/Churn/compare.webp",
+      url: "/assets/projects/Churn/compare.webp",
       alt: "Model Comparison",
       caption: "Compare model accuracy"
     }

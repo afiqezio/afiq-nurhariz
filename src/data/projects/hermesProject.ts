@@ -3,12 +3,12 @@ import { ProjectDetails } from "../projectTypes";
 export const hermesProject: ProjectDetails = {
   images: [
     {
-      url: "assets/projects/Hermes/pipeline.svg",
+      url: "/assets/projects/Hermes/pipeline.svg",
       alt: "The nine steps from a Telegram request to a running app",
       caption: "A request, start to finish: plan, approve, build, check, deploy, prove, watch"
     },
     {
-      url: "assets/projects/Hermes/architecture.svg",
+      url: "/assets/projects/Hermes/architecture.svg",
       alt: "Two-seam architecture: an orchestration loop and a separate engineering subprocess",
       caption: "Two seams: a cheap model runs the conversation, Claude Code does the engineering"
     }

@@ -120,7 +120,7 @@ const View = () => {
     if (!project) return null;
     const idx = projectOrder.indexOf(project.title as typeof projectOrder[number]);
     if (idx < 0) return null;
-    return `assets/videos/${String(idx + 1).padStart(2, "0")}.mp4`;
+    return `/assets/videos/${String(idx + 1).padStart(2, "0")}.mp4`;
   }, [project]);
 
   useEffect(() => {

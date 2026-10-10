@@ -3,22 +3,22 @@ import { ProjectDetails } from "../projectTypes";
 export const tamsProject: ProjectDetails = {
   images: [
     {
-      url: "assets/projects/TAMS/mainpage.webp",
+      url: "/assets/projects/TAMS/mainpage.webp",
       alt: "Mobile App Interface",
       caption: "Time attendance details interface"
     },
     {
-      url: "assets/projects/TAMS/checkin.webp",
+      url: "/assets/projects/TAMS/checkin.webp",
       alt: "Location Tracking",
       caption: "GPS location verification"
     },
     {
-      url: "assets/projects/TAMS/log.webp",
+      url: "/assets/projects/TAMS/log.webp",
       alt: "Transaction Log",
       caption: "Check In/Check Out log history"
     },
     {
-      url: "assets/projects/TAMS/map.webp",
+      url: "/assets/projects/TAMS/map.webp",
       alt: "User Current Location on Map",
       caption: "User current location"
     }

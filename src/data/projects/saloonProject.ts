@@ -3,37 +3,37 @@ import { ProjectDetails } from "../projectTypes";
 export const saloonProject: ProjectDetails = {
   images: [
     {
-      url: "assets/projects/Saloon/main menu.webp",
+      url: "/assets/projects/Saloon/main menu.webp",
       alt: "Main Menu Interface",
       caption: "Main booking screen"
     },
     {
-      url: "assets/projects/Saloon/book.webp",
+      url: "/assets/projects/Saloon/book.webp",
       alt: "Log Booking",
       caption: "Booking log history"
     },
     {
-      url: "assets/projects/Saloon/calendar.webp",
+      url: "/assets/projects/Saloon/calendar.webp",
       alt: "Date Selection",
       caption: "Available date selection"
     },
     {
-      url: "assets/projects/Saloon/time.webp",
+      url: "/assets/projects/Saloon/time.webp",
       alt: "Time Selection",
       caption: "Available time selection"
     },
     {
-      url: "assets/projects/Saloon/qr.webp",
+      url: "/assets/projects/Saloon/qr.webp",
       alt: "Booking Details",
       caption: "Detail of the booking with QR"
     },
     {
-      url: "assets/projects/Saloon/adminqr.webp",
+      url: "/assets/projects/Saloon/adminqr.webp",
       alt: "Admin QR Scanner",
       caption: "Admin QR scanner"
     },
     {
-      url: "assets/projects/Saloon/adminconfirm.webp",
+      url: "/assets/projects/Saloon/adminconfirm.webp",
       alt: "Admin Confirmation",
       caption: "Admin confirmation"
     }

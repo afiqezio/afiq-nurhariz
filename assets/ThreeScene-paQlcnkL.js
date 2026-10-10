@@ -1,4 +1,4 @@
-import{a as J}from"./react-vendor-D5VTSrQV.js";import{W as Q,S as U,P as Z,I as b,a as h,A as y,F as q,V as $,M as S,B as ee,b as P,c as oe,C as te}from"./three-vendor-CNe-AdDl.js";const A=`
+import{a as J}from"./react-vendor-7jCbmHAf.js";import{W as Q,S as U,P as Z,I as b,a as h,A as y,F as q,V as $,M as S,B as ee,b as P,c as oe,C as te}from"./three-vendor-CNe-AdDl.js";const A=`
 uniform float uTime;
 uniform float uScroll;
 uniform vec2 uMouse;

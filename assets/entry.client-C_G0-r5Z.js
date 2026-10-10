@@ -1,0 +1,1 @@
+import{j as o}from"./ui-vendor-CAGEIlWX.js";import{d as a,a as i,H as n}from"./react-vendor-7jCbmHAf.js";var t={},e;function s(){if(e)return t;e=1;var r=a();return t.createRoot=r.createRoot,t.hydrateRoot=r.hydrateRoot,t}var u=s();i.startTransition(()=>{u.hydrateRoot(document,o.jsx(n,{}))});

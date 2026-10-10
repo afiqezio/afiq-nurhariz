@@ -1,5 +1,6 @@
 import { lazy, Suspense, useState, useEffect, useRef, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
+import type { MetaArgs } from "react-router";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ImageModal from "@/components/ImageModal";
@@ -10,6 +11,7 @@ import Footer from "@/components/Footer";
 import { projectData } from "@/data/projectData";
 import { projectList, workPath } from "@/data/projectList";
 import { scrollToY } from "@/lib/smoothScroll";
+import { pageMeta, SITE_NAME, SITE_URL, toMetaDescription } from "@/lib/seo";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -78,6 +80,39 @@ const splitForReveal = (root: HTMLElement) => {
 
   walk(root);
   root.dataset.splitDone = "1";
+};
+
+export const meta = ({ params }: MetaArgs) => {
+  const item = projectList.find((p) => p.id === params.slug);
+  const details = item ? projectData[item.title as keyof typeof projectData] : undefined;
+  if (!item || !details) {
+    return [{ title: `Case study not found — ${SITE_NAME}` }, { name: "robots", content: "noindex" }];
+  }
+  const path = workPath(item.id);
+  const description = toMetaDescription(details.overview);
+  // Social cards can't render SVG; fall back to the default portrait
+  const cover = details.images.find((img) => !img.url.endsWith(".svg"));
+  return [
+    ...pageMeta({
+      title: `${item.title} — ${SITE_NAME}`,
+      description,
+      path,
+      type: "article",
+      ...(cover && { image: cover.url, imageAlt: cover.alt }),
+    }),
+    {
+      "script:ld+json": {
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        name: item.title,
+        description,
+        url: SITE_URL + path,
+        dateCreated: projectMeta[item.title]?.year,
+        keywords: (details.caseStudy?.techStack ?? item.tech).join(", "),
+        author: { "@id": `${SITE_URL}/#person` },
+      },
+    },
+  ];
 };
 
 const View = () => {

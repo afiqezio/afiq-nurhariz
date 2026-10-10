@@ -14,6 +14,7 @@ import ProjectsSection from "@/sections/ProjectsSection";
 import InterstitialSection from "@/sections/InterstitialSection";
 import SkillsSection from "@/sections/SkillsSection";
 import ContactSection from "@/sections/ContactSection";
+import { pageMeta } from "@/lib/seo";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -62,6 +63,14 @@ const splitForReveal = (root: HTMLElement) => {
   walk(root);
   root.dataset.splitDone = "1";
 };
+
+export const meta = () =>
+  pageMeta({
+    title: "Afiq Nurhariz",
+    description:
+      "Afiq Nurhariz is a Full-Stack & AI engineer in Shah Alam, Malaysia, building intelligent, high-performance web, mobile and machine learning systems.",
+    path: "/",
+  });
 
 const Index = () => {
   const [ready, setReady] = useState(false);
